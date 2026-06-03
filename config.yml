@@ -19,7 +19,7 @@ databases:
 models:
   - name: sonnet
     vendor: anthropic
-    model_ref: claude-3-5-sonnet-latest
+    model_ref: claude-sonnet-4-6
     api_key_var: ANTHROPIC_API_KEY
 
 # GitHub repo for schema hot-reload + the in-app AI assistant's PR
