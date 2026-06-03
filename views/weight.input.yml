@@ -1,44 +1,37 @@
 target: weight.view.yml
 icon: scale
 date_field: date
-dimensions:
+list_display:
+  title: weight_lbs
+  subtitle: ${body_fat_caliper}% caliper / ${body_fat_omron}% omron
+fields:
   id:
-    input:
-      editable: false
+    editable: false
   date:
-    input:
-      widget: date
-      default: today
-      required: true
+    widget: date
+    default: today
+    required: true
   day_of_week:
     derive:
       from: date
       format: weekday_long
   time:
-    input:
-      widget: text
-      placeholder: "7:45"
-      now_button: true
+    widget: text
+    placeholder: '7:45'
+    now_button: true
   weight_lbs:
-    input:
-      widget: number
-      required: true
-      min: 0
-      max: 500
-      placeholder: "180.0"
+    widget: number
+    required: true
+    min: 0
+    max: 500
+    placeholder: '180.0'
   body_fat_caliper:
-    input:
-      widget: number
-      min: 0
-      max: 60
+    widget: number
+    min: 0
+    max: 60
   body_fat_omron:
-    input:
-      widget: number
-      min: 0
-      max: 60
+    widget: number
+    min: 0
+    max: 60
   notes:
-    input:
-      widget: longtext
-list_display:
-  title: weight_lbs
-  subtitle: ${body_fat_caliper}% caliper / ${body_fat_omron}% omron
+    widget: longtext

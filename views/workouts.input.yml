@@ -1,38 +1,24 @@
 target: workouts.view.yml
 icon: flame
 date_field: done_at
-dimensions:
-  id:
-    input:
-      editable: false
-  done_at:
-    input:
-      widget: datetime
-      default: now
-      required: true
-  kind:
-    samples:
-      - strength
-      - cardio
-      - mobility
-      - climbing
-    input:
-      widget: dropdown
-      options:
-        - strength
-        - cardio
-        - mobility
-        - climbing
-      required: true
-  duration_min:
-    input:
-      widget: number
-      required: true
-      min: 0
-      max: 1440
-  notes:
-    input:
-      widget: longtext
 list_display:
   title: kind
   subtitle: ${duration_min} min
+fields:
+  id:
+    editable: false
+  done_at:
+    widget: datetime
+    default: now
+    required: true
+  kind:
+    widget: dropdown
+    options: [strength, cardio, mobility, climbing]
+    required: true
+  duration_min:
+    widget: number
+    required: true
+    min: 0
+    max: 1440
+  notes:
+    widget: longtext

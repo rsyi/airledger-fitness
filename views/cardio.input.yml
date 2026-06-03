@@ -4,75 +4,59 @@ date_field: date
 plannable:
   log_field: start_time
   log_format: time_string
-dimensions:
+list_display:
+  title: type
+  subtitle: ${total_time} / ${max_hr}bpm
+fields:
   id:
-    input:
-      editable: false
+    editable: false
   date:
-    input:
-      widget: date
-      default: today
-      required: true
+    widget: date
+    default: today
+    required: true
   day_of_week:
     derive:
       from: date
       format: weekday_long
   type:
-    input:
-      widget: dropdown
-      required: true
-      options:
-        - treadmill
-        - stairmaster
-        - bike
-        - rower
+    widget: dropdown
+    required: true
+    options: [treadmill, stairmaster, bike, rower]
   incline:
+    widget: number
+    min: 0
+    max: 15
     show_when:
       type: treadmill
-    input:
-      widget: number
-      min: 0
-      max: 15
   treadmill_speed:
+    widget: number
+    min: 0
+    max: 15
     show_when:
       type: treadmill
-    input:
-      widget: number
-      min: 0
-      max: 15
   stairmaster_speed:
+    widget: number
+    min: 0
+    max: 30
     show_when:
       type: stairmaster
-    input:
-      widget: number
-      min: 0
-      max: 30
   zone4_reached:
-    input:
-      widget: text
-      placeholder: "0:01:30"
+    widget: text
+    placeholder: 0:01:30
   zone5_reached:
-    input:
-      widget: text
-      placeholder: "0:02:45"
+    widget: text
+    placeholder: 0:02:45
   total_time:
-    input:
-      widget: text
-      placeholder: "4:00"
-      required: true
+    widget: text
+    placeholder: '4:00'
+    required: true
   max_hr:
-    input:
-      widget: number
-      min: 60
-      max: 230
+    widget: number
+    min: 60
+    max: 230
   start_time:
-    input:
-      widget: text
-      placeholder: "3:54:00 PM"
-      now_button: true
+    widget: text
+    placeholder: 3:54:00 PM
+    now_button: true
   notes:
-    input:
-      widget: longtext
-list_display:
-  title: type
-  subtitle: ${total_time} / ${max_hr}bpm
+    widget: longtext

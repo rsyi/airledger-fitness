@@ -1,45 +1,29 @@
 target: meals.view.yml
 icon: utensils
 date_field: eaten_at
-dimensions:
-  id:
-    input:
-      editable: false
-  eaten_at:
-    input:
-      widget: datetime
-      default: now
-      required: true
-  meal:
-    input:
-      widget: text
-      required: true
-      placeholder: e.g. oatmeal with berries
-  meal_type:
-    samples:
-      - breakfast
-      - lunch
-      - dinner
-      - snack
-    input:
-      widget: dropdown
-      options:
-        - breakfast
-        - lunch
-        - dinner
-        - snack
-  calories:
-    input:
-      widget: number
-      required: true
-      min: 0
-  protein_g:
-    input:
-      widget: number
-      min: 0
-  notes:
-    input:
-      widget: longtext
 list_display:
   title: meal
   subtitle: ${calories} cal • ${meal_type}
+fields:
+  id:
+    editable: false
+  eaten_at:
+    widget: datetime
+    default: now
+    required: true
+  meal:
+    widget: text
+    required: true
+    placeholder: e.g. oatmeal with berries
+  meal_type:
+    widget: dropdown
+    options: [breakfast, lunch, dinner, snack]
+  calories:
+    widget: number
+    required: true
+    min: 0
+  protein_g:
+    widget: number
+    min: 0
+  notes:
+    widget: longtext
