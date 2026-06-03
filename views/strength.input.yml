@@ -354,11 +354,25 @@ fields:
     widget: number
     required: true
     min: 0
+    show_when:
+      exercise:
+        not_in_group: isometric
   reps:
     widget: number
     required: true
     min: 0
     max: 100
+    show_when:
+      exercise:
+        not_in_group: isometric
+  duration:
+    widget: number
+    required: true
+    min: 0
+    placeholder: "seconds"
+    show_when:
+      exercise:
+        in_group: isometric
   start_time:
     widget: text
     placeholder: 3:54:00 PM
@@ -367,5 +381,43 @@ fields:
     widget: number
     min: 1
     max: 10
+    show_when:
+      exercise:
+        not_in_group: isometric
   notes:
     widget: longtext
+
+# Named, reusable value sets for show_when. Adding more (e.g. cardio
+# modalities, machine groups) is just another entry here — no schema
+# change required.
+groups:
+  isometric:
+    - Tuck Front Lever
+    - Quick front lever
+    - Hollow Body Hold
+    - Plank
+    - Side plank
+    - Side plank with leg raised
+    - Side plank with lateral raise
+    - Side Bridge
+    - Foot Supported L Sit
+    - Straight leg L sit
+    - Bended Leg L-sit
+    - Chair L-sit
+    - L sit handstand swing
+    - L sit handstand negative
+    - Arch Body Hold
+    - Reverse Plank
+    - Superman
+    - Stomach To Wall Handstand
+    - Back to Wall Handstand Pushup
+    - Held Pull Up
+    - Bench Press Heavy Hold
+    - Dumbbell static bench
+    - Dumbbell static floor press
+    - Dumbbell hold (reps in seconds)
+    - Deep squat dynamic stretch
+    - Ankle dorsiflexion stretch
+    - Peroneals Stretch
+    - Adductor rock
+    - Chair Sit
