@@ -21,3 +21,14 @@ models:
     vendor: anthropic
     model_ref: claude-3-5-sonnet-latest
     api_key_var: ANTHROPIC_API_KEY
+
+# GitHub repo for schema hot-reload + the in-app AI assistant's PR
+# tooling. The token must have contents:rw + pull_requests:rw scoped to
+# rsyi/airledger-fitness. Generate a fine-grained PAT, drop it in .env
+# as GITHUB_TOKEN.
+github:
+  owner: rsyi
+  repo: airledger-fitness
+  default_branch: main
+  views_path: views
+  token_var: GITHUB_TOKEN
