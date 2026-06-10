@@ -1,0 +1,14 @@
+name: nutrition
+description: "Nutrition tracking and analysis from the meal log, covering calories, protein, and meal timing for optimizing dietary intake"
+base_view: macro_tracker
+views:
+  - macro_tracker
+
+# Questions this topic can answer:
+# - What are my average daily calories over the last month?
+# - How consistent is my calorie intake?
+# - What's my protein-to-calorie ratio?
+# - What meals am I eating most often?
+# - Am I hitting my daily protein target?
+# - How do my calories vary by day of week?
+# - How are my calories split across breakfast/lunch/dinner/snacks?
