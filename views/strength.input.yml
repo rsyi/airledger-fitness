@@ -1,6 +1,10 @@
 target: strength.view.yml
 icon: dumbbell
 date_field: date
+# History-panel highlight: for each day in the history sheet, the row with
+# the largest e1rm (Weight × (1 + Reps/30)) gets the "top set" tint.
+# The measure itself is declared on strength.view.yml.
+top_metric: max_e1rm
 plannable:
   log_field: start_time
   log_format: time_string
@@ -8,21 +12,35 @@ post_log:
   model: sonnet
   prompt: |
     You're a sharp, technical strength coach. The user just logged a set,
-    and you're commenting on it in context of recent work.
+    and you're judging it against the rest of today's workout AND the
+    previous workout for the same exercise.
 
     Just-logged set:
-      {{ row['exercise'] }} — {{ row['weight'] }} × {{ row['reps'] }}{% if row['rpe'] %} @ RPE {{ row['rpe'] }}{% endif %}
+      {{ row['exercise'] }} — {{ row['weight'] }} × {{ row['reps'] }}{% if row['rpe'] %} @ RPE {{ row['rpe'] }}{% endif %} {% if row['notes'] %}({{ row['notes'] }}){% endif %}
 
-    Same exercise, last 14 days:
-    {% for r in last_n_days(14) if r['exercise'] == row['exercise'] %}
-    - {{ r['date'] }}: {{ r['weight'] }} × {{ r['reps'] }}{% if r['rpe'] %} @ RPE {{ r['rpe'] }}{% endif %}
+    Today's {{ row['exercise'] }} sets so far (this includes the just-logged set):
+    {% for r in today_for('exercise', row['exercise']) %}
+    - {{ r['weight'] }} × {{ r['reps'] }}{% if r['rpe'] %} @ RPE {{ r['rpe'] }}{% endif %} {% if r['notes'] %}— {{ r['notes'] }}{% endif %}
     {% else %}
-    - (no prior sets in last 14 days)
+    - (this is the first {{ row['exercise'] }} set today)
     {% endfor %}
 
-    Reply with ONE short sentence — 18 words max — that calls out one
-    specific thing: a PR, a regression, a load/rep change vs. last time,
-    or an RPE observation. Be precise, not generic. No emoji. No filler.
+    Previous {{ row['exercise'] }} workouts (newest first, up to 3):
+    {% for workout in last_workouts_for('exercise', row['exercise'], 3) %}
+    {{ workout[0]['date'] }}:
+    {% for s in workout %}
+      - {{ s['weight'] }} × {{ s['reps'] }}{% if s['rpe'] %} @ RPE {{ s['rpe'] }}{% endif %} {% if s['notes'] %}— {{ s['notes'] }}{% endif %}
+    {% endfor %}
+    {% else %}
+    - (no prior {{ row['exercise'] }} sessions on record)
+    {% endfor %}
+
+    Reply with ONE short sentence — 22 words max — that compares this
+    set to what you'd expect given today's ramp AND the previous workout.
+    Call out one specific thing: a PR, a regression, a planned warmup
+    landing as expected, a load/rep change vs. last session, or an RPE
+    pattern. Be precise — reference actual numbers from the context, not
+    generic platitudes. No emoji. No filler.
 list_display:
   title: exercise
   subtitle: ${weight} × ${reps}
@@ -40,6 +58,7 @@ fields:
   exercise:
     widget: autocomplete
     required: true
+    history: true
     placeholder: e.g. Barbell Squat
     options:
     - Flat Barbell Bench Press
@@ -350,13 +369,22 @@ fields:
     - Chair Sit
     - Eleanor lunges
     - Side plank with leg raised
+    - Handstand Practice
+    - Thoracic Extension (Foam Roller)
+    - Open Books
+    - Lat Stretch
+    - Chin Tucks
+    - Wall Slides
+    - Serratus Wall Slides
+    - Trap-3 Raise
+    - Farmer Carry
   weight:
     widget: number
     required: true
     min: 0
     show_when:
       exercise:
-        not_in_group: isometric
+        not_in_group: [isometric, timed, mobility]
   reps:
     widget: number
     required: true
@@ -364,7 +392,7 @@ fields:
     max: 100
     show_when:
       exercise:
-        not_in_group: isometric
+        not_in_group: [isometric, timed]
   duration:
     widget: number
     required: true
@@ -374,6 +402,17 @@ fields:
       exercise:
         in_group: isometric
   start_time:
+    widget: timer
+    placeholder: 3:54:00 PM
+    # Stop logs both: end_time as wall-clock (for timed exercises like
+    # Handstand Practice) and duration in seconds (for isometric holds
+    # like Plank). show_when on weight/reps/duration/end_time hides
+    # whichever doesn't apply to the chosen exercise, so save drops the
+    # irrelevant value automatically.
+    stop_targets:
+      - { target: end_time, format: time_of_day }
+      - { target: duration, format: seconds }
+  end_time:
     widget: text
     placeholder: 3:54:00 PM
     now_button: true
@@ -383,7 +422,7 @@ fields:
     max: 10
     show_when:
       exercise:
-        not_in_group: isometric
+        not_in_group: [isometric, timed, mobility]
   notes:
     widget: longtext
 
@@ -391,7 +430,22 @@ fields:
 # modalities, machine groups) is just another entry here — no schema
 # change required.
 groups:
+  # Timed-session exercises: just start_time + end_time + notes. No
+  # weight/reps/duration/rpe — the start/end stamps are the data.
+  timed:
+    - Handstand Practice
+  # Low-load mobility/prep exercises: just reps. Weight + RPE hidden
+  # because bodyweight mobility isn't a progressive-overload target —
+  # the rep is the lever. Duration stays hidden (set count, not hold).
+  mobility:
+    - Open Books
+    - Chin Tucks
+    - Wall Slides
+    - Serratus Wall Slides
   isometric:
+    - Thoracic Extension (Foam Roller)
+    - Lat Stretch
+    - Farmer Carry
     - Tuck Front Lever
     - Quick front lever
     - Hollow Body Hold
@@ -410,7 +464,6 @@ groups:
     - Reverse Plank
     - Superman
     - Stomach To Wall Handstand
-    - Back to Wall Handstand Pushup
     - Held Pull Up
     - Bench Press Heavy Hold
     - Dumbbell static bench

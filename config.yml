@@ -9,7 +9,7 @@ spreadsheet_id: 1C1rSudguUv00gYsb7i82XV6OM1V2KSZ4BGwMliwKDG4
 
 databases:
   - name: gsheets
-    type: sheets
+    type: gsheets
     spreadsheet_id: 1C1rSudguUv00gYsb7i82XV6OM1V2KSZ4BGwMliwKDG4
     service_account_key_path_var: GOOGLE_SA_KEY_PATH
 

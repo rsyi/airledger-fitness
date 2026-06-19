@@ -1,6 +1,10 @@
 target: cardio.view.yml
 icon: heart-pulse
 date_field: date
+# Cardio lives on its own spreadsheet (separate from the main
+# strength/weight/meals workbook). Per-view override; default applies
+# to every view that doesn't specify one.
+spreadsheet_id: 1hiDgkewR-z7JCJ1yNkKpCB7klIY0HDGupLscmcUSnhQ
 plannable:
   log_field: start_time
   log_format: time_string
@@ -55,8 +59,15 @@ fields:
     min: 60
     max: 230
   start_time:
-    widget: text
+    widget: timer
     placeholder: 3:54:00 PM
-    now_button: true
+    # Tap "Start" → stamps now + begins live elapsed counter.
+    # Tap a ladder chip → writes elapsed (m:ss / H:MM:SS) into its target.
+    # Tap the Stop (⏸) button → writes elapsed into stop_target and
+    # freezes the timer. Acts as the natural "Done" for the interval.
+    ladders:
+      - { label: "Zone 4 reached", target: zone4_reached }
+      - { label: "Zone 5 reached", target: zone5_reached }
+    stop_target: total_time
   notes:
     widget: longtext
