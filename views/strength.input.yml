@@ -402,16 +402,9 @@ fields:
       exercise:
         in_group: isometric
   start_time:
-    widget: timer
+    widget: text
     placeholder: 3:54:00 PM
-    # Stop logs both: end_time as wall-clock (for timed exercises like
-    # Handstand Practice) and duration in seconds (for isometric holds
-    # like Plank). show_when on weight/reps/duration/end_time hides
-    # whichever doesn't apply to the chosen exercise, so save drops the
-    # irrelevant value automatically.
-    stop_targets:
-      - { target: end_time, format: time_of_day }
-      - { target: duration, format: seconds }
+    now_button: true
   end_time:
     widget: text
     placeholder: 3:54:00 PM
