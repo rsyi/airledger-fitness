@@ -24,3 +24,7 @@ entries:
   - { exercise: Overhead Press, weight: "{{ ((ohp_deload * 0.80 / 5) | round) * 5 }}", reps: 2, notes: "bridge" }
   - { exercise: Overhead Press, weight: "{{ ohp_deload }}", reps: 5, notes: "deload" }
   - { exercise: Overhead Press, weight: "{{ ohp_deload }}", reps: 5, notes: "deload" }
+  # Accessory
+  - { exercise: External Rotation, reps: 15, notes: "AMRAP — edit reps/weight" }
+  - { exercise: External Rotation, reps: 15, notes: "AMRAP — edit reps/weight" }
+  - { exercise: External Rotation, reps: 15, notes: "AMRAP — edit reps/weight" }
