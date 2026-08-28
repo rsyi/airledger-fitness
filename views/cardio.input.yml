@@ -1,10 +1,6 @@
 target: cardio.view.yml
 icon: heart-pulse
 date_field: date
-# Cardio lives on its own spreadsheet (separate from the main
-# strength/weight/meals workbook). Per-view override; default applies
-# to every view that doesn't specify one.
-spreadsheet_id: 1hiDgkewR-z7JCJ1yNkKpCB7klIY0HDGupLscmcUSnhQ
 plannable:
   log_field: start_time
   log_format: time_string
@@ -25,7 +21,7 @@ fields:
   type:
     widget: dropdown
     required: true
-    options: [treadmill, stairmaster, bike, rower]
+    options: [treadmill, outdoor running, stairmaster, bike, rower]
   incline:
     widget: number
     min: 0
