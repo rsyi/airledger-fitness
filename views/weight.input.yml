@@ -33,5 +33,9 @@ fields:
     widget: number
     min: 0
     max: 60
+  body_fat_withing:
+    widget: number
+    min: 0
+    max: 60
   notes:
     widget: longtext

@@ -12,6 +12,7 @@ dimensions:
   - { name: weight_lbs, type: number, expr: weight_lbs, description: Body weight (lbs) }
   - { name: body_fat_caliper, type: number, expr: body_fat_caliper, description: Body fat % from caliper measurement }
   - { name: body_fat_omron, type: number, expr: body_fat_omron, description: Body fat % from Omron device }
+  - { name: body_fat_withing, type: number, expr: body_fat_withing, description: Body fat % from Withings scale }
   - { name: notes, type: string, expr: notes }
 measures:
   - { name: weigh_in_count, type: count }
