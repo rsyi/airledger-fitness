@@ -32,3 +32,10 @@ github:
   default_branch: main
   views_path: views
   token_var: GITHUB_TOKEN
+
+# External integrations (Integrations page in the app). Secrets live
+# in .env (gitignored); *_var keys resolve at brand time.
+integrations:
+  withings:
+    client_id_var: WITHINGS_CLIENT_ID
+    client_secret_var: WITHINGS_CLIENT_SECRET
