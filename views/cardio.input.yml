@@ -61,9 +61,13 @@ fields:
     # Tap a ladder chip → writes elapsed (m:ss / H:MM:SS) into its target.
     # Tap the Stop (⏸) button → writes elapsed into stop_target and
     # freezes the timer. Acts as the natural "Done" for the interval.
+    # With a live BLE HR source (Whoop broadcast) connected, ladders
+    # with hr_pct auto-stamp at that % of user_max_hr, and Stop writes
+    # the session's peak BPM into hr_max_target. Manual taps still work.
     ladders:
-      - { label: "Zone 4 reached", target: zone4_reached }
-      - { label: "Zone 5 reached", target: zone5_reached }
+      - { label: "Zone 4 reached", target: zone4_reached, hr_pct: 80 }
+      - { label: "Zone 5 reached", target: zone5_reached, hr_pct: 90 }
     stop_target: total_time
+    hr_max_target: max_hr
   notes:
     widget: longtext
