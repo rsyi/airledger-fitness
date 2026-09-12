@@ -1,0 +1,15 @@
+name: coach_chat
+description: "Coach conversation — synced message log, rendered as chat in the app (never as a tracker)"
+datasource: gsheets
+table: coach_chat
+entities:
+  - { name: coach_message, type: primary, key: id }
+dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
+  - { name: date, type: date, expr: date, description: Message day }
+  - { name: ts, type: string, expr: ts, description: "ISO datetime — message ordering" }
+  - { name: role, type: string, expr: role, description: "coach | user" }
+  - { name: kind, type: string, expr: kind, description: "briefing | reply | user" }
+  - { name: text, type: string, expr: text, description: Message body (markdown-ish plain text) }
+measures:
+  - { name: message_count, type: count }

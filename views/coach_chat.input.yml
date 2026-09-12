@@ -1,0 +1,25 @@
+target: coach_chat.view.yml
+# The app hides this view from the home tile list and renders it via
+# the pinned Coach row + chat screen; this overlay exists so the view
+# participates in the normal gsheets sync.
+icon: bot
+date_field: date
+list_display:
+  title: text
+  subtitle: ${role}
+fields:
+  id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  ts:
+    editable: false
+  role:
+    editable: false
+  kind:
+    editable: false
+  text:
+    widget: longtext
+    required: true
