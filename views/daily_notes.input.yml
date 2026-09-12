@@ -1,0 +1,21 @@
+target: daily_notes.view.yml
+icon: notebook-pen
+date_field: date
+list_display:
+  title: note
+  subtitle: ${day_of_week}
+fields:
+  id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  day_of_week:
+    derive:
+      from: date
+      format: weekday_long
+  note:
+    widget: longtext
+    required: true
+    placeholder: How training felt, sleep, soreness, life context…

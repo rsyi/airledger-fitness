@@ -1,0 +1,13 @@
+name: daily_notes
+description: "One free-form journal entry per day — training context for review and the AI coach"
+datasource: gsheets
+table: daily_notes
+entities:
+  - { name: daily_note, type: primary, key: id }
+dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
+  - { name: date, type: date, expr: date, description: Journal day }
+  - { name: day_of_week, type: string, expr: day_of_week }
+  - { name: note, type: string, expr: note, description: "Free-form daily note: how training felt, sleep, life context" }
+measures:
+  - { name: note_count, type: count }
