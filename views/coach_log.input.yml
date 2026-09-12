@@ -1,0 +1,20 @@
+target: coach_log.view.yml
+icon: bot
+date_field: date
+list_display:
+  title: summary
+  subtitle: ${drafted}
+fields:
+  id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  generated_at:
+    editable: false
+  summary:
+    widget: longtext
+    required: true
+  drafted:
+    widget: longtext

@@ -1,0 +1,14 @@
+name: coach_log
+description: "Nightly AI coach output — one row per day: readable summary + what was drafted"
+datasource: gsheets
+table: coach_log
+entities:
+  - { name: coach_entry, type: primary, key: id }
+dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
+  - { name: date, type: date, expr: date, description: "Day the advice is FOR (the day being planned)" }
+  - { name: generated_at, type: string, expr: generated_at, description: "When the nightly run produced this (ISO datetime)" }
+  - { name: summary, type: string, expr: summary, description: "Readable coach summary: what to do and why" }
+  - { name: drafted, type: string, expr: drafted, description: "What was written as draft rows (view: template/desc, one per line)" }
+measures:
+  - { name: entry_count, type: count }
