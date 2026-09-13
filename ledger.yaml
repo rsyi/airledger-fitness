@@ -4,6 +4,6 @@
 #
 # No icon: set — the unbranded build picks up the airledger default
 # launcher icon (oxy-palette 3-bar stack on dark bg).
-app_name: Airledger-Fitness
+app_name: Ledger
 package_id: com.robertyi.fitness
 adb_device: 66260DLKX00010
