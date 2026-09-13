@@ -10,13 +10,16 @@ dimensions:
   - { name: id, type: string, expr: id }
   - { name: date, type: date, expr: Date, description: Workout day }
   - { name: day_of_week, type: string, expr: Day of Week }
-  # Timer up top: drives this whole row. Start stamps the time-of-day,
+  # Type first — it drives which machine fields show, so it gets picked
+  # before the timer starts. (Sheet columns map by expr, not position;
+  # reordering here only changes the form.)
+  - { name: type, type: string, expr: Type, description: Cardio modality (drives which fields show below) }
+  # Timer: drives this whole row. Start stamps the time-of-day,
   # ladders fill zone fields, Stop fills total_time.
   - { name: start_time, type: string, expr: Start Time, description: Tap Start to stamp + begin the elapsed timer. }
   - { name: zone4_reached, type: string, expr: Time Zone 4 Reached, description: Elapsed when you hit Zone 4 (stamped by timer) }
   - { name: zone5_reached, type: string, expr: Time Zone 5 Reached, description: Elapsed when you hit Zone 5 (stamped by timer) }
   - { name: total_time, type: string, expr: Total Time, description: Total elapsed (stamped by Stop) }
-  - { name: type, type: string, expr: Type, description: Cardio modality (drives which fields show below) }
   - { name: incline, type: number, expr: Treadmill Incline, description: Incline (%) }
   - { name: treadmill_speed, type: number, expr: Treadmill Speed, description: Speed (mph) }
   - { name: stairmaster_speed, type: number, expr: Stairmaster Speed, description: Level / speed }
