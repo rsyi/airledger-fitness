@@ -8,12 +8,14 @@
 2. **2× rock climbing sessions** (at the climbing gym). Gym-side
    prep/accessory work uses template `strength.climbing_prep`
    (mobility ramp + climbing-relevant pulling/rotation/grip).
-3. **Exactly one heavy lower pull per week, alternating weeks —
-   never squat-heavy and deadlift-heavy in the same week:**
-   - Week A: heavy squat (`strength.cut_squat_heavy`) + light deadlift
-     (`strength.cut_deadlift_light`)
-   - Week B: heavy deadlift (`strength.cut_deadlift_heavy`) + light
-     squat (`strength.cut_squat_light`)
+3. **Squat and deadlift are SEPARATE sessions on SEPARATE days —
+   never combined into one workout.** Each week has one squat day AND
+   one deadlift day; the weekly alternation decides which is heavy
+   (exactly one heavy lower pull per week, never both heavy):
+   - Week A: squat day = heavy (`strength.cut_squat_heavy`); deadlift
+     day = light (`strength.cut_deadlift_light`), on a different day
+   - Week B: deadlift day = heavy (`strength.cut_deadlift_heavy`);
+     squat day = light (`strength.cut_squat_light`), on a different day
    - Returning after a gap (travel, illness): use the reentry variants
      first (`strength.cut_squat_reentry`, `strength.cut_deadlift_reentry`).
 4. **1× calisthenics / muscle-up day** — template
@@ -30,7 +32,7 @@ descriptions): if the back is guarded, switch heavy → light.
 
 ## Scheduling guidance for the coach
 
-- Heavy lower and the 4×4 should not land on back-to-back days when
+- Squat and deadlift never share a day. Heavy lower and the 4×4 should not land on back-to-back days when
   avoidable; climbing days pair fine with press or muscle-up work.
 - Which week is A vs B: derive from the ledger — whichever heavy lift
   appeared most recently, schedule the other one this week.
