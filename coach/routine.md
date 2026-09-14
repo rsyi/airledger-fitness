@@ -1,6 +1,6 @@
 # Weekly routine — cut phase
 
-(as of 2026-09-11 · templates live in `../views/`)
+(as of 2026-09-13 · templates live in `../views/`)
 
 ## The week, by rule
 
@@ -29,6 +29,41 @@
 Net load: ~3–4 lifting sessions + the 4×4 + 2 climbing sessions per
 week. Back feel-test gates on squat/deadlift days (per the template
 descriptions): if the back is guarded, switch heavy → light.
+
+## Weekday anchors
+
+- **Monday = press day** — bench + rows by default. The carryover rule
+  below can upgrade it to the combined heavy press day.
+- No other weekday is anchored; slot the rest of the week by the rules
+  above and the scheduling guidance below.
+
+## Carryover rule — check before proposing ANY session
+
+Look at the trailing 7 days of the strength ledger and note which main
+lifts (squat, deadlift, bench, OHP) were actually LOGGED — not planned,
+logged. A main lift the rules called for that never got logged folds
+into the next compatible day:
+
+- Skipped OHP → the next press day (usually Monday) becomes the
+  combined heavy press day (`strength.cut_press_heavy` — bench first,
+  fresh; then OHP). Keep rows only if recovery allows.
+- Skipped bench → same, combined press day, bench still first.
+- Skipped squat or deadlift day → re-slot it per the week-parity
+  algorithm below; squat and deadlift still never share a day.
+
+State your carryover reasoning in one line (like the parity line) so
+mistakes are visible — e.g. "OHP not logged since Tue → Monday is the
+combined press day."
+
+## Deficit consequences (cut phase)
+
+The calorie deficit (goals.md) reduces recovery. Concretely:
+
+- When folding a skipped lift forward, drop accessories before mains —
+  NEVER stack extra volume onto a day to "catch up".
+- Maintain loads; no PR chasing. A flat e1RM on the cut is a win.
+- Low-energy / hunger / soreness flags in the daily notes outrank the
+  default rotation AND this carryover rule.
 
 ## Scheduling guidance for the coach
 
