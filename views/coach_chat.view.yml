@@ -10,6 +10,7 @@ dimensions:
   - { name: ts, type: string, expr: ts, description: "ISO datetime — message ordering" }
   - { name: role, type: string, expr: role, description: "coach | user" }
   - { name: kind, type: string, expr: kind, description: "briefing | reply | user" }
+  - { name: thread, type: string, expr: thread, description: "Thread id; blank = general, 'briefings' = nightly briefings" }
   - { name: text, type: string, expr: text, description: Message body (markdown-ish plain text) }
 measures:
   - { name: message_count, type: count }

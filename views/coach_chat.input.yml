@@ -20,6 +20,8 @@ fields:
     editable: false
   kind:
     editable: false
+  thread:
+    editable: false
   text:
     widget: longtext
     required: true
