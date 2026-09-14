@@ -34,7 +34,17 @@ descriptions): if the back is guarded, switch heavy → light.
 
 - Squat and deadlift never share a day. Heavy lower and the 4×4 should not land on back-to-back days when
   avoidable; climbing days pair fine with press or muscle-up work.
-- Which week is A vs B: derive from the ledger — whichever heavy lift
-  appeared most recently, schedule the other one this week.
+- **Week parity — apply this algorithm, no improvising.** Weeks run
+  Monday–Sunday. To set the parity of the week being PLANNED: find the
+  most recent heavy lower session in the ledger (heavy = a top-single
+  day per the heavy templates, i.e. a max-effort single around RPE 8;
+  light days have no top single). If it was deadlift → the week being
+  planned is Week A (squat heavy). If squat → Week B (deadlift heavy).
+  The flip happens at the Monday boundary: parity belongs to the week
+  you are planning, NOT the week you just observed. Worked example:
+  heavy deadlift on Fri Sep 11 → the week of Mon Sep 14 is Week A —
+  heavy squat day + light deadlift day (separate days). When proposing
+  any lower-body day, state your parity reasoning in one line so
+  mistakes are visible.
 - Respect the daily note: soreness, sleep, or "elbow tweaky" outrank
   the default rotation.
