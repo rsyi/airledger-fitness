@@ -1,0 +1,37 @@
+target: climbing.view.yml
+icon: mountain
+date_field: date
+list_display:
+  title: climb_name
+  subtitle: ${grade} · ${ascent_type}
+fields:
+  id:
+    editable: false
+  kaya_id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  climb_name:
+    widget: text
+  climb_type:
+    widget: dropdown
+    options: [boulder, route]
+  grade:
+    widget: text
+    placeholder: 'V5 / 5.12a'
+  ascent_type:
+    widget: dropdown
+    options: [flash, redpoint, onsight, send]
+  attempts:
+    widget: number
+    min: 1
+  lead:
+    editable: false
+  gym:
+    widget: text
+  location:
+    widget: text
+  notes:
+    widget: longtext
