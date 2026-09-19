@@ -1,0 +1,7 @@
+target: climbing.view.yml
+icon: mountain
+read_only: true
+date_field: date
+list_display:
+  title: grade
+  subtitle: ${ascent_type} · ${gym}

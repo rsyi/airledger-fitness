@@ -1,0 +1,20 @@
+name: climbing
+description: "Kaya logbook snapshot — read-only mirror of the kaya_ascents tab (written by tool/kaya_import.dart from Kaya's CSV export; refresh by re-exporting). Never synced into the ledger."
+datasource: gsheets
+table: kaya_ascents
+entities:
+  - { name: ascent, type: primary, key: date }
+dimensions:
+  - { name: date, type: date, expr: date, description: Ascent day }
+  - { name: ascent_type, type: string, expr: ascent_type, description: Flash / Onsight / Redpoint / Repeat }
+  - { name: attempts, type: number, expr: attempts }
+  - { name: grade, type: string, expr: grade, description: "Kaya grade string verbatim (v5, 5.12a)" }
+  - { name: color, type: string, expr: color, description: Hold color (gym sets) }
+  - { name: climb_name, type: string, expr: climb_name }
+  - { name: gym, type: string, expr: gym, description: Gym name (blank when outdoor) }
+  - { name: location, type: string, expr: location, description: Outdoor area (blank in the gym) }
+  - { name: country, type: string, expr: country }
+  - { name: rating, type: number, expr: rating }
+  - { name: stiffness, type: number, expr: stiffness }
+measures:
+  - { name: ascent_count, type: count }
