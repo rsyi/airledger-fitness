@@ -1,0 +1,294 @@
+# Shared fixtures for the working-max controller evaluate() twins:
+#   Dart: ledger/lib/services/working_max.dart  (test/wm_fixture_test.dart)
+#   TS:   ledger-mcp/src/working_max.ts         (test/working_max.test.ts)
+# Both suites load THIS file against coach/program.yaml v5 load_policies
+# and must produce identical outputs. Drift = a failing test on either
+# side. Expectations were generated FROM the Dart controller (the
+# reference implementation, working-max spec §2).
+#
+# Case shape:
+#   policy   load_policy name from program.yaml (cut_early, cut_late,
+#            climbing_block, lifting_block, light_week, test_week)
+#   lift     bench | squat | deadlift | press
+#   wm       working max going in
+#   date     evaluation date (YYYY-MM-DD)
+#   reading  { weight, reps, rpe, kind, notes?, missed? } — omit for the
+#            no-reading cases. The harness runs the §1.4 variant parser
+#            on `notes` (converted weight = weight / factor) and the
+#            §1.2 grinder rule (rpe >= 9.5 or notes ~ /grind|slow|stall|
+#            miss/); `missed` is passed through as given (default false).
+#   weeks_without_reading   for no-reading cases (NO_READING at >= 2)
+#   prior    { action, raise_eligible, pain_cap_clean } — the previous
+#            decision's state (consecutive-drop rule, cut_early raise
+#            streak, pain-cap clean-session counting). Omit for "no
+#            prior decision".
+#   pain_cap / two_signals  boolean overrides (spec §2, checked first)
+#   expect:
+#     decision      raise | hold | drop | freeze | reset
+#     new_wm        wm after the decision (always present)
+#     source        rule | test | pain_cap (omit = rule)
+#     cap           capNextTopSetRpe (omit = none)
+#     flags         EXACT flag list (omit = none)
+#     no_top_sets_next_week   (omit = false)
+#     raise_eligible          this hold feeds the raise streak (omit = false)
+#     converted_weight        reading weight in default-variant terms (±0.05)
+#     implied_max             converted weight / chart[rpe][reps] (±0.05)
+cases:
+  # ── hold in band ─────────────────────────────────────────────────────
+  - name: cut_early_hold_in_band
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-22"
+    reading: { weight: 225, reps: 1, rpe: 8, kind: heavy_top }
+    expect: { decision: hold, new_wm: 240 }
+
+  # ── drops: rpe threshold, grinder (note + rpe 9.5), missed ───────────
+  - name: cut_early_drop_on_rpe_9
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-22"
+    reading: { weight: 235, reps: 1, rpe: 9, kind: heavy_top }
+    expect: { decision: drop, new_wm: 235, cap: 8.5 }
+
+  - name: cut_early_drop_grinder_note
+    policy: cut_early
+    lift: squat
+    wm: 320
+    date: "2026-09-21"
+    reading: { weight: 300, reps: 1, rpe: 8, kind: heavy_top, notes: "slow off the floor" }
+    expect: { decision: drop, new_wm: 315, cap: 8.5 }
+
+  - name: cut_early_drop_grinder_rpe_9_5
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-22"
+    reading: { weight: 235, reps: 1, rpe: 9.5, kind: heavy_top }
+    expect: { decision: drop, new_wm: 235, cap: 8.5 }
+
+  - name: cut_early_drop_missed_reps
+    policy: cut_early
+    lift: deadlift
+    wm: 330
+    date: "2026-09-25"
+    reading: { weight: 315, reps: 2, rpe: 8, kind: heavy_top, missed: true }
+    expect: { decision: drop, new_wm: 325, cap: 8.5 }
+
+  - name: cut_early_saturday_single_grinder_drops
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-26"
+    reading: { weight: 225, reps: 1, rpe: 9.5, kind: saturday_single }
+    expect: { decision: drop, new_wm: 235, cap: 8.5 }
+
+  # ── cut_early twice-in-a-row raise rule ──────────────────────────────
+  - name: cut_early_raise_streak_first_hold
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-22"
+    reading: { weight: 220, reps: 1, rpe: 7, kind: heavy_top }
+    expect: { decision: hold, new_wm: 240, raise_eligible: true }
+
+  - name: cut_early_raise_streak_second_raises
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-29"
+    reading: { weight: 220, reps: 1, rpe: 7, kind: heavy_top }
+    prior: { action: hold, raise_eligible: true }
+    expect: { decision: raise, new_wm: 245 }
+
+  - name: cut_early_raise_streak_broken_restarts
+    policy: cut_early
+    lift: bench
+    wm: 235
+    date: "2026-10-06"
+    reading: { weight: 215, reps: 1, rpe: 7, kind: heavy_top }
+    prior: { action: drop, raise_eligible: false }
+    expect: { decision: hold, new_wm: 235, raise_eligible: true }
+
+  # ── consecutive drops ────────────────────────────────────────────────
+  - name: cut_early_second_consecutive_drop_no_top_sets
+    policy: cut_early
+    lift: bench
+    wm: 235
+    date: "2026-09-29"
+    reading: { weight: 230, reps: 1, rpe: 9, kind: heavy_top }
+    prior: { action: drop, raise_eligible: false }
+    expect:
+      decision: drop
+      new_wm: 230
+      cap: 8.5
+      no_top_sets_next_week: true
+
+  # ── frozen policies: drop rule still runs, raises never do ───────────
+  - name: cut_late_frozen_drop_runs
+    policy: cut_late
+    lift: bench
+    wm: 235
+    date: "2026-11-20"
+    reading: { weight: 215, reps: 1, rpe: 8.5, kind: heavy_top }
+    expect: { decision: drop, new_wm: 230, cap: 7 }
+
+  - name: cut_late_frozen_easy_reading_holds
+    policy: cut_late
+    lift: bench
+    wm: 235
+    date: "2026-11-20"
+    reading: { weight: 205, reps: 1, rpe: 6, kind: heavy_top }
+    expect: { decision: hold, new_wm: 235 }
+
+  - name: climbing_block_frozen_holds_at_rpe_8
+    policy: climbing_block
+    lift: squat
+    wm: 320
+    date: "2027-01-12"
+    reading: { weight: 290, reps: 1, rpe: 8, kind: heavy_top }
+    expect: { decision: hold, new_wm: 320 }
+
+  # ── light week: recorded + ignored, even grinders ────────────────────
+  - name: light_week_grinder_ignored
+    policy: light_week
+    lift: squat
+    wm: 320
+    date: "2027-03-24"
+    reading: { weight: 315, reps: 1, rpe: 9.9, kind: light_week }
+    expect: { decision: hold, new_wm: 320 }
+
+  # ── test reset: wm = weight / 0.922, round DOWN to 5 ─────────────────
+  - name: test_reset_240_to_260
+    policy: test_week
+    lift: bench
+    wm: 250
+    date: "2027-04-20"
+    reading: { weight: 240, reps: 1, rpe: 8, kind: test }
+    expect: { decision: reset, new_wm: 260, source: test }
+
+  - name: test_reset_245_to_265
+    policy: test_week
+    lift: bench
+    wm: 250
+    date: "2027-04-20"
+    reading: { weight: 245, reps: 1, rpe: 8, kind: test }
+    expect: { decision: reset, new_wm: 265, source: test }
+
+  # ── §1.4 variant conversion ──────────────────────────────────────────
+  - name: touch_and_go_bench_divided_by_1_03
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-22"
+    reading: { weight: 247.2, reps: 1, rpe: 8, kind: heavy_top, notes: "touch and go" }
+    expect:
+      decision: hold
+      new_wm: 240
+      converted_weight: 240.0
+      implied_max: 260.3
+
+  - name: variant_mismatch_paused_deadlift_holds
+    policy: cut_early
+    lift: deadlift
+    wm: 330
+    date: "2026-09-25"
+    reading: { weight: 300, reps: 1, rpe: 9, kind: heavy_top, notes: "paused at the floor" }
+    expect:
+      decision: hold
+      new_wm: 330
+      flags: [VARIANT_MISMATCH]
+
+  # ── pain cap: freeze + cap 7; two clean heavy sessions lift it ───────
+  - name: pain_cap_dirty_session_not_clean
+    policy: cut_early
+    lift: squat
+    wm: 320
+    date: "2026-09-21"
+    pain_cap: true
+    reading: { weight: 300, reps: 1, rpe: 9, kind: heavy_top }
+    expect:
+      decision: freeze
+      new_wm: 320
+      source: pain_cap
+      cap: 7
+      flags: [PAIN_CAP]
+
+  - name: pain_cap_first_clean_session
+    policy: cut_early
+    lift: squat
+    wm: 320
+    date: "2026-09-21"
+    pain_cap: true
+    reading: { weight: 275, reps: 1, rpe: 7, kind: capped }
+    expect:
+      decision: freeze
+      new_wm: 320
+      source: pain_cap
+      cap: 7
+      flags: [PAIN_CAP, PAIN_CAP_CLEAN]
+
+  - name: pain_cap_second_clean_session_lifts
+    policy: cut_early
+    lift: squat
+    wm: 320
+    date: "2026-09-28"
+    pain_cap: true
+    reading: { weight: 285, reps: 1, rpe: 7, kind: capped }
+    prior: { action: freeze, pain_cap_clean: true }
+    expect:
+      decision: freeze
+      new_wm: 320
+      source: pain_cap
+      cap: 7
+      flags: [PAIN_CAP, PAIN_CAP_CLEAN, PAIN_CAP_LIFTED]
+
+  # ── post-drop cap: kind=capped never raises ──────────────────────────
+  - name: capped_reading_rpe_7_holds_not_raises
+    policy: cut_early
+    lift: bench
+    wm: 235
+    date: "2026-09-07"
+    reading: { weight: 185, reps: 5, rpe: 7, kind: capped }
+    prior: { action: drop, raise_eligible: false }
+    expect: { decision: hold, new_wm: 235, raise_eligible: false }
+
+  # ── NO_READING ───────────────────────────────────────────────────────
+  - name: one_readingless_week_holds_silently
+    policy: cut_early
+    lift: press
+    wm: 140
+    date: "2026-09-28"
+    weeks_without_reading: 1
+    expect: { decision: hold, new_wm: 140 }
+
+  - name: two_readingless_weeks_flag_no_reading
+    policy: cut_early
+    lift: press
+    wm: 140
+    date: "2026-10-05"
+    weeks_without_reading: 2
+    expect: { decision: hold, new_wm: 140, flags: [NO_READING] }
+
+  # ── TWO_SIGNALS freezes the week ─────────────────────────────────────
+  - name: two_signals_freezes_all_lifts
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-09-22"
+    two_signals: true
+    reading: { weight: 220, reps: 1, rpe: 7, kind: heavy_top }
+    expect:
+      decision: freeze
+      new_wm: 240
+      flags: [TWO_SIGNALS]
+
+  # ── lifting_block: single-session raise ──────────────────────────────
+  - name: lifting_block_single_rpe_8_raises
+    policy: lifting_block
+    lift: squat
+    wm: 320
+    date: "2027-03-08"
+    reading: { weight: 300, reps: 1, rpe: 8, kind: heavy_top }
+    expect: { decision: raise, new_wm: 325 }
