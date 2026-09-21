@@ -16,3 +16,4 @@ dimensions:
   - { name: notes, type: string, expr: notes }
 measures:
   - { name: weigh_in_count, type: count }
+  - { name: avg_weight_lbs, type: average, expr: weight_lbs, description: "Mean body weight (lbs) over the grouped period — grouped by date it yields one averaged point per day (Program screen's observed layer)" }
