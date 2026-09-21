@@ -298,6 +298,8 @@ versions:
       carbs: "extra on the four lifting days and the limit-climbing day"
       maintenance_definition: "the intake at which the 7-day average holds for two weeks; recorded at end of block 1"
 
+  # NOTE (v3): superseded by v4 below (identical + warmup_protocol
+  # + weight_fill for reference-based weekly auto-planning).
   - version: 3
     effective_from: "2026-09-21"
     reason: "Structured planned lifts for weekly auto-planning (exercise + sets x reps only)"
@@ -404,6 +406,229 @@ versions:
       sun:
         morning: null
         afternoon: null
+
+    # 5.3 Loads
+    loads:
+      top_set:
+        reps: [1, 3]
+        rpe: [8.5, 9]
+        pct_max_by_reps: { 1: 0.96, 2: 0.90, 3: 0.88 }
+        rotate_weekly: true
+      back_offs:
+        reps: 3
+        sets: { squat: 4, bench: 4, press: 4, deadlift: 3 }
+        pct_max: [0.81, 0.83]
+        rpe: [6.5, 7.5]
+      volume_day:
+        sets_reps: "3x8"
+        pct_max: 0.70
+        progression: "add one rep per set weekly to 3x10, then +5 lb and back to 3x8"
+      saturday_single: { lifts: [bench, squat], rpe: 8.5 }
+      progression: "+5 lb to working max when top set RPE 8.5 or easier two sessions running"
+      regression: "two consecutive top sets at RPE 9.5 -> next week RPE 8, no top-set attempts on that lift"
+      never: "no grinders"
+      light_week:
+        top_set_rpe: 6
+        back_offs: 0
+        volume: "2x8"
+        climbing: "one fewer"
+        hangboard: "off"
+      test_week: "one single at RPE 8 on squat, bench, deadlift, press; those four numbers are the block's result"
+      climbing_block:
+        top_set_rpe_cap: 8
+        back_offs: "held"
+        climbing: 3
+        max_hangs: "5x7s on 20mm before the two hard sessions"
+      lifting_block:
+        climbing: 2
+        climbing_intensity: "both below limit"
+        hangboard: "once a week or off"
+
+    # 5.4 Targets
+    targets:
+      gain_rate_lb_wk: { blocks_2_5: [0.2, 0.5], blocks_6_7: [0.1, 0.3], alarm: 0.6 }
+      bodyweight_lb: { band: [154, 172], hold: [168, 170] }
+      near_max_sets_wk: 6
+      working_sets_wk: 28
+      working_sets_wk_min_normal: 20
+      bench_days_wk: 2
+      press_days_wk: 2
+      squat_days_wk: 2
+      deadlift_days_wk: 1
+      climbing_wk: { lifting_block: 2, climbing_block: 3 }
+      bike_4x4_wk: 1
+      muscle_up_sessions_wk: 1
+      block_length_wk: 8
+      protein_g_per_lb: [0.8, 1.0]
+
+    # 2.6 flag rule ids in force
+    rules:
+      - WEIGHT_FAST
+      - WEIGHT_FLAT
+      - WEIGHT_CAP
+      - WEIGHT_DRIFT
+      - PHASE_MISMATCH
+      - NEAR_MAX_LOW
+      - WORKING_LOW
+      - LONG_SETS
+      - BENCH_ONCE
+      - TUESDAY_LOWER
+      - CLIMB_OVER
+      - BIKE_DROP
+      - TOP_SET_HEAVY
+      - PAIN_NOTE
+      - TWO_SIGNALS
+      - BLOCK_END
+
+    # 5.5 Nutrition
+    nutrition:
+      surplus_kcal: { rate_0_4: 200, rate_0_2: 100 }
+      adjust: "every third Sunday, 7-day average vs block target line: >1 lb over -> -100; >1 lb under -> +100; never a bigger step"
+      maintenance_week: "week 4 of every block at maintenance"
+      carbs: "extra on the four lifting days and the limit-climbing day"
+      maintenance_definition: "the intake at which the 7-day average holds for two weeks; recorded at end of block 1"
+
+  - version: 4
+    effective_from: "2026-09-21"
+    reason: "Warmup protocol + reference-based weight fill (user-approved)"
+    id: bulk-2026-27
+
+    block_0_loads: "Maintenance: one top single at RPE 8 + one back-off at RPE 7 x 3-5 per lift; top singles at RPE 7 from Nov 16."
+
+    # 5.1 Blocks (contiguous: each starts the day after the previous ends)
+    blocks:
+      - { n: 0, dates: ["2026-09-21", "2026-12-13"], emphasis: cut,      weight: [163, 154], notes: "Maintenance week + DEXA Nov 2-8. Top singles at RPE 7 from Nov 16." }
+      - { n: 1, dates: ["2026-12-14", "2027-01-03"], emphasis: reverse,  weight: [154, 155], notes: "Add ~150 kcal/day per week until the 7-day average holds two weeks; that is maintenance. Full training week at RPE 7." }
+      - { n: 2, dates: ["2027-01-04", "2027-02-28"], emphasis: climbing, weight: [154, 157], rate: 0.4 }
+      - { n: 3, dates: ["2027-03-01", "2027-04-25"], emphasis: lifting,  weight: [157, 160], rate: 0.4 }
+      - { n: 4, dates: ["2027-04-26", "2027-06-20"], emphasis: climbing, weight: [160, 163], rate: 0.4, notes: "End with an outdoor trip or a comp." }
+      - { n: 5, dates: ["2027-06-21", "2027-08-15"], emphasis: lifting,  weight: [163, 166], rate: 0.4 }
+      - { n: 6, dates: ["2027-08-16", "2027-10-10"], emphasis: climbing, weight: [166, 168], rate: 0.2 }
+      - { n: 7, dates: ["2027-10-11", "2027-12-05"], emphasis: lifting,  weight: [168, 170], rate: 0.2, notes: "Then hold 168-170." }
+    hard_cap_lb: 172
+    band_lb: [154, 172]
+
+    # Blocks 2-7 are 8 weeks: weeks 1-3 normal, week 4 light, weeks 5-7
+    # normal, week 8 test. Blocks 0-1 have no light/test cadence — every
+    # week is normal (applies_to_blocks makes that explicit).
+    week_types:
+      normal: {}
+      light: { week_in_block: 4 }
+      test: { week_in_block: 8 }
+      applies_to_blocks: [2, 3, 4, 5, 6, 7]
+
+    # 5.2 Weekly template (blocks 1-7), per weekday.
+    weekly_template:
+      mon:
+        morning: "Squat heavy: top set of 1-3 at RPE 8.5-9, then 4x3 at 82%; hanging leg raise; muscle-ups (3-4 sets of 1-2, 2x3-5 banded strict, front lever up-downs 2x5, ~10 min)."
+        afternoon: null
+      tue:
+        morning: "Bench heavy: top set of 1-3, then 4x3 at 82%; press light 3x8 at 70%."
+        afternoon: "Climb 1, limit/projecting (partner day, through June 2027). No squat or deadlift on this day."
+      wed:
+        morning: "Bike 4x4; 10 min hip and thoracic mobility. Easy day."
+        afternoon: null
+      thu:
+        morning: "Deadlift heavy: top set of 1-3, then 3x3 at 82%; press heavy: top set, then 4x3."
+        afternoon: null
+      fri:
+        morning: null
+        afternoon: "Climb 2, board/steep-wall power. Max hangs first in climbing blocks."
+      sat:
+        morning: "Bench: one single at RPE 8.5, then 3x8 at 70%; weighted pull-ups 5x3, rows, face pulls; squat: one single at RPE 8.5, then 3x8 at 70%; optional deadlift 3x5 at 65% only after four clean weeks. Longest session."
+        afternoon: null
+      sun:
+        morning: null
+        afternoon: "Climb 3, volume/technique, climbing blocks only."
+
+    # 5.2c Planned-lift alternation (weekly auto-planning, block 0).
+    # a/b parity = whole ISO weeks since anchor_monday: even = a, odd = b.
+    planned_alternation:
+      anchor_monday: "2026-09-21"
+      note: "A week = squat heavy + deadlift light; B week = deadlift heavy + squat light"
+
+    # 5.2b Block-0 weekly template (cut phase).
+    # Replaces weekly_template for block 0 only.
+    #
+    # `planned` = structured lifts the app auto-plans into the strength
+    # timeline each week (one row per set). Main lifts ONLY — accessories
+    # stay prose. Exercise strings must match the logged names EXACTLY
+    # (metrics depend on them). Rep ranges resolve to the LOW end.
+    # NEVER carries rpe/notes/weight — those are logged, not planned.
+    weekly_template_block_0:
+      mon:
+        morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
+        afternoon: null
+        planned:
+          a: # squat heavy: hard single + back-off triple
+            - { exercise: "Barbell Squat", sets: 1, reps: 1 }
+            - { exercise: "Barbell Squat", sets: 1, reps: 3 }
+          b: # squat light: one triple at lower weight
+            - { exercise: "Barbell Squat", sets: 1, reps: 3 }
+      tue:
+        morning: "Bench: one hard set at RPE 8 + back-off RPE 7 x 3-5; OHP here if not covered Saturday. No squat or deadlift today."
+        afternoon: "Climb 1 — Tuesday partner session."
+        planned: # OHP may land Saturday instead; planned here, user adjusts
+          - { exercise: "Flat Barbell Bench Press", sets: 1, reps: 1 }
+          - { exercise: "Flat Barbell Bench Press", sets: 1, reps: 3 }
+          - { exercise: "Overhead Press", sets: 1, reps: 1 }
+          - { exercise: "Overhead Press", sets: 1, reps: 3 }
+      wed:
+        morning: "Calisthenics."
+        afternoon: "Flex slot for Climb 2 (default is Friday)."
+      thu:
+        morning: "4x4 run (usually treadmill). Deadlift sometimes lands here instead of Friday."
+        afternoon: null
+      fri:
+        morning: "Deadlift (if not Thursday): one hard single RPE 8 + back-off RPE 7 x 3-5, alternating heavy/light with squat."
+        afternoon: "Climb 2 (default)."
+        planned:
+          a: # deadlift light opposite the heavy squat week
+            - { exercise: "Barbell Deadlift", sets: 1, reps: 3 }
+          b: # deadlift heavy: hard single + back-off triple
+            - { exercise: "Barbell Deadlift", sets: 1, reps: 1 }
+            - { exercise: "Barbell Deadlift", sets: 1, reps: 3 }
+      sat:
+        morning: "OHP if not Tuesday. Weekly row (inverted ring rows / seated cable row). EZ bar curls, lateral dumbbell raises."
+        afternoon: null
+      sun:
+        morning: null
+        afternoon: null
+
+    # 5.2d Warm-up ramp (weekly auto-planning, user-approved 2026-09-21).
+    # The planner prepends these rows before each planned lift's working
+    # sets. `pct_top` steps are percentages of the day's TOP working
+    # weight, rounded to rounding_lb; steps with `min_above_lb` are
+    # dropped unless their rounded weight is strictly above it. The whole
+    # ramp is skipped when the working weight is unknown (no reference —
+    # the planner never guesses). Per-lift keys override `default`.
+    warmup_protocol:
+      rounding_lb: 5
+      default:
+        - { weight_lb: 45, reps: 10 }   # empty bar
+        - { pct_top: 0.40, reps: 5 }
+        - { pct_top: 0.60, reps: 3 }
+        - { pct_top: 0.80, reps: 1 }
+      deadlift:                          # plates start at 135; no bar work
+        - { weight_lb: 135, reps: 5 }
+        - { pct_top: 0.60, reps: 3, min_above_lb: 135 }
+        - { pct_top: 0.80, reps: 1, min_above_lb: 135 }
+
+    # 5.2e Working-weight fill (weekly auto-planning, user-approved
+    # 2026-09-21). Planned working sets get
+    #   weight = reference e1rm x pct_by_reps[planned reps], round 5
+    # where the reference is the lift's 42-day reference e1rm (spec §2.5
+    # semantics: max Epley e1rm over qualifying reps<=8 sets in the 42
+    # days ending today, carried forward when the window is empty).
+    # Weight is ABSENT when no reference exists or the planned reps have
+    # no pct entry. rpe and notes are NEVER auto-filled (standing
+    # constraint) — they describe what happened, not what's planned.
+    weight_fill:
+      method: reference_e1rm
+      reference_days: 42
+      pct_by_reps: { 1: 0.96, 3: 0.88 }
+      rounding_lb: 5
+      never_fill: [rpe, notes]
 
     # 5.3 Loads
     loads:

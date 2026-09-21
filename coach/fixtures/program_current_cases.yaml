@@ -210,13 +210,13 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v3 is the last non-pending entry for 2026-09-21+.
-  # v1/v2/v3 share effective_from 2026-09-21; last list entry wins (v3 =
-  # v2 + structured `planned` lifts; today_template is unchanged).
-  - name: version_resolution_v3_wins_for_block0
+  # Version resolution: v4 is the last non-pending entry for 2026-09-21+.
+  # v1/v2/v3/v4 share effective_from 2026-09-21; last list entry wins (v4 =
+  # v3 + warmup_protocol + weight_fill; today_template is unchanged).
+  - name: version_resolution_v4_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 3
+      version: 4
       block: 0
       emphasis: cut
       week_in_block: 1
