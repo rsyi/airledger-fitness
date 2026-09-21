@@ -1,0 +1,32 @@
+# Versioned strategy note — spec §2.3. Append-only: every edit is a new
+# entry with version/effective_from/reason. Written by the user, never
+# by the model. Returned verbatim by get_coach_context.
+# House rule: any deviation from the program lasting more than a week
+# must be written into this note.
+versions:
+  - version: 1
+    effective_from: 2026-09-20
+    reason: "Initial seed — user-authored in coach chat, replacing the §5.7 draft"
+    text: |
+      On a cut - tactically, doing this by only eating morning +
+      post-workout smoothie, dinner at home, and small lunch. no snacks,
+      once/week nighttime snacking for date with wife (but small).
+      climbing: limit climbing 2x a week. tuesday afternoons and
+      generally fridays. strength: because I'm just trying to maintain
+      strength, I'm hitting basically one hard set at rpe 8 (1 rep) each
+      week, with one backoff set at rpe 7 for 3-5 reps for each of OHP,
+      BP, deadlift, squat. for deadlift and squat, I alternate heavy
+      (1 rep) and light (3 rep, lower weight) weeks - squat heavy and
+      deadlift light, then deadlift heavy, squat light. I'm switching to
+      squat on Monday because, since the start of the school year,
+      climbing is now on tuesdays and don't want to overload back on
+      tuesday. Tuesday is bench (and OHP, if I don't get it on Sat).
+      Wednesday is calisthenics. Thursday is 4x4 runs (usually on
+      treadmill). Sometimes I'll deadlift on Thurs, sometimes on Friday.
+      I'll slot in the second climbing either friday or Wednesday,
+      depending on how I feel. Accessories: face pulls and external
+      rotations to maintain shoulder health. EZ bar curls and lateral
+      dumbell raises for hypetrophy maintenance. Some sort of row each
+      week - often inverted ring rows or seated cable row. Very rarely
+      pendlay row. Once I hit 13% BF on Dexa (~154 lbs), I'll schedule
+      my dexa and re-evaluate this strategy.
