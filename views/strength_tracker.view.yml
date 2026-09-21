@@ -334,6 +334,15 @@ measures:
       END
     synonyms: ["RPE 1RM", "true 1RM", "adjusted E1RM"]
 
+  # Declared e1RM source of truth (working-max spec, 2026-09-21): Epley
+  # with reps capped at 12. lib/services/program_metrics.dart (epleyE1rm)
+  # and the working-max controller must match this expression exactly.
+  - name: max_e1rm_capped
+    type: max
+    description: "Maximum estimated 1RM using Epley formula with reps capped at 12: weight * (1 + min(reps, 12) / 30). The authoritative e1RM definition — program metrics and the working-max controller mirror this expression."
+    expr: "Weight * (1 + MIN(Reps, 12) / 30.0)"
+    synonyms: ["capped E1RM", "Epley 1RM", "reference e1RM"]
+
   # General 1RM (across all exercises)
   - name: max_estimated_1rm
     type: max
