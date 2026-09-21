@@ -11,8 +11,13 @@ dimensions:
   - { name: meal_type, type: string, expr: meal_type, description: Meal slot in the day }
   - { name: calories, type: number, expr: calories }
   - { name: protein_g, type: number, expr: protein_g, description: Protein in grams }
+  - { name: carbs_g, type: number, expr: carbs_g, description: Carbohydrates in grams }
+  - { name: fat_g, type: number, expr: fat_g, description: Fat in grams }
   - { name: notes, type: string, expr: notes }
+  - { name: hc_id, type: string, expr: hc_id, description: "Health Connect record uuid (Macrofactor ingest match key; blank on hand-entered rows)" }
 measures:
   - { name: meal_count, type: count, description: Number of meals logged }
   - { name: total_calories, type: sum, expr: calories }
   - { name: avg_protein_g, type: average, expr: protein_g }
+  - { name: avg_carbs_g, type: average, expr: carbs_g }
+  - { name: avg_fat_g, type: average, expr: fat_g }

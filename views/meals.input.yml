@@ -25,5 +25,13 @@ fields:
   protein_g:
     widget: number
     min: 0
+  carbs_g:
+    widget: number
+    min: 0
+  fat_g:
+    widget: number
+    min: 0
   notes:
     widget: longtext
+  hc_id:
+    editable: false
