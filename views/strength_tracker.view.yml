@@ -86,6 +86,18 @@ dimensions:
     description: "Time of day the set was started (blank = planned)"
     expr: "\"Start Time\""
 
+  - name: paused
+    type: boolean
+    description: "Paused reps (dead stop at chest/bottom). Tri-state: NULL/blank = not recorded — never assume false. Structured since 2026-09; older rows may only carry the info in Notes."
+    expr: "TRY_CAST(Paused AS BOOLEAN)"
+    synonyms: ["paused rep", "pause"]
+
+  - name: belted
+    type: boolean
+    description: "Lifting belt worn (squat/deadlift; belted is their default variant, beltless ~3-4% weaker). Tri-state: NULL/blank = not recorded — never assume false. Backfilled for squat/deadlift from notes + effort inference 2026-09."
+    expr: "TRY_CAST(Belted AS BOOLEAN)"
+    synonyms: ["belt", "with belt", "beltless"]
+
   - name: estimated_1rm
     type: number
     description: "Estimated one-rep max using Lombardi formula: weight * reps^0.1"

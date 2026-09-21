@@ -23,7 +23,7 @@ dimensions:
   - { name: incline, type: number, expr: Treadmill Incline, description: Incline (%) }
   - { name: treadmill_speed, type: number, expr: Treadmill Speed, description: Speed (mph) }
   - { name: stairmaster_speed, type: number, expr: Stairmaster Speed, description: Level / speed }
-  - { name: max_hr, type: number, expr: Max Heart Rate, description: Max heart rate during this interval }
+  - { name: max_hr, type: number, expr: Max Heart Rate, description: "Max heart rate during this interval (auto-filled from the live BLE HR feed when connected)" }
   - { name: notes, type: string, expr: Notes }
 measures:
   - { name: interval_count, type: count }
