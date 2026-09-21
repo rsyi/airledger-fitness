@@ -1,0 +1,34 @@
+name: program_status
+description: "Weekly training metrics computed by tool/program_status_update.dart — read-only; the coach's outcome layer."
+datasource: gsheets
+table: program_status
+entities:
+  - { name: week, type: primary, key: week_monday }
+dimensions:
+  - { name: week_monday, type: date, expr: week_monday, description: "ISO week Monday (week key)" }
+  - { name: week_type, type: string, expr: week_type, description: "Week classification (heavy, light, test, deload, etc.)" }
+  - { name: sessions, type: number, expr: sessions }
+  - { name: sets_total, type: number, expr: sets_total }
+  - { name: working_sets, type: number, expr: working_sets }
+  - { name: hard_sets, type: number, expr: hard_sets }
+  - { name: near_max_sets, type: number, expr: near_max_sets }
+  - { name: long_failure_sets, type: number, expr: long_failure_sets }
+  - { name: avg_reps_working, type: number, expr: avg_reps_working }
+  - { name: bench_days, type: number, expr: bench_days }
+  - { name: squat_days, type: number, expr: squat_days }
+  - { name: deadlift_days, type: number, expr: deadlift_days }
+  - { name: press_days, type: number, expr: press_days }
+  - { name: best_e1rm_squat, type: number, expr: best_e1rm_squat }
+  - { name: best_e1rm_bench, type: number, expr: best_e1rm_bench }
+  - { name: best_e1rm_deadlift, type: number, expr: best_e1rm_deadlift }
+  - { name: best_e1rm_press, type: number, expr: best_e1rm_press }
+  - { name: climbing_sessions, type: number, expr: climbing_sessions }
+  - { name: bike_4x4_count, type: number, expr: bike_4x4_count }
+  - { name: bike_4x4_max_hr, type: number, expr: bike_4x4_max_hr }
+  - { name: bw_7d_avg, type: number, expr: bw_7d_avg }
+  - { name: bw_rate_lb_wk, type: number, expr: bw_rate_lb_wk }
+  - { name: bw_3wk_change, type: number, expr: bw_3wk_change }
+  - { name: flags, type: string, expr: flags }
+  - { name: deviations, type: string, expr: deviations }
+measures:
+  - { name: week_count, type: count }

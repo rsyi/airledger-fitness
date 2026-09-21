@@ -1,0 +1,7 @@
+target: program_status.view.yml
+icon: activity
+read_only: true
+date_field: week_monday
+list_display:
+  title: ${working_sets}w · ${near_max_sets}nm
+  subtitle: ${flags}
