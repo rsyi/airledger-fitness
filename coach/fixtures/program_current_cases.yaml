@@ -13,6 +13,9 @@
 #   climbing_wk {lifting_block: 2, climbing_block: 3}).
 # - gain_rate_lb_wk: the block's `rate` when present; block 0 (cut) uses
 #   [-1.0, -0.5]; block 1 (reverse) has no target rate -> null.
+# - block-0 targets come from v6 `targets_block_0` (key present ->
+#   overrides base `targets`; explicit null -> no target in force;
+#   absent -> base value). Other blocks use base `targets` untouched.
 # - Blocks 0-7 are contiguous (each starts the day after the previous
 #   ends), so NO between-blocks gap date exists to test.
 # - expect: null means date is outside every block (pre-program).
@@ -29,10 +32,15 @@ cases:
         morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
         afternoon: null
       targets:
-        near_max_sets: 6
-        working_sets: 28
+        near_max_sets: 4          # v6 targets_block_0: one top single per lift
+        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        working_sets_min_normal: null
         bench_days: 2
-        climbing_sessions: 2
+        press_days: [1, 2]
+        squat_days: [1, 2]
+        deadlift_days: 1
+        climbing_sessions: 2      # v6 scalar override (cut block)
+        bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
 
   - name: block0_week3_midweek_wednesday
@@ -47,10 +55,15 @@ cases:
         morning: "Calisthenics."
         afternoon: "Flex slot for Climb 2 (default is Friday)."
       targets:
-        near_max_sets: 6
-        working_sets: 28
+        near_max_sets: 4          # v6 targets_block_0: one top single per lift
+        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        working_sets_min_normal: null
         bench_days: 2
-        climbing_sessions: 2
+        press_days: [1, 2]
+        squat_days: [1, 2]
+        deadlift_days: 1
+        climbing_sessions: 2      # v6 scalar override (cut block)
+        bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
 
   - name: block0_last_day_sunday_week12_still_normal
@@ -65,10 +78,15 @@ cases:
         morning: null
         afternoon: null
       targets:
-        near_max_sets: 6
-        working_sets: 28
+        near_max_sets: 4          # v6 targets_block_0: one top single per lift
+        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        working_sets_min_normal: null
         bench_days: 2
-        climbing_sessions: 2
+        press_days: [1, 2]
+        squat_days: [1, 2]
+        deadlift_days: 1
+        climbing_sessions: 2      # v6 scalar override (cut block)
+        bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
 
   - name: block1_week1_reverse_starts
@@ -210,13 +228,13 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v5 is the last non-pending entry for 2026-09-21+.
-  # v1..v5 share effective_from 2026-09-21; last list entry wins (v5 = v4 +
-  # working-max rpe_chart/variants/load_policies; today_template unchanged).
-  - name: version_resolution_v5_wins_for_block0
+  # Version resolution: v6 is the last non-pending entry for 2026-09-21+.
+  # v1..v6 share effective_from 2026-09-21; last list entry wins (v6 = v5 +
+  # targets_block_0 cut-phase target overrides; today_template unchanged).
+  - name: version_resolution_v6_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 5
+      version: 6
       block: 0
       emphasis: cut
       week_in_block: 1
@@ -226,8 +244,13 @@ cases:
         morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
         afternoon: null
       targets:
-        near_max_sets: 6
-        working_sets: 28
+        near_max_sets: 4          # v6 targets_block_0: one top single per lift
+        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        working_sets_min_normal: null
         bench_days: 2
-        climbing_sessions: 2
+        press_days: [1, 2]
+        squat_days: [1, 2]
+        deadlift_days: 1
+        climbing_sessions: 2      # v6 scalar override (cut block)
+        bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
