@@ -1,3 +1,6 @@
+> **DEPRECATED (2026-09-20): superseded by coach/program.yaml
+> weekly_template. Kept readable for one release; do not edit.**
+
 # Weekly routine — cut phase
 
 (as of 2026-09-13 · templates live in `../views/`)

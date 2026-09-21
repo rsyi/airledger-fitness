@@ -1,0 +1,202 @@
+# Shared fixtures for the program.current resolvers:
+#   Dart: ledger/lib/services/program_current.dart (test/program_current_test.dart)
+#   TS:   ledger-mcp/src/program.ts             (test/program.test.ts)
+# Both suites load THIS file against coach/program.yaml + coach/phase.yaml
+# and must produce identical outputs. Drift = a failing test on either side.
+#
+# Conventions under test:
+# - week_in_block: 1-based count of Mondays; the week containing the
+#   block's start date is week 1 (all seed blocks start on Mondays).
+# - week_type: blocks 2-7 (week_types.applies_to_blocks) run weeks 1-3
+#   normal, 4 light, 5-7 normal, 8 test; blocks 0-1 are ALL normal.
+# - climbing_sessions: 3 in climbing-emphasis blocks, else 2 (§5.4
+#   climbing_wk {lifting_block: 2, climbing_block: 3}).
+# - gain_rate_lb_wk: the block's `rate` when present; block 0 (cut) uses
+#   [-1.0, -0.5]; block 1 (reverse) has no target rate -> null.
+# - Blocks 0-7 are contiguous (each starts the day after the previous
+#   ends), so NO between-blocks gap date exists to test.
+# - expect: null means date is outside every block (pre-program).
+cases:
+  - name: block0_week1_monday_program_start
+    date: "2026-09-21"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 1
+      week_type: normal
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: [-1.0, -0.5]
+
+  - name: block0_week3_midweek_wednesday
+    date: "2026-10-07"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 3
+      week_type: normal
+      weekday: wed
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: [-1.0, -0.5]
+
+  - name: block0_last_day_sunday_week12_still_normal
+    date: "2026-12-13"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 12
+      week_type: normal
+      weekday: sun
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: [-1.0, -0.5]
+
+  - name: block1_week1_reverse_starts
+    date: "2026-12-14"
+    expect:
+      block: 1
+      emphasis: reverse
+      week_in_block: 1
+      week_type: normal
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: null
+
+  - name: block2_week1_normal_climbing_block
+    date: "2027-01-04"
+    expect:
+      block: 2
+      emphasis: climbing
+      week_in_block: 1
+      week_type: normal
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 3
+        gain_rate_lb_wk: 0.4
+
+  - name: block2_week4_light
+    date: "2027-01-25"
+    expect:
+      block: 2
+      emphasis: climbing
+      week_in_block: 4
+      week_type: light
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 3
+        gain_rate_lb_wk: 0.4
+
+  - name: block2_week8_test
+    date: "2027-02-22"
+    expect:
+      block: 2
+      emphasis: climbing
+      week_in_block: 8
+      week_type: test
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 3
+        gain_rate_lb_wk: 0.4
+
+  - name: block2_last_day_sunday_test_week
+    date: "2027-02-28"
+    expect:
+      block: 2
+      emphasis: climbing
+      week_in_block: 8
+      week_type: test
+      weekday: sun
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 3
+        gain_rate_lb_wk: 0.4
+
+  - name: block3_week1_lifting_block_starts
+    date: "2027-03-01"
+    expect:
+      block: 3
+      emphasis: lifting
+      week_in_block: 1
+      week_type: normal
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: 0.4
+
+  - name: block3_week2_midweek_wednesday
+    date: "2027-03-10"
+    expect:
+      block: 3
+      emphasis: lifting
+      week_in_block: 2
+      week_type: normal
+      weekday: wed
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: 0.4
+
+  - name: block6_week1_slower_rate
+    date: "2027-08-16"
+    expect:
+      block: 6
+      emphasis: climbing
+      week_in_block: 1
+      week_type: normal
+      weekday: mon
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 3
+        gain_rate_lb_wk: 0.2
+
+  - name: block7_final_day_sunday_test_week
+    date: "2027-12-05"
+    expect:
+      block: 7
+      emphasis: lifting
+      week_in_block: 8
+      week_type: test
+      weekday: sun
+      targets:
+        near_max_sets: 6
+        working_sets: 28
+        bench_days: 2
+        climbing_sessions: 2
+        gain_rate_lb_wk: 0.2
+
+  - name: pre_program_date_resolves_null
+    date: "2026-09-20"
+    expect: null

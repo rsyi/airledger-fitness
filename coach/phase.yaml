@@ -1,0 +1,12 @@
+# coach/phase.yaml — Intent layer: declared phase (cut|reverse|bulk|maintain).
+# Append-only versions; current = LAST entry without `pending: true`.
+# The app NEVER changes value; it only computes whether the scale agrees
+# (PHASE_MISMATCH).
+versions:
+  - version: 1
+    value: cut
+    effective_from: "2025-10-06"
+    reason: "Ending the 2025 bulk at 186.5; the extra weight bought nothing"
+    target_weight_lb: 154
+    target_rate_lb_per_week: -0.75
+    exit_criteria: "DEXA week of Nov 2 at ~157 lb sets the real endpoint (13%); maintenance week Nov 2-8; cut ends Dec 13 2026; reverse diet starts Dec 14"
