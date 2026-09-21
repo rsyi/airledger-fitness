@@ -39,3 +39,5 @@ fields:
     max: 60
   notes:
     widget: longtext
+    # Subjective per-entry — never copied by history autofill.
+    autofill: false

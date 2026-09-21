@@ -71,3 +71,5 @@ fields:
     hr_max_target: max_hr
   notes:
     widget: longtext
+    # Subjective per-session — never copied by history autofill.
+    autofill: false

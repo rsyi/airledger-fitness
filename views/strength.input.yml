@@ -412,11 +412,14 @@ fields:
     widget: number
     min: 1
     max: 10
+    # Subjective per-set — never copied by exercise-history autofill.
+    autofill: false
     show_when:
       exercise:
         not_in_group: [isometric, timed, mobility]
   notes:
     widget: longtext
+    autofill: false
 
 # Named, reusable value sets for show_when. Adding more (e.g. cardio
 # modalities, machine groups) is just another entry here — no schema
