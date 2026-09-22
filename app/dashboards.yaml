@@ -29,6 +29,10 @@
 #     from: series window start date. wilks_series also anchors its
 #       dashed reference line to the metric's value AS OF this date
 #       (block-0 start → "the Wilks you walked into the cut with").
+#     floor_pct: acceptable-drop floor, percent BELOW the from-anchored
+#       reference — the chart draws a second (dotted) line at
+#       reference × (1 − floor_pct/100); sinking under it is the act
+#       signal (wilks_series). Older apps ignore the key safely.
 #     goal_note: human context when the goal isn't a bare number.
 #     goal_band_per_lb: [low, high] g-per-lb-of-bodyweight band — the app
 #       scales it by the current 7-day-avg bodyweight and shades the
@@ -57,16 +61,20 @@ domains:
         unit: lb
         lifts: [squat, bench, deadlift, press]
       # Wilks (SBD): WILKS-2020 male, classic squat+bench+deadlift total
-      # (press excluded — NOT pl_total), weekly best e1RM from reps<=5
-      # sets (carried forward when untrained) at that week's 7d-avg bw.
+      # (press excluded — NOT pl_total), best e1RM from reps<=5 sets,
+      # carried forward when untrained. The stat is weekly-current; the
+      # SERIES is month-to-month (deload weeks make weekly points
+      # noisy) with monthly-mean bodyweight carried through months
+      # with no weigh-ins, so history runs back through sparse eras.
       - id: wilks
         kind: stat
         label: "Wilks (SBD) — 2020 formula, weekly"
       - id: wilks_series
         kind: series
-        label: "Wilks (SBD)"
+        label: "Wilks (SBD) — monthly"
         from: "2026-09-21" # block-0 (cut) start — keep in sync with program.yaml
-        goal_note: "hold stable through the cut"
+        floor_pct: 2.5 # acceptable drop below the cut-start reference (~327.5 → floor ~319)
+        goal_note: "hold within 2.5% of cut start; 3+ weeks below the floor = act"
 
   - name: weight
     paradigm: entry
