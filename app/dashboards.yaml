@@ -88,6 +88,10 @@ domains:
         label: "Wilks (SBD) — monthly"
         from: "2026-09-21" # block-0 (cut) start — keep in sync with program.yaml
         floor_pct: 2.5 # acceptable drop below the cut-start reference (~327.5 → floor ~319)
+        # Trailing plot window in years (48 monthly points). User-tunable;
+        # delete the key (or set null) for the full history. Tooltips
+        # carry the year on multi-year windows either way. 2026-09-22.
+        window_years: 4
         goal_note: "hold within 2.5% of cut start; 3+ weeks below the floor = act"
 
   # Weight is INTEGRATION paradigm (2026-09-21): Withings feeds it, so
