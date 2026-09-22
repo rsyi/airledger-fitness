@@ -1,0 +1,106 @@
+# app/dashboards.yaml — domain dashboards + home-IA presentation config.
+#
+# ENGINE-FREE: the app fetches this file straight from GitHub (1 h cache,
+# pull-to-refresh bust) and parses it in Dart only — it never passes
+# through the Rust engine, so keys here need no dylib rebuild and no
+# schema mirrors. Presentation, not row semantics. Missing/malformed file
+# → the app falls back to the flat Ledgers list; nothing breaks.
+#
+# Each domain groups view(s) into one home row + one domain screen:
+#   paradigm: entry        → LOG section; domain screen keeps the full
+#                            timeline affordances (FAB, forms, planning).
+#   paradigm: integration  → CONNECTED section; domain screen renders a
+#                            read-only timeline (denser read view in P3).
+#   views:    view names — the FIRST backs the domain screen's timeline.
+#   icon:     lucide icon name (same vocabulary as the input.yml icons).
+#   metrics:  dashboard header entries.
+#     kind: stat (latest/derived value) | best (all-time) | series (chart)
+#     id (built-ins): pl_total, e1rm_reference, all_time_best_weight,
+#       bw_series, bf_series, kcal_series, protein_series, grade_pyramid,
+#       session_frequency, hr_4x4_series
+#     goal: number → target line/reference; explicit null → no goal set.
+#     goal_note: human context when the goal isn't a bare number.
+#     lifts: main-lift filter for per-lift strength metrics.
+
+domains:
+  - name: strength
+    paradigm: entry
+    views: [strength]
+    icon: dumbbell
+    metrics:
+      - id: pl_total
+        kind: stat
+        label: "PL total — sum of best capped e1RMs (S+B+D+P)"
+        unit: lb
+        goal: null # no declared total goal yet
+      - id: e1rm_reference
+        kind: stat
+        label: "e1RM reference (42-day)"
+        unit: lb
+        lifts: [squat, bench, deadlift, press]
+      - id: all_time_best_weight
+        kind: best
+        label: "all-time best actual weight"
+        unit: lb
+        lifts: [squat, bench, deadlift, press]
+
+  - name: weight
+    paradigm: entry
+    views: [weight]
+    icon: scale
+    metrics:
+      - id: bw_series
+        kind: series
+        label: "body weight"
+        unit: lb
+        goal: 154 # cut target (coach/phase.yaml target_weight_lb)
+        goal_note: "phase target — keep in sync with phase.yaml"
+      - id: bf_series
+        kind: series
+        label: "body fat"
+        unit: "%"
+
+  - name: cardio
+    paradigm: entry
+    views: [cardio]
+    icon: heart-pulse
+    metrics:
+      - id: hr_4x4_series
+        kind: series
+        label: "4x4 max HR"
+        unit: bpm
+
+  - name: daily_notes
+    paradigm: entry
+    views: [daily_notes]
+    icon: notebook-pen
+    metrics: [] # journal — no numeric dashboard
+
+  - name: climbing
+    paradigm: integration
+    views: [climbing]
+    icon: mountain
+    metrics:
+      - id: grade_pyramid
+        kind: best
+        label: "grade pyramid"
+      - id: session_frequency
+        kind: series
+        label: "sessions / wk"
+        goal: 2
+        goal_note: "program climbing_wk — 2 in lifting blocks, 3 in climbing blocks"
+
+  - name: meals
+    paradigm: integration
+    views: [meals]
+    icon: utensils
+    metrics:
+      - id: kcal_series
+        kind: series
+        label: "calories"
+        unit: kcal
+      - id: protein_series
+        kind: series
+        label: "protein"
+        unit: g
+        goal_note: "0.8–1.0 g/lb × bodyweight (≈125–160 g at current bw)"
