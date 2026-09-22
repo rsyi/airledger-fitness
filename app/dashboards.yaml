@@ -10,9 +10,16 @@
 #   paradigm: entry        → LOG section; domain screen keeps the full
 #                            timeline affordances (FAB, forms, planning).
 #   paradigm: integration  → CONNECTED section; domain screen renders a
-#                            read-only timeline (denser read view in P3).
+#                            read-friendly record list (date-grouped, one
+#                            line per record, newest first); the classic
+#                            read-only timeline stays behind the app-bar
+#                            calendar icon.
 #   views:    view names — the FIRST backs the domain screen's timeline.
 #   icon:     lucide icon name (same vocabulary as the input.yml icons).
+#   list_fields: salient columns for the integration record list, in
+#     display order. Bare string (grade) or map ({ field: calories,
+#     unit: kcal }) — units are appended to numeric values. Absent →
+#     the app falls back to the view's list_display.
 #   metrics:  dashboard header entries.
 #     kind: stat (latest/derived value) | best (all-time) | series (chart)
 #     id (built-ins): pl_total, e1rm_reference, all_time_best_weight,
@@ -20,6 +27,9 @@
 #       session_frequency, hr_4x4_series
 #     goal: number → target line/reference; explicit null → no goal set.
 #     goal_note: human context when the goal isn't a bare number.
+#     goal_band_per_lb: [low, high] g-per-lb-of-bodyweight band — the app
+#       scales it by the current 7-day-avg bodyweight and shades the
+#       range on the chart (protein_series).
 #     lifts: main-lift filter for per-lift strength metrics.
 
 domains:
@@ -80,6 +90,7 @@ domains:
     paradigm: integration
     views: [climbing]
     icon: mountain
+    list_fields: [grade, color, gym, ascent_type]
     metrics:
       - id: grade_pyramid
         kind: best
@@ -94,6 +105,10 @@ domains:
     paradigm: integration
     views: [meals]
     icon: utensils
+    list_fields:
+      - meal
+      - { field: calories, unit: kcal }
+      - { field: protein_g, unit: g }
     metrics:
       - id: kcal_series
         kind: series
@@ -103,4 +118,5 @@ domains:
         kind: series
         label: "protein"
         unit: g
-        goal_note: "0.8–1.0 g/lb × bodyweight (≈125–160 g at current bw)"
+        goal_band_per_lb: [0.8, 1.0] # shaded band, scaled by current 7d-avg bw
+        goal_note: "0.8–1.0 g/lb of bodyweight"
