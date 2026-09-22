@@ -1,4 +1,5 @@
-# app/dashboards.yaml — domain dashboards + home-IA presentation config.
+# app/dashboards.yaml — domain dashboards + home-IA presentation config
+# + the home hero's per-phase eigenvectors (`phases:`, bottom).
 #
 # ENGINE-FREE: the app fetches this file straight from GitHub (1 h cache,
 # pull-to-refresh bust) and parses it in Dart only — it never passes
@@ -142,3 +143,86 @@ domains:
         unit: g
         goal_band_per_lb: [0.8, 1.0] # shaded band, scaled by current 7d-avg bw
         goal_note: "0.8–1.0 g/lb of bodyweight"
+
+# phases: — the home hero's eigenvectors, keyed by coach/phase.yaml's
+# current `value`. The hero renders one row per eigenvector: verdict
+# chip (green agree / amber drifting / red act) + the one number that
+# matters + a mini sparkline. Parsed by the app only (services/
+# phase_eigenvectors.dart); ABSENT section → the pre-hero four-card
+# home dashboard renders unchanged (back-compat by construction).
+#
+# Eigenvector vocabulary:
+#   weight_loss | gain_rate | weight_hold
+#     rate_band: [lo, hi] lb/wk the observed 3-week rate should land in
+#       (absent → derived from the program slice's gain_rate_lb_wk).
+#     act_above / act_below: red thresholds — outside the band but
+#       inside these is only amber.
+#   wilks_stability | strength_gain
+#     from: reference anchor date — weekly Wilks AS OF this day is the
+#       yardstick (absent → the running block's start date).
+#     floor_pct: acceptable drop below the reference, percent.
+#     act_weeks_below: consecutive weeks under the floor → act (def. 3).
+#     strength_gain additionally wants current >= reference (a bulk
+#     should trend UP; holding above the floor is only amber).
+#   inputs_delivered
+#     near_max_sets + working_sets from the nightly program_status row
+#     vs the program's targets-in-force (§5.4), pro-rated mid-week.
+phases:
+  cut:
+    eigenvectors:
+      # Losing weight: -1.0..-0.5 lb/wk (program cut band around the
+      # phase's -0.75 target; trajectory 163 → 154 by Dec 13).
+      - id: weight_loss
+        label: weight
+        rate_band: [-1.0, -0.5]
+        act_above: 0.2 # gaining on a cut — PHASE_MISMATCH territory
+        act_below: -1.5 # 2x the fast edge — muscle risk, eat
+      # ...without losing strength: weekly Wilks vs the cut-start
+      # reference (327.5 on 2026-09-21) with the 2.5% floor (~319.3).
+      - id: wilks_stability
+        label: strength
+        from: "2026-09-21" # block-0 start — sync with wilks_series above
+        floor_pct: 2.5
+        act_weeks_below: 3
+  bulk:
+    eigenvectors:
+      # Not gaining too fast: §5.4 gain_rate_lb_wk blocks_2_5 band;
+      # switch to [0.1, 0.3] when blocks 6-7 begin (2027-08-16).
+      - id: gain_rate
+        label: weight
+        rate_band: [0.2, 0.5]
+        act_above: 0.6 # the program's alarm rate
+        act_below: -0.2 # losing on a bulk
+      # Gaining strength: Wilks trending up over the block (reference
+      # defaults to the running block's start).
+      - id: strength_gain
+        label: strength
+        floor_pct: 1.5
+        act_weeks_below: 3
+      # Delivering the inputs: near-max + working sets vs the §5.4
+      # targets-in-force (28 working / 6 near-max in bulk blocks).
+      - id: inputs_delivered
+        label: inputs
+  maintain:
+    eigenvectors:
+      - id: weight_hold
+        label: weight
+        rate_band: [-0.25, 0.25]
+        act_above: 0.75
+        act_below: -0.75
+      - id: wilks_stability
+        label: strength
+        floor_pct: 2.5
+        act_weeks_below: 3
+  reverse:
+    eigenvectors:
+      # Kcal ramp: hold-to-slight-gain while finding maintenance.
+      - id: weight_hold
+        label: weight
+        rate_band: [-0.25, 0.5]
+        act_above: 1.0
+        act_below: -0.5
+      - id: wilks_stability
+        label: strength
+        floor_pct: 2.5
+        act_weeks_below: 3
