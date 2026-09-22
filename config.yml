@@ -39,3 +39,7 @@ integrations:
   withings:
     client_id_var: WITHINGS_CLIENT_ID
     client_secret_var: WITHINGS_CLIENT_SECRET
+  # Web-type OAuth client id (public — ships in the APK); the Android
+  # client in the same GCP project is matched by package + SHA-1.
+  kaya_gmail:
+    server_client_id: 262393512085-7sqb33066e7f8fo3s8pb4bvpu8ncfmsq.apps.googleusercontent.com
