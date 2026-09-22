@@ -182,6 +182,23 @@ domains:
         goal_band_per_lb: [0.8, 1.0] # shaded band, scaled by current 7d-avg bw
         goal_note: "0.8–1.0 g/lb of bodyweight"
 
+# last_bulk: — the home STRENGTH card's second column (2026-09-22,
+# user: "show my numbers from my last bulk"): per lift the heaviest
+# weight ACTUALLY lifted inside [start, end], Wilks-priced at the
+# contemporaneous monthly bodyweight; the all-time top moved to the
+# card's click-in sheet. `end` is the declared cut (coach/phase.yaml
+# v1 effective_from, "Ending the 2025 bulk at 186.5"); `start` was
+# DERIVED from the weigh-in series — the trailing-7-day-average trough
+# (167.6 lb on 2025-02-05) before the sustained climb to the bulk end
+# (tool/derive_bulk_window.dart in the app repo reproduces it) — and
+# is USER-EDITABLE: move the dates if the derivation misread your
+# history. Absent section → the card simply omits the column (older
+# apps ignore the key entirely).
+last_bulk:
+  start: "2025-02-05" # derived weigh-in trough — edit freely
+  end: "2025-10-06" # cut declared; keep in sync with phase.yaml
+  label: "2025 bulk"
+
 # phases: — the home hero's eigenvectors, keyed by coach/phase.yaml's
 # current `value`. The hero renders one row per eigenvector: verdict
 # chip (green agree / amber drifting / red act) + the one number that
