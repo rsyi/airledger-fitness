@@ -26,7 +26,7 @@
 #   icon:     lucide icon name (same vocabulary as the input.yml icons).
 #   headline: metric ids for the compact strip above the records — the
 #     2-3 numbers worth seeing every open (e.g. strength: wilks +
-#     pl_total → "Wilks 327.5 · PL 1222 lb"). Stats show their first
+#     pl_total → "Wilks 306.1 · PL 1222 lb"). Stats show their first
 #     chip, series their latest point, grade_pyramid its top grade.
 #     Absent → the app defaults to stat/best-kind metrics, capped at 3.
 #   list_fields: salient columns for the integration record list, in
@@ -57,7 +57,7 @@ domains:
     paradigm: entry
     views: [strength]
     icon: dumbbell
-    headline: [wilks, pl_total] # "Wilks 327.5 · PL 1222 lb" above the log
+    headline: [wilks, pl_total] # "Wilks 306.1 · PL 1222 lb" above the log
     metrics:
       - id: pl_total
         kind: stat
@@ -75,19 +75,28 @@ domains:
         unit: lb
         lifts: [squat, bench, deadlift, press]
       # Wilks (SBD): WILKS-2020 male, classic squat+bench+deadlift total
-      # (press excluded — NOT pl_total), best e1RM from reps<=5 sets,
-      # carried forward when untrained. The stat is weekly-current; the
-      # SERIES is month-to-month (deload weeks make weekly points
-      # noisy) with monthly-mean bodyweight carried through months
-      # with no weigh-ins, so history runs back through sparse eras.
+      # (press excluded — NOT pl_total). Basis = ACTUAL MAX since
+      # 2026-09-22 (user: "done against actually max lift numbers, not
+      # e1RM"): per period per lift the heaviest weight actually lifted
+      # (any reps >= 1 — a 405×2 counts as 405), carried forward when
+      # untrained. The stat is weekly-current; the SERIES is
+      # month-to-month (deload weeks make weekly points noisy) with
+      # monthly-mean bodyweight carried through months with no
+      # weigh-ins, so history runs back through sparse eras. The app
+      # also draws the ALL-TIME BENCHMARK line — the series' absolute
+      # max ("best ever 364.7 · May '24") — the yardstick the current
+      # score is tracked against.
       - id: wilks
         kind: stat
-        label: "Wilks (SBD) — 2020 formula, weekly"
+        label: "Wilks (SBD, actual lifts) — weekly"
       - id: wilks_series
         kind: series
-        label: "Wilks (SBD) — monthly"
+        label: "Wilks (SBD, actual lifts) — monthly"
         from: "2026-09-21" # block-0 (cut) start — keep in sync with program.yaml
-        floor_pct: 2.5 # acceptable drop below the cut-start reference (~327.5 → floor ~319)
+        # Acceptable drop below the cut-start reference, on the
+        # actual-max basis: reference 306.1 → floor 298.5 (2026-09-22;
+        # was 327.3 → 319.1 on the retired e1RM basis).
+        floor_pct: 2.5
         # Trailing plot window in years (48 monthly points). User-tunable;
         # delete the key (or set null) for the full history. Tooltips
         # carry the year on multi-year windows either way. 2026-09-22.
@@ -206,8 +215,9 @@ phases:
         rate_band: [-1.0, -0.5]
         act_above: 0.2 # gaining on a cut — PHASE_MISMATCH territory
         act_below: -1.5 # 2x the fast edge — muscle risk, eat
-      # ...without losing strength: weekly Wilks vs the cut-start
-      # reference (327.5 on 2026-09-21) with the 2.5% floor (~319.3).
+      # ...without losing strength: weekly Wilks (actual-max basis,
+      # 2026-09-22) vs the cut-start reference (306.1 on 2026-09-21)
+      # with the 2.5% floor (~298.5).
       - id: wilks_stability
         label: strength
         from: "2026-09-21" # block-0 start — sync with wilks_series above
