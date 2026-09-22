@@ -7,21 +7,33 @@
 # schema mirrors. Presentation, not row semantics. Missing/malformed file
 # → the app falls back to the flat Ledgers list; nothing breaks.
 #
-# Each domain groups view(s) into one home row + one domain screen:
+# Each domain groups view(s) into one home row + one domain screen.
+# Domain screens are RECORDS-FIRST (UX redesign 2026-09-21): the ledger
+# fills the screen, topped by a one-line `headline:` strip; the full
+# metric dashboard lives behind the strip's Trends toggle.
 #   paradigm: entry        → LOG section; domain screen keeps the full
 #                            timeline affordances (FAB, forms, planning).
 #   paradigm: integration  → CONNECTED section; domain screen renders a
 #                            read-friendly record list (date-grouped, one
 #                            line per record, newest first); the classic
 #                            read-only timeline stays behind the app-bar
-#                            calendar icon.
+#                            calendar icon. Views that still accept
+#                            writes (weight) keep a manual escape hatch:
+#                            ⋮ → "Add entry manually" opens the normal
+#                            form for integration gaps (travel, dead
+#                            scale battery).
 #   views:    view names — the FIRST backs the domain screen's timeline.
 #   icon:     lucide icon name (same vocabulary as the input.yml icons).
+#   headline: metric ids for the compact strip above the records — the
+#     2-3 numbers worth seeing every open (e.g. strength: wilks +
+#     pl_total → "Wilks 327.5 · PL 1222 lb"). Stats show their first
+#     chip, series their latest point, grade_pyramid its top grade.
+#     Absent → the app defaults to stat/best-kind metrics, capped at 3.
 #   list_fields: salient columns for the integration record list, in
 #     display order. Bare string (grade) or map ({ field: calories,
 #     unit: kcal }) — units are appended to numeric values. Absent →
 #     the app falls back to the view's list_display.
-#   metrics:  dashboard header entries.
+#   metrics:  the Trends dashboard's entries.
 #     kind: stat (latest/derived value) | best (all-time) | series (chart)
 #     id (built-ins): pl_total, e1rm_reference, all_time_best_weight,
 #       wilks, wilks_series, bw_series, bf_series, kcal_series,
@@ -45,6 +57,7 @@ domains:
     paradigm: entry
     views: [strength]
     icon: dumbbell
+    headline: [wilks, pl_total] # "Wilks 327.5 · PL 1222 lb" above the log
     metrics:
       - id: pl_total
         kind: stat
@@ -77,10 +90,19 @@ domains:
         floor_pct: 2.5 # acceptable drop below the cut-start reference (~327.5 → floor ~319)
         goal_note: "hold within 2.5% of cut start; 3+ weeks below the floor = act"
 
+  # Weight is INTEGRATION paradigm (2026-09-21): Withings feeds it, so
+  # the screen is a read surface — record list + Trends, no FAB. Manual
+  # weigh-ins stay possible via ⋮ → "Add entry manually" (the view keeps
+  # its input overlay; rows write to the ledger + sync like any entry).
   - name: weight
-    paradigm: entry
+    paradigm: integration
     views: [weight]
     icon: scale
+    headline: [bw_series, bf_series] # latest bw + bf above the records
+    list_fields:
+      - { field: weight_lbs, unit: lb }
+      - { field: body_fat_withing, unit: "% bf" }
+      - time
     metrics:
       - id: bw_series
         kind: series
@@ -97,6 +119,7 @@ domains:
     paradigm: entry
     views: [cardio]
     icon: heart-pulse
+    headline: [hr_4x4_series] # last session's max HR above the log
     metrics:
       - id: hr_4x4_series
         kind: series
@@ -113,6 +136,7 @@ domains:
     paradigm: integration
     views: [climbing]
     icon: mountain
+    headline: [grade_pyramid, session_frequency] # "top v7 · sess/wk 2"
     list_fields: [grade, color, gym, ascent_type]
     metrics:
       - id: grade_pyramid
@@ -128,6 +152,7 @@ domains:
     paradigm: integration
     views: [meals]
     icon: utensils
+    headline: [kcal_series, protein_series] # yesterday/today's totals
     list_fields:
       - meal
       - { field: calories, unit: kcal }
