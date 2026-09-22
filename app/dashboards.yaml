@@ -23,9 +23,12 @@
 #   metrics:  dashboard header entries.
 #     kind: stat (latest/derived value) | best (all-time) | series (chart)
 #     id (built-ins): pl_total, e1rm_reference, all_time_best_weight,
-#       bw_series, bf_series, kcal_series, protein_series, grade_pyramid,
-#       session_frequency, hr_4x4_series
+#       wilks, wilks_series, bw_series, bf_series, kcal_series,
+#       protein_series, grade_pyramid, session_frequency, hr_4x4_series
 #     goal: number → target line/reference; explicit null → no goal set.
+#     from: series window start date. wilks_series also anchors its
+#       dashed reference line to the metric's value AS OF this date
+#       (block-0 start → "the Wilks you walked into the cut with").
 #     goal_note: human context when the goal isn't a bare number.
 #     goal_band_per_lb: [low, high] g-per-lb-of-bodyweight band — the app
 #       scales it by the current 7-day-avg bodyweight and shades the
@@ -53,6 +56,17 @@ domains:
         label: "all-time best actual weight"
         unit: lb
         lifts: [squat, bench, deadlift, press]
+      # Wilks (SBD): WILKS-2020 male, classic squat+bench+deadlift total
+      # (press excluded — NOT pl_total), weekly best e1RM from reps<=5
+      # sets (carried forward when untrained) at that week's 7d-avg bw.
+      - id: wilks
+        kind: stat
+        label: "Wilks (SBD) — 2020 formula, weekly"
+      - id: wilks_series
+        kind: series
+        label: "Wilks (SBD)"
+        from: "2026-09-21" # block-0 (cut) start — keep in sync with program.yaml
+        goal_note: "hold stable through the cut"
 
   - name: weight
     paradigm: entry
