@@ -228,13 +228,14 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v6 is the last non-pending entry for 2026-09-21+.
-  # v1..v6 share effective_from 2026-09-21; last list entry wins (v6 = v5 +
-  # targets_block_0 cut-phase target overrides; today_template unchanged).
+  # Version resolution: v7 is the last non-pending entry for 2026-09-21+.
+  # v1..v6 share effective_from 2026-09-21; last list entry wins (v7 = v6 +
+  # week_start: saturday, the 2026-09-22 accounting-week amendment; slice
+  # semantics — targets, templates, week types — are unchanged from v6).
   - name: version_resolution_v6_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 6
+      version: 7
       block: 0
       emphasis: cut
       week_in_block: 1
