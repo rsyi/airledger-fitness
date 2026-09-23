@@ -206,6 +206,23 @@ last_bulk:
 # phase_eigenvectors.dart); ABSENT section → the pre-hero four-card
 # home dashboard renders unchanged (back-compat by construction).
 #
+# weekly_drivers: — the home THIS WEEK strip's driver checklist
+# (2026-09-22, output>>input principle): NOT activity tallies but the
+# few causal inputs that produce the phase's outcome, each tied to the
+# outcome it drives (`outcome` names it; `why` is the detail sheet's
+# one-line causal story). Parsed by services/week_drivers.dart; a phase
+# WITHOUT weekly_drivers (or an older app) keeps the old quota strip.
+# Driver ids:
+#   top_single_per_lift  each `lifts` entry gets its heavy single (a
+#                        §2.5 near-max set) this week — per-lift ticks
+#   bench_frequency      distinct bench days ≥ target
+#   lift_frequency       per-lift distinct days vs per_lift_targets
+#   near_max_exposure    near-max sets this week ≥ target
+#   protein_floor        daily-avg protein ≥ floor_g_per_lb × current bw
+#   climbing_cap         session days vs cap — over is the bad state;
+#                        stale kaya snapshot renders "as of <date>"
+#   bike_4x4             4x4 session days ≥ target
+#
 # Eigenvector vocabulary:
 #   weight_loss | gain_rate | weight_hold
 #     rate_band: [lo, hi] lb/wk the observed 3-week rate should land in
@@ -240,6 +257,36 @@ phases:
         from: "2026-09-21" # block-0 start — sync with wilks_series above
         floor_pct: 2.5
         act_weeks_below: 3
+    # Cut drivers — verified against coach/program.yaml v7
+    # targets_block_0 (near_max 4 = one single per lift at RPE ≤ 8,
+    # bench_days 2, climbing_wk 2 scalar, bike_4x4_wk 1) and base
+    # protein_g_per_lb [0.8, 1.0].
+    weekly_drivers:
+      - id: top_single_per_lift
+        label: singles
+        lifts: [squat, bench, deadlift, press]
+        outcome: "Wilks preserved"
+        why: "One heavy single (RPE ≤ 8) per lift is the minimum dose that keeps neural drive in a deficit — skip a lift and its number starts sliding."
+      - id: bench_frequency
+        label: bench 2x
+        target: 2
+        outcome: "bench / Wilks held"
+        why: "Bench detrains fastest of the four — the second (light) weekly exposure is what holds it through the cut."
+      - id: protein_floor
+        label: protein
+        floor_g_per_lb: 0.8
+        outcome: "muscle retention"
+        why: "Under 0.8 g/lb in a deficit the weight coming off stops being mostly fat."
+      - id: climbing_cap
+        label: climb
+        cap: 2
+        outcome: "weight rate + Wilks"
+        why: "Recovery budget: a third session in a deficit taxes the same recovery the lifts and the loss rate depend on. Under the cap is fine."
+      - id: bike_4x4
+        label: 4x4
+        target: 1
+        outcome: "VO2 maintained"
+        why: "One weekly 4x4 keeps the aerobic top end without eating recovery."
   bulk:
     eigenvectors:
       # Not gaining too fast: §5.4 gain_rate_lb_wk blocks_2_5 band;
@@ -259,6 +306,25 @@ phases:
       # targets-in-force (28 working / 6 near-max in bulk blocks).
       - id: inputs_delivered
         label: inputs
+    # Bulk drivers — §5.4 base targets: squat/bench/press 2 days,
+    # deadlift 1, near_max_sets_wk 6, protein_g_per_lb [0.8, 1.0].
+    # Gain rate stays an OUTCOME in the hero, not a driver here.
+    weekly_drivers:
+      - id: lift_frequency
+        label: lifts
+        per_lift_targets: { squat: 2, bench: 2, press: 2, deadlift: 1 }
+        outcome: "steady e1RM growth"
+        why: "Each lift ~2x/week (deadlift 1x) is the muscle-group frequency eigenvector specialized to the program — coverage, not volume, drives steady progress."
+      - id: near_max_exposure
+        label: near-max
+        target: 6
+        outcome: "e1RM growth"
+        why: "Backtest-validated: ~6 near-max sets a week is the productive stretch that actually moves e1RM."
+      - id: protein_floor
+        label: protein
+        floor_g_per_lb: 0.8
+        outcome: "lean gain"
+        why: "The surplus builds muscle only when the protein floor is met."
   maintain:
     eigenvectors:
       - id: weight_hold
@@ -270,6 +336,23 @@ phases:
         label: strength
         floor_pct: 2.5
         act_weeks_below: 3
+    # Maintenance: the minimal set that holds both outcomes.
+    weekly_drivers:
+      - id: top_single_per_lift
+        label: singles
+        lifts: [squat, bench, deadlift, press]
+        outcome: "strength held"
+        why: "One weekly heavy exposure per lift is the maintenance dose."
+      - id: protein_floor
+        label: protein
+        floor_g_per_lb: 0.8
+        outcome: "lean mass held"
+        why: "The floor still applies at maintenance — muscle is kept, not assumed."
+      - id: bike_4x4
+        label: 4x4
+        target: 1
+        outcome: "VO2 maintained"
+        why: "One weekly 4x4 keeps the aerobic top end."
   reverse:
     eigenvectors:
       # Kcal ramp: hold-to-slight-gain while finding maintenance.
@@ -282,3 +365,21 @@ phases:
         label: strength
         floor_pct: 2.5
         act_weeks_below: 3
+    # Reverse: RPE-7 singles seed the next bulk's working maxes; keep
+    # the exposure cadence while kcal ramps.
+    weekly_drivers:
+      - id: top_single_per_lift
+        label: singles
+        lifts: [squat, bench, deadlift, press]
+        outcome: "reverse seeds the bulk"
+        why: "The weekly RPE-7 singles are the numbers the bulk's working maxes are seeded from — keep the cadence."
+      - id: protein_floor
+        label: protein
+        floor_g_per_lb: 0.8
+        outcome: "lean regain"
+        why: "The kcal ramp should refill glycogen and muscle, not just fat — the floor decides which."
+      - id: bike_4x4
+        label: 4x4
+        target: 1
+        outcome: "VO2 maintained"
+        why: "One weekly 4x4 keeps the aerobic top end."
