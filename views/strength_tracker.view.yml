@@ -355,6 +355,25 @@ measures:
     expr: "Weight * (1 + MIN(Reps, 12) / 30.0)"
     synonyms: ["capped E1RM", "Epley 1RM", "reference e1RM"]
 
+  # RPE-adjusted capped e1RM (progress-tracking source of truth,
+  # 2026-09-25): effective reps = capped reps + RIR (10 - RPE), the
+  # TOTAL capped at 12 — an RPE-8 double counts as 4 effective reps
+  # (you had 2 more in the tank), so submaximal work off a cut doesn't
+  # read as strength loss. Rows WITHOUT an RPE fall back to plain
+  # capped Epley via COALESCE(10 - RPE, 0) → 0 extra reps — i.e. they
+  # are treated as taken to failure, the legacy max_e1rm_capped
+  # behavior. Two-arg MIN is the sqlite scalar form (precedent:
+  # max_e1rm_capped). The app's progress displays (STRENGTH card
+  # recent column, strength-domain recent metric) mirror this in
+  # lib/services/program_metrics.dart (rpeAdjustedE1rm); the §2.5
+  # effort-grading reference and the working-max controller stay on
+  # max_e1rm_capped.
+  - name: max_e1rm_rpe
+    type: max
+    description: "Maximum RPE-adjusted estimated 1RM: Epley over effective reps = min(min(reps, 12) + RIR, 12) where RIR = 10 - RPE. Better current-1RM estimate when training away from failure; rows without RPE degrade to the capped Epley (at-failure) estimate."
+    expr: "Weight * (1 + MIN(MIN(Reps, 12) + COALESCE(10 - RPE, 0), 12) / 30.0)"
+    synonyms: ["RPE-adjusted e1RM", "capped RPE E1RM", "recent e1RM (RPE-adj)"]
+
   # General 1RM (across all exercises)
   - name: max_estimated_1rm
     type: max

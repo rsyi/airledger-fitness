@@ -64,6 +64,20 @@ domains:
         label: "PL total — sum of best capped e1RMs (S+B+D+P)"
         unit: lb
         goal: null # no declared total goal yet
+      # Current-1RM ESTIMATE for progress tracking (2026-09-25): recent
+      # 14-day best on the RPE-adjusted capped e1RM — the
+      # strength_tracker `max_e1rm_rpe` measure's basis (RIR = 10 - RPE
+      # counts as reps, total capped at 12; rows without RPE score
+      # as-is, i.e. at-failure). The home STRENGTH card's recent column
+      # shows the same numbers.
+      - id: recent_e1rm_rpe
+        kind: stat
+        label: "recent e1RM (RPE-adjusted, 14-day)"
+        unit: lb
+        lifts: [squat, bench, deadlift, press]
+      # §2.5 GRADING reference — plain capped Epley by design (effort
+      # grading is backtest-calibrated against it); NOT a current-1RM
+      # display. Kept distinct from recent_e1rm_rpe on purpose.
       - id: e1rm_reference
         kind: stat
         label: "e1RM reference (42-day)"
