@@ -227,8 +227,16 @@ last_bulk:
 # one-line causal story). Parsed by services/week_drivers.dart; a phase
 # WITHOUT weekly_drivers (or an older app) keeps the old quota strip.
 # Driver ids:
-#   top_single_per_lift  each `lifts` entry gets its heavy single (a
-#                        §2.5 near-max set) this week — per-lift ticks
+#   top_single_per_lift  each `lifts` entry gets its top-set READING
+#                        this week (the working-max controller's own
+#                        extraction — heavy_top / saturday_single /
+#                        capped / test tick; light_week doesn't; ANY
+#                        reps) — per-lift ticks. Squat/deadlift ticks
+#                        wear this week's alternation side ((H)/(L),
+#                        from program.yaml planned_alternation), and
+#                        heavy_single_max_days adds the every-two-weeks
+#                        heavy-single recency line (≤2 reps at RPE ≥
+#                        7.5; amber past the config, red a week later)
 #   bench_frequency      distinct bench days ≥ target
 #   lift_frequency       per-lift distinct days vs per_lift_targets
 #   near_max_exposure    near-max sets this week ≥ target
@@ -276,11 +284,17 @@ phases:
     # bench_days 2, climbing_wk 2 scalar, bike_4x4_wk 1) and base
     # protein_g_per_lb [0.8, 1.0].
     weekly_drivers:
+      # Codified 2026-09-25 (user): "the rule is I need to hit a heavy
+      # single every two weeks, but I've been fine with a lighter
+      # stimulus on alternate weeks." The weekly tick = a top-set
+      # reading, heavy OR light; the heavy-single line under the pills
+      # enforces the two-week rule for the alternating lifts.
       - id: top_single_per_lift
         label: singles
         lifts: [squat, bench, deadlift, press]
+        heavy_single_max_days: 14
         outcome: "Wilks preserved"
-        why: "One heavy single (RPE ≤ 8) per lift is the minimum dose that keeps neural drive in a deficit — skip a lift and its number starts sliding."
+        why: "One top set per lift each week keeps neural drive in the deficit — heavy or light both count (squat/deadlift alternate heavy and light weeks; (H)/(L) marks this week's side). The standing rule: a true heavy single every two weeks per lift — the line under the pills tracks it."
       - id: bench_frequency
         label: bench 2x
         target: 2
