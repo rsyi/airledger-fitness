@@ -264,13 +264,17 @@ last_bulk:
 phases:
   cut:
     eigenvectors:
-      # Losing weight: -1.0..-0.5 lb/wk (program cut band around the
-      # phase's -0.75 target; trajectory 163 → 154 by Dec 13).
+      # Losing weight: -1.6..-0.5 lb/wk (phase target -0.75; trajectory
+      # 163 → 154 by Dec 13). Fast edge: cap ≈ 1% of bodyweight/week —
+      # the evidence-based muscle-preservation ceiling for trained
+      # lifters (Garthe 2011: 0.7%/wk preserved LBM vs 1.4%/wk; Helms
+      # guidance 0.5–1%/wk); at ~161 lb → 1.6 lb/wk. User-approved
+      # 2026-09-25.
       - id: weight_loss
         label: weight
-        rate_band: [-1.0, -0.5]
+        rate_band: [-1.6, -0.5]
         act_above: 0.2 # gaining on a cut — PHASE_MISMATCH territory
-        act_below: -1.5 # 2x the fast edge — muscle risk, eat
+        act_below: -1.8 # clearly past the 1%/wk cap — muscle risk, eat
       # ...without losing strength: weekly Wilks (actual-max basis,
       # 2026-09-22) vs the cut-start reference (306.1 on 2026-09-21)
       # with the 2.5% floor (~298.5).
