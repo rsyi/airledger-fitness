@@ -1,0 +1,91 @@
+# app/world_model.yaml — declared causal graph + fitted response models
+# for the program simulator. Driver vocabulary matches airlayer
+# (docs/schema-format.md §Drivers): measure/direction/form/coefficient/
+# intercept/lag. Extensions: fit metadata, saturation, sim rules.
+# Coefficients are REFIT from history (tool/sim_calibrate.dart fit code
+# shared with the app's SimRefit); the values here are the shipped
+# defaults + the audit trail of the last refit.
+version: 1
+nodes:
+  - id: bw            # lb, controlled input (phase schedule + levers)
+    measure: weight.bw_7d_avg
+    kind: input
+  - id: e1rm_squat    # lb, RPE-adjusted weekly best
+    measure: strength_tracker.max_e1rm_capped
+    filter: { lift: squat }
+  - id: e1rm_bench
+    measure: strength_tracker.max_e1rm_capped
+    filter: { lift: bench }
+  - id: e1rm_deadlift
+    measure: strength_tracker.max_e1rm_capped
+    filter: { lift: deadlift }
+  - id: e1rm_press
+    measure: strength_tracker.max_e1rm_capped
+    filter: { lift: press }
+  - id: grade_p75     # numeric V, rolling 4-wk p75
+    measure: kaya_ascents.grade_p75
+  - id: wilks         # derived: wilks(k * sbd_total, bw)
+    kind: derived
+
+drivers:
+  # strength velocity (lb/wk) = intercept + coefficient * d(bw)/dt
+  # damped by saturation on the gain side (sim.saturation).
+  - target: e1rm_squat
+    driver: bw
+    form: linear_rate          # responds to the DRIVER'S weekly rate
+    direction: positive
+    coefficient: 2.295
+    intercept: -0.280
+    fit: { method: ols_4wk_blocks, window: 2011-05..2026-09, n: 88, r2: 0.06, mae_lb_wk: 5.00 }
+  - target: e1rm_bench
+    driver: bw
+    form: linear_rate
+    direction: positive
+    coefficient: 0.919
+    intercept: -0.099
+    fit: { method: ols_4wk_blocks, window: 2011-05..2026-09, n: 86, r2: 0.01, mae_lb_wk: 3.91 }
+  - target: e1rm_deadlift
+    driver: bw
+    form: linear_rate
+    direction: positive
+    coefficient: 0.795
+    intercept: 0.775
+    fit: { method: ols_4wk_blocks, window: 2011-05..2026-09, n: 94, r2: 0.01, mae_lb_wk: 5.60 }
+  - target: e1rm_press
+    driver: bw
+    form: linear_rate
+    direction: positive
+    coefficient: 0.352
+    intercept: -0.143
+    fit: { method: ols_4wk_blocks, window: 2011-05..2026-09, n: 90, r2: 0.01, mae_lb_wk: 2.17 }
+  # climbing grade tracks bw LEVEL (level-anchored — integrated
+  # velocity models drift; see calibration study)
+  - target: grade_p75
+    driver: bw
+    form: linear               # level-on-level
+    direction: negative
+    coefficient: -0.0288
+    intercept: 8.56
+    fit: { method: ols_weekly_level, window: 2025-05..2026-09, n: 108, r2: 0.07, mae_v: 0.54 }
+  - target: grade_p75
+    driver: climb_frequency
+    form: linear_rate
+    direction: positive
+    coefficient: 0.0032        # V/wk per session/wk, capped 26 wk in sim
+    fit: { method: ols_4wk_blocks, window: 2025-05..2026-09, n: 20, r2: 0.09, mae_v_wk: 0.126 }
+
+sim:
+  saturation:                  # S4 damper, gains only
+    full_below_pct_of_peak: 0.95
+    zero_at_pct_of_peak: 1.05
+  phase_rules:
+    cut_ends_at: target_or_date
+    early_cut_filler: maintain
+    reverse_rate_lb_wk: 0.15
+    next_cycle: { hold_weeks: 8, band_top_lb: 170, cut_target_lb: 154, reverse_weeks: 3 }
+  levers:
+    bulk_rate_lb_wk: { min: 0.1, max: 0.6 }
+    cut_rate_lb_wk: { min: -1.6, max: -0.5 }
+    climb_frequency: [2, 3]
+    horizon_yr: { min: 1, max: 3 }
+  wilks_anchor: actual_max_ratio   # k = actual-max SBD total / e1RM total at t0
