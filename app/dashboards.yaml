@@ -220,6 +220,15 @@ last_bulk:
 # phase_eigenvectors.dart); ABSENT section → the pre-hero four-card
 # home dashboard renders unchanged (back-compat by construction).
 #
+# VARIANT SELECTION (2026-09-26, program.yaml v8): when the current
+# program version carries `variant: recomposition`, a declared `bulk`
+# phase selects the `recomp:` set below instead (services/
+# phase_eigenvectors.dart effectivePhaseKey) — the recomp year replaces
+# the bulk's gain-rate eigenvector with weight-hold. The `bulk:` set is
+# KEPT but unselected while the variant is active (flip the program
+# variant off and it comes straight back). A phase declared `recomp`
+# directly also selects it.
+#
 # weekly_drivers: — the home THIS WEEK strip's driver checklist
 # (2026-09-22, output>>input principle): NOT activity tallies but the
 # few causal inputs that produce the phase's outcome, each tied to the
@@ -357,6 +366,63 @@ phases:
         floor_g_per_lb: 0.8
         outcome: "lean gain"
         why: "The surplus builds muscle only when the protein floor is met."
+  # Recomposition year (program.yaml v8, active from Dec 14 2026):
+  # maintenance food, muscle out of the fat store. Selected via the
+  # program `variant` (see the section comment above); the bulk set
+  # stays defined-but-unselected. The scale HOLDING FLAT is the good
+  # state here — the retired WEIGHT_FLAT bulk rule does not apply.
+  # Fat gauge note: the doc's primary fat gauge is the weekly navel
+  # waist 7-day average + DEXA every 16 weeks — waist is NOT TRACKED
+  # YET (no view/data source; open item), so until a source lands the
+  # hero runs on weight-hold + strength + inputs and the waist gauge is
+  # a placeholder only.
+  recomp:
+    eigenvectors:
+      # Hold the scale: 0 to +0.15 lb/wk; 0.3 sustained is the recomp
+      # alarm (WEIGHT_FAST's v8 threshold); losing faster than the
+      # third-Sunday -0.5 adjustment step is the red edge below (a
+      # deficit slows the building).
+      - id: weight_hold
+        label: weight
+        rate_band: [0.0, 0.15]
+        act_above: 0.3
+        act_below: -0.25
+      # Gain strength at maintenance: Wilks trending up over the block.
+      # The block's RESULT is still the test-week singles (every 8
+      # weeks); the weekly Wilks series is the between-tests proxy.
+      - id: strength_gain
+        label: strength
+        floor_pct: 1.5
+        act_weeks_below: 3
+      # Deliver the inputs — unchanged from the bulk set (the variant
+      # keeps the whole training week: 28 working / 6 near-max).
+      - id: inputs_delivered
+        label: inputs
+    # Recomp drivers — same causal inputs as the bulk (the training
+    # week is unchanged) with the protein floor raised to the recomp
+    # 1.0 g/lb (targets 1.0-1.1, four feedings) and the weekly 4x4 kept
+    # explicit (never dropped).
+    weekly_drivers:
+      - id: lift_frequency
+        label: lifts
+        per_lift_targets: { squat: 2, bench: 2, press: 2, deadlift: 1 }
+        outcome: "steady e1RM growth"
+        why: "Each lift ~2x/week (deadlift 1x) is the muscle-group frequency eigenvector specialized to the program — coverage, not volume, drives steady progress."
+      - id: near_max_exposure
+        label: near-max
+        target: 6
+        outcome: "e1RM growth"
+        why: "Backtest-validated: ~6 near-max sets a week is the productive stretch that actually moves e1RM."
+      - id: protein_floor
+        label: protein
+        floor_g_per_lb: 1.0
+        outcome: "recomp lean gain"
+        why: "At maintenance the muscle signal is protein + heavy sets — 1.0-1.1 g/lb over four feedings, every day; under the floor the recomp stalls."
+      - id: bike_4x4
+        label: 4x4
+        target: 1
+        outcome: "VO2 maintained"
+        why: "One weekly 4x4, every block, never dropped — the longevity lever."
   maintain:
     eigenvectors:
       - id: weight_hold

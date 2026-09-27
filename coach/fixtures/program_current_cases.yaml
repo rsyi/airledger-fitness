@@ -11,9 +11,18 @@
 #   normal, 4 light, 5-7 normal, 8 test; blocks 0-1 are ALL normal.
 # - climbing_sessions: 3 in climbing-emphasis blocks, else 2 (§5.4
 #   climbing_wk {lifting_block: 2, climbing_block: 3}).
-# - gain_rate_lb_wk: the block's `rate` when present; block 0 (cut) uses
-#   [-1.0, -0.5]; block 1 (reverse) has no target rate -> null.
-# - block-0 targets come from v6 `targets_block_0` (key present ->
+# - gain_rate_lb_wk: v8 `variant: recomposition` — rated blocks (2-7)
+#   resolve to the recomp band [0.0, 0.15] (targets.gain_rate_lb_wk
+#   .blocks_2_7) instead of the block's superseded bulk `rate`; block 0
+#   (cut) uses [-1.0, -0.5]; block 1 (reverse) has no target rate -> null.
+# - gain_rate_alarm_lb_wk: recomp 0.3 (blocks >= 1); block 0 keeps the
+#   cut-era 0.6 via targets_block_0.
+# - bodyweight_band_lb / hard_cap_lb: recomp [152, 162] / 165 from
+#   Dec 14; block 0 keeps [154, 172] / 172 via targets_block_0 (the
+#   whole cut is outside the variant — block-0 slice identical to v7).
+# - protein_g_per_lb: recomp [1.0, 1.1]; block 0 keeps [0.8, 1.0].
+# - variant: 'recomposition' rides along in targets_in_force (v8+).
+# - block-0 targets come from `targets_block_0` (key present ->
 #   overrides base `targets`; explicit null -> no target in force;
 #   absent -> base value). Other blocks use base `targets` untouched.
 # - Blocks 0-7 are contiguous (each starts the day after the previous
@@ -32,16 +41,21 @@ cases:
         morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
         afternoon: null
       targets:
-        near_max_sets: 4          # v6 targets_block_0: one top single per lift
-        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        near_max_sets: 4          # targets_block_0: one top single per lift
+        working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
         bench_days: 2
         press_days: [1, 2]
         squat_days: [1, 2]
         deadlift_days: 1
-        climbing_sessions: 2      # v6 scalar override (cut block)
+        climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
+        gain_rate_alarm_lb_wk: 0.6   # cut keeps the v7 alarm (targets_block_0)
+        bodyweight_band_lb: [154, 172] # cut keeps the v7 band (targets_block_0)
+        hard_cap_lb: 172             # cut keeps the v7 cap (targets_block_0)
+        protein_g_per_lb: [0.8, 1.0] # cut keeps the v7 floor (targets_block_0)
+        variant: recomposition
 
   - name: block0_week3_midweek_wednesday
     date: "2026-10-07"
@@ -55,16 +69,18 @@ cases:
         morning: "Calisthenics."
         afternoon: "Flex slot for Climb 2 (default is Friday)."
       targets:
-        near_max_sets: 4          # v6 targets_block_0: one top single per lift
-        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        near_max_sets: 4          # targets_block_0: one top single per lift
+        working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
         bench_days: 2
         press_days: [1, 2]
         squat_days: [1, 2]
         deadlift_days: 1
-        climbing_sessions: 2      # v6 scalar override (cut block)
+        climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
+        gain_rate_alarm_lb_wk: 0.6
+        hard_cap_lb: 172
 
   - name: block0_last_day_sunday_week12_still_normal
     date: "2026-12-13"
@@ -78,14 +94,14 @@ cases:
         morning: null
         afternoon: null
       targets:
-        near_max_sets: 4          # v6 targets_block_0: one top single per lift
-        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        near_max_sets: 4          # targets_block_0: one top single per lift
+        working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
         bench_days: 2
         press_days: [1, 2]
         squat_days: [1, 2]
         deadlift_days: 1
-        climbing_sessions: 2      # v6 scalar override (cut block)
+        climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
 
@@ -102,7 +118,12 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 2
-        gain_rate_lb_wk: null
+        gain_rate_lb_wk: null     # reverse: rate emerges from the kcal ramp
+        gain_rate_alarm_lb_wk: 0.3   # recomp alarm in force from Dec 14
+        bodyweight_band_lb: [152, 162]
+        hard_cap_lb: 165
+        protein_g_per_lb: [1.0, 1.1]
+        variant: recomposition
 
   - name: block2_week1_normal_climbing_block
     date: "2027-01-04"
@@ -117,7 +138,12 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 3
-        gain_rate_lb_wk: 0.4
+        gain_rate_lb_wk: [0.0, 0.15] # recomp band supersedes bulk rate 0.4
+        gain_rate_alarm_lb_wk: 0.3
+        bodyweight_band_lb: [152, 162]
+        hard_cap_lb: 165
+        protein_g_per_lb: [1.0, 1.1]
+        variant: recomposition
 
   - name: block2_week4_light
     date: "2027-01-25"
@@ -132,7 +158,7 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 3
-        gain_rate_lb_wk: 0.4
+        gain_rate_lb_wk: [0.0, 0.15]
 
   - name: block2_week8_test
     date: "2027-02-22"
@@ -147,7 +173,7 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 3
-        gain_rate_lb_wk: 0.4
+        gain_rate_lb_wk: [0.0, 0.15]
 
   - name: block2_last_day_sunday_test_week
     date: "2027-02-28"
@@ -162,7 +188,7 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 3
-        gain_rate_lb_wk: 0.4
+        gain_rate_lb_wk: [0.0, 0.15]
 
   - name: block3_week1_lifting_block_starts
     date: "2027-03-01"
@@ -177,7 +203,8 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 2
-        gain_rate_lb_wk: 0.4
+        gain_rate_lb_wk: [0.0, 0.15]
+        hard_cap_lb: 165
 
   - name: block3_week2_midweek_wednesday
     date: "2027-03-10"
@@ -192,7 +219,7 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 2
-        gain_rate_lb_wk: 0.4
+        gain_rate_lb_wk: [0.0, 0.15]
 
   - name: block6_week1_slower_rate
     date: "2027-08-16"
@@ -207,7 +234,8 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 3
-        gain_rate_lb_wk: 0.2
+        # v7 bulk rate here was 0.2 — recomp band replaces it too.
+        gain_rate_lb_wk: [0.0, 0.15]
 
   - name: block7_final_day_sunday_test_week
     date: "2027-12-05"
@@ -222,20 +250,25 @@ cases:
         working_sets: 28
         bench_days: 2
         climbing_sessions: 2
-        gain_rate_lb_wk: 0.2
+        gain_rate_lb_wk: [0.0, 0.15]
+        gain_rate_alarm_lb_wk: 0.3
+        bodyweight_band_lb: [152, 162]
+        hard_cap_lb: 165
+        protein_g_per_lb: [1.0, 1.1]
+        variant: recomposition
 
   - name: pre_program_date_resolves_null
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v7 is the last non-pending entry for 2026-09-21+.
-  # v1..v6 share effective_from 2026-09-21; last list entry wins (v7 = v6 +
-  # week_start: saturday, the 2026-09-22 accounting-week amendment; slice
-  # semantics — targets, templates, week types — are unchanged from v6).
-  - name: version_resolution_v6_wins_for_block0
+  # Version resolution: v8 is the last non-pending entry for 2026-09-26+.
+  # v1..v7 share effective_from 2026-09-21; last list entry wins (v8 =
+  # v7 + variant: recomposition — recomp weight/protein targets for
+  # blocks >= 1, WEIGHT_FLAT retired; block-0 slice IDENTICAL to v7).
+  - name: version_resolution_v8_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 7
+      version: 8
       block: 0
       emphasis: cut
       week_in_block: 1
@@ -245,13 +278,17 @@ cases:
         morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
         afternoon: null
       targets:
-        near_max_sets: 4          # v6 targets_block_0: one top single per lift
-        working_sets: null        # v6: no volume floor on a cut (explicit null)
+        near_max_sets: 4          # targets_block_0: one top single per lift
+        working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
         bench_days: 2
         press_days: [1, 2]
         squat_days: [1, 2]
         deadlift_days: 1
-        climbing_sessions: 2      # v6 scalar override (cut block)
+        climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
         gain_rate_lb_wk: [-1.0, -0.5]
+        gain_rate_alarm_lb_wk: 0.6
+        bodyweight_band_lb: [154, 172]
+        hard_cap_lb: 172
+        protein_g_per_lb: [0.8, 1.0]
