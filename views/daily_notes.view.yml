@@ -9,5 +9,14 @@ dimensions:
   - { name: date, type: date, expr: date, description: Journal day }
   - { name: day_of_week, type: string, expr: day_of_week }
   - { name: note, type: string, expr: note, description: "Free-form daily note: how training felt, sleep, life context" }
+  # Daily recovery subjectives (recomp tracking spec 2026-09-27, amending
+  # intent-layers spec §2.4). All optional; free text stays primary. Pain
+  # outranks numeric programming targets as a coaching signal.
+  - { name: sleep_hours, type: number, expr: sleep_hours, description: Sleep duration last night (hours) }
+  - { name: sleep_quality, type: number, expr: sleep_quality, description: Sleep quality / recovery rating 1-5 (5 = best) }
+  - { name: fatigue, type: number, expr: fatigue, description: Systemic fatigue 1-5 (5 = wrecked) }
+  - { name: soreness, type: number, expr: soreness, description: Muscle soreness 1-5 (5 = worst) }
+  - { name: pain, type: string, expr: pain, description: "Any pain/tendon/joint issue (free text; blank = none). OUTRANKS numeric targets as a coaching signal." }
+  - { name: readiness, type: number, expr: readiness, description: Motivation / readiness to train 1-5 (5 = fully ready) }
 measures:
   - { name: note_count, type: count }

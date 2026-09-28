@@ -1,0 +1,59 @@
+# Calisthenics skill log (recomp tracking spec, 2026-09-27) — measures
+# skill quality/progression, NOT hypertrophy volume. Hypertrophy overlap
+# from this work is credited through the program's exercise_muscle_map;
+# barbell/weighted strength sets stay in the strength view.
+target: calisthenics.view.yml
+icon: person-standing
+date_field: date
+list_display:
+  title: skill
+  subtitle: ${variation} · ${sets}x${reps}
+fields:
+  id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  day_of_week:
+    derive:
+      from: date
+      format: weekday_long
+  skill:
+    widget: dropdown
+    required: true
+    options: [muscle-up, handstand, hspu, front lever, pistol squat, core]
+  variation:
+    widget: text
+    placeholder: e.g. tuck, green band, wall-assisted, strict
+    history: true
+  sets:
+    widget: number
+    min: 0
+    max: 20
+  reps:
+    widget: number
+    min: 0
+    max: 100
+  hold_seconds:
+    widget: number
+    min: 0
+    placeholder: "seconds (holds)"
+  assistance:
+    widget: text
+    placeholder: band color / wall / paralettes …
+    history: true
+  # Technically-clean flag. Tri-state switch: blank = not recorded —
+  # never coerced to false. Subjective per-set: never autofilled.
+  clean:
+    widget: switch
+    autofill: false
+  rpe:
+    widget: number
+    min: 1
+    max: 10
+    # Subjective per-set — never copied by history autofill. RIR = 10 - RPE.
+    autofill: false
+  notes:
+    widget: longtext
+    autofill: false

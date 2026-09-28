@@ -24,6 +24,7 @@ dimensions:
   - { name: treadmill_speed, type: number, expr: Treadmill Speed, description: Speed (mph) }
   - { name: stairmaster_speed, type: number, expr: Stairmaster Speed, description: Level / speed }
   - { name: max_hr, type: number, expr: Max Heart Rate, description: "Max heart rate during this interval (auto-filled from the live BLE HR feed when connected)" }
+  - { name: completed_intervals, type: number, expr: Completed Intervals, description: "Work intervals completed this session (4 = full 4x4). Session-level: filled on the day's last row; blank elsewhere." }
   - { name: notes, type: string, expr: Notes }
 measures:
   - { name: interval_count, type: count }

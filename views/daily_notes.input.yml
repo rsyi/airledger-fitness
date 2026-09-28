@@ -19,3 +19,43 @@ fields:
     widget: longtext
     required: true
     placeholder: How training felt, sleep, soreness, life context…
+  # --- Daily recovery subjectives (recomp tracking spec, 2026-09-27;
+  # amends intent-layers spec §2.4) --------------------------------------
+  # ALL OPTIONAL — the free-text note stays primary. Numbers feed the
+  # weekly review's recovery aggregates; the pain field OUTRANKS every
+  # numeric target as a coaching signal. Subjective per-day: never
+  # autofilled from history.
+  sleep_hours:
+    widget: number
+    min: 0
+    max: 14
+    placeholder: '7.5'
+    autofill: false
+  sleep_quality:
+    widget: number
+    min: 1
+    max: 5
+    placeholder: 1-5
+    autofill: false
+  fatigue:
+    widget: number
+    min: 1
+    max: 5
+    placeholder: 1-5
+    autofill: false
+  soreness:
+    widget: number
+    min: 1
+    max: 5
+    placeholder: 1-5
+    autofill: false
+  pain:
+    widget: text
+    placeholder: joint/tendon issue + where (blank = none)
+    autofill: false
+  readiness:
+    widget: number
+    min: 1
+    max: 5
+    placeholder: 1-5
+    autofill: false

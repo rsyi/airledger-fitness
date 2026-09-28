@@ -175,6 +175,14 @@ domains:
         goal: 2
         goal_note: "program climbing_wk — 2 in lifting blocks, 3 in climbing blocks"
 
+  # Calisthenics skill log (recomp tracking spec 2026-09-27): entry
+  # paradigm — skill quality/progression, not hypertrophy volume.
+  - name: calisthenics
+    paradigm: entry
+    views: [calisthenics]
+    icon: person-standing
+    metrics: [] # bests are per-skill/variation — surfaced by the weekly review + recomp dashboard rows
+
   - name: meals
     paradigm: integration
     views: [meals]

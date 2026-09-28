@@ -54,6 +54,15 @@ fields:
     widget: number
     min: 60
     max: 230
+  # All-four-completed tracking (recomp spec 2026-09-27): how many of the
+  # session's 4 work intervals were completed. Session-level by
+  # convention — fill on the LAST row of the day (or the only row when a
+  # session is logged as one row). 4 = full 4x4.
+  completed_intervals:
+    widget: number
+    min: 0
+    max: 8
+    autofill: false
   start_time:
     widget: timer
     placeholder: 3:54:00 PM

@@ -37,6 +37,15 @@ fields:
     widget: number
     min: 0
     max: 60
+  # Weekly waist at navel, standardized (recomp tracking spec 2026-09-27)
+  # — the body-comp control signal alongside the 7d-avg weight. Optional;
+  # intended ~weekly, not daily. Subjective/manual: never autofilled.
+  waist_in:
+    widget: number
+    min: 20
+    max: 60
+    placeholder: '31.5'
+    autofill: false
   notes:
     widget: longtext
     # Subjective per-entry — never copied by history autofill.

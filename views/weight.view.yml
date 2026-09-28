@@ -13,6 +13,7 @@ dimensions:
   - { name: body_fat_caliper, type: number, expr: body_fat_caliper, description: Body fat % from caliper measurement }
   - { name: body_fat_omron, type: number, expr: body_fat_omron, description: Body fat % from Omron device }
   - { name: body_fat_withing, type: number, expr: body_fat_withing, description: "Body fat % from Withings scale (auto-filled by the Withings integration; leave blank when logging manually)" }
+  - { name: waist_in, type: number, expr: waist_in, description: "Waist at navel, inches, standardized morning measurement — weekly cadence (recomp body-comp control; blank most days)" }
   - { name: notes, type: string, expr: notes }
 measures:
   - { name: weigh_in_count, type: count }

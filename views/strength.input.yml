@@ -144,6 +144,18 @@ fields:
     show_when:
       exercise:
         not_in_group: [isometric, timed, mobility]
+  # Set intent (recomp tracking spec, 2026-09-27): what this set was FOR.
+  # Optional; untagged rows fall back to effort-based inference in the
+  # weekly-review counters (lib/services/recomp_review.dart documents the
+  # rule). warmup + skill (+ rehab) never count as productive hypertrophy
+  # sets. RIR stays expressible via the existing rpe field (RIR = 10 −
+  # RPE — the dashboards' stated convention); deliberately NOT a second
+  # field.
+  set_type:
+    widget: dropdown
+    options: [warmup, heavy, hypertrophy, skill, rehab]
+    # Per-set intent — never copied forward by exercise-history autofill.
+    autofill: false
   # --- Equipment/technique flags (2026-09-21) ---------------------------
   # Tri-state switches: blank = not recorded (NEVER coerced to false).
   # autofill: false on all four — carrying gear flags over from a past

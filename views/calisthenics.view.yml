@@ -1,0 +1,23 @@
+name: calisthenics
+description: "Calisthenics skill log — one row per set/hold. Tracks skill QUALITY and progression (variation, assistance, clean execution), not hypertrophy volume (that overlap is credited via the program's exercise_muscle_map). RIR convention: RIR = 10 - RPE."
+datasource: gsheets
+table: calisthenics
+entities:
+  - { name: calisthenics_set, type: primary, key: id }
+dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
+  - { name: date, type: date, expr: date, description: Practice day }
+  - { name: day_of_week, type: string, expr: day_of_week }
+  - { name: skill, type: string, expr: skill, description: "Primary skill: muscle-up | handstand | hspu | front lever | pistol squat | core" }
+  - { name: variation, type: string, expr: variation, description: "Progression/variation (e.g. 'tuck', 'green band', 'wall-assisted', 'strict')" }
+  - { name: sets, type: number, expr: sets, description: Sets performed at this variation (blank = 1) }
+  - { name: reps, type: number, expr: reps, description: Reps per set (rep-based skills) }
+  - { name: hold_seconds, type: number, expr: hold_seconds, description: Hold duration in seconds (isometric skills — handstand, front lever) }
+  - { name: assistance, type: string, expr: assistance, description: "Assistance level (band color, wall, spotter, paralettes …); blank = unassisted" }
+  - { name: clean, type: boolean, expr: clean, description: "Technically clean execution — the skill-quality flag. Tri-state: blank = not recorded, never assume false." }
+  - { name: rpe, type: number, expr: rpe, description: "RPE 1-10 (optional — skill work should live well short of failure). RIR = 10 - RPE." }
+  - { name: notes, type: string, expr: notes }
+measures:
+  - { name: entry_count, type: count }
+  - { name: max_reps, type: max, expr: reps, description: Best reps in the period (per skill/variation when grouped) }
+  - { name: max_hold_seconds, type: max, expr: hold_seconds, description: Longest hold in the period }

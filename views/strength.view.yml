@@ -14,7 +14,11 @@ dimensions:
   - { name: duration, type: number, expr: Duration, description: "Hold/work duration in seconds (used for isometric exercises that don't have a weight/reps notion)" }
   - { name: start_time, type: string, expr: Start Time, description: Time of day (blank = planned). Tap the clock to stamp now. }
   - { name: end_time, type: string, expr: End Time, description: "Time the set ended (useful for timed practice like handstand). Tap the clock to stamp now." }
-  - { name: rpe, type: number, expr: RPE, description: Rate of Perceived Exertion (1-10) }
+  - { name: rpe, type: number, expr: RPE, description: "Rate of Perceived Exertion (1-10). RIR convention: RIR = 10 - RPE — no separate RIR field by design." }
+  # Set intent (recomp tracking spec, 2026-09-27). Optional; blank on all
+  # legacy rows — the weekly-review counters effort-infer untagged rows.
+  # warmup + skill (+ rehab) never count as productive hypertrophy sets.
+  - { name: set_type, type: string, expr: Set Type, description: "What the set was for: warmup | heavy | hypertrophy | skill | rehab. Blank = untagged (legacy rows)." }
   # Equipment/technique flags (2026-09-21). Tri-state booleans: blank =
   # not recorded (historical rows predate these columns), TRUE/FALSE only
   # when explicitly set. The working-max controller prefers these over
