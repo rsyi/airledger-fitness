@@ -1,53 +1,62 @@
 # Goals
 
 **Active phase: CUT** (as of 2026-09-11) — ends Dec 13 2026.
-**The year after it runs the RECOMPOSITION variant** (program.yaml v8,
-source: `coach/program-2026-27-source.md`, active from Dec 14 2026):
-same blocks, same training week, same heavy-day rule — but food stays
-at maintenance and the muscle-building energy comes out of the fat
-store. Not a bulk. The scale barely moving is success, not a problem.
+**The year after it runs the POST-CUT RECOMP program** (program.yaml
+v9, source: **`coach/post-cut-recomp-spec.md`** (user-authored,
+2026-09-27; refines and supersedes the recomp section of
+`coach/program-2026-27-source.md`), active from Dec 14 2026): eat at
+maintenance, gain muscle out of the fat store, hypertrophy as a
+FIRST-CLASS objective alongside strength, climbing, calisthenics and
+VO2. Not a bulk. The scale barely moving while strength and lean mass
+rise is SUCCESS.
 
 ## The year in one paragraph
 
-Finish the cut to ~154 lb (13% by DEXA) by mid-December, reverse-diet
-three weeks to find maintenance (3 weeks flat within ±0.5 lb — write
-the number down), then run eight-week blocks alternating climbing and
-lifting emphasis on a four-day heavy/volume week, eating at
-maintenance all year. Expect ~0.3–0.6 lb muscle/month, body fat at or
-under 13% all year, climbing that keeps its bodyweight advantage, and
-roughly 25 lb less on the barbell total by Dec 2027 than a bulk would
-give — most of that leverage rather than muscle. Food goes up only per
-the third-Sunday rule; every other signal changes training first.
+Finish the cut to ~154 lb (~13% by DEXA) by mid-December. Then ~3
+weeks establishing true maintenance — expect weight to RISE from
+glycogen/water/food mass; **154 is NOT the long-term weight target**
+(glycogen-replete maintenance likely sits several lb above it);
+maintenance = the intake where the 7-day avg is ~stable for 2-3 weeks.
+From there: the post-cut week (squat Mon, bench+climb Tue,
+calisthenics Wed, 4x4 Thu, deadlift+climb Fri, OHP+bench2 Sat, rest
+Sun) — every main lift gets BOTH a heavy exposure (1-3 @ RPE 7-8) and
+a hypertrophy exposure (3-8 @ RPE 7-9), with 8-12 productive sets per
+muscle group per week counted across compounds, climbing and
+calisthenics. Success metrics: strength UP, lean mass UP, climbing UP,
+calisthenics UP, VO2 UP, body fat ~13%. Scale weight itself is
+secondary.
 
-## Objectives by domain (recomp year)
+## Objectives by domain (post-cut recomp year)
 
 | Domain | Objective | Notes |
 |--------|-----------|-------|
-| Body composition | **Recomp at maintenance** | Weight 152–162, hold 158–161, hard cap 165; rate 0 to +0.15 lb/wk (0.3 for two weeks = alarm) |
-| Heavy lifts (squat, deadlift, bench, press) | **Progress at maintenance** | Full training week: 6 near-max sets, bench/press/squat 2x, deadlift 1x; block result = test-week singles @RPE 8 every 8 weeks |
-| Rock climbing | **Progress** | 2 sessions in lifting blocks, 3 in climbing blocks; the light bodyweight is the point — first-time V5+ sends per session is the score |
-| VO2max / conditioning | **Maintain+** | One 4x4 every week, every block, never dropped — the longevity lever |
-| Muscle-up | **Maintain the Aug 19 2026 standard** | One skill session/week, Monday after squats; no progression target this year |
-| Nutrition | **Maintenance adherence + protein** | 0 to +50 kcal over maintenance; protein 1.0–1.1 g/lb in four feedings EVERY day; carbs onto lifting + limit-climbing days |
+| Muscle / hypertrophy | **Gain muscle at maintenance — first-class** | 8-12 productive sets per muscle group/week (~10 default), overlap-counted from compounds + climbing + calisthenics (program.yaml `exercise_muscle_map`); mostly 1-3 RIR; add volume only when progress stalls and recovery is good; watch total pulling volume |
+| Heavy lifts (squat, deadlift, bench, press) | **Progress in both exposures** | Working-max controller continues; each lift weekly: heavy 1-3 @ RPE 7-8 AND hypertrophy 3-8 @ RPE 7-9; block result = test-week singles every 8 weeks |
+| Rock climbing | **Progress** | 2 differentiated sessions/week: technique/volume (onsights, movement variety) vs limit (V5-V7+ projects, long rests); track new V5+ sends/onsights + limit progress; some blocks may run 3x with reduced lifting |
+| Calisthenics | **Skill progress** | Muscle-up, handstand/HSPU, front lever, pistol, hanging leg raise — low-fatigue quality practice, long rests, stop when quality drops |
+| VO2max / conditioning | **Improve/maintain** | ≥1 Norwegian 4x4/week (adaptation, not calorie burn); extra aerobic work = walking/easy Zone 2 |
+| Body composition | **Hold ~13% BF, weight secondary** | Soft advisory band 154-165; flat scale + strength up = SUCCESS; weight may rise if waist/BF stable and performance improving |
+| Nutrition | **Maintenance + absolute targets** | Protein 160-175 g/day; fat floor 55-65 g; carbs 225-300 g biased to training days (~50-75 g in the 1-3 h pre-training, no rigid timing) |
 
-## The rules that matter (recomp)
+## The rules that matter (post-cut, per the spec)
 
-- Maintenance: found in the reverse diet (Dec 14–Jan 3); re-found
-  whenever the scale moves 1.5 lb in 3 weeks.
-- Adjusting (every third Sunday): up >1 lb in 3 weeks → −100 kcal;
-  down >0.5 lb → +100 kcal (a deficit slows the building). Never a
-  bigger step.
-- Fat gauge: waist at the navel, weekly 7-day average (NOT TRACKED
-  YET — open item), plus DEXA every 16 weeks (Nov 2026, late Apr, mid
-  Aug, early Dec 2027).
-- Muscle gauge: DEXA lean mass every 16 weeks; test-week singles every 8.
-- Stall rule: two DEXA scans with lean mass flat AND every input
-  delivered → +100 kcal for one block, then re-check. Not a return to
-  0.4 lb/wk.
-- A flat scale is GOOD here — the bulk's flat-three-weeks-add-100 rule
-  (WEIGHT_FLAT) is retired for the recomp year.
+- Maintenance: established over 2-3 stable weeks after the BF target;
+  re-found when the 7-day avg trends steadily for 3+ weeks.
+- **A flat scale NEVER triggers +100 kcal** — flat with strength/lean
+  mass rising is the plan working (this reverses the old
+  down-0.5-adds-100 adjust step).
+- Allow body weight to increase if waist/BF are stable and
+  performance/lean mass are improving.
+- Weight AND waist consistently up WITHOUT performance → reduce
+  calories modestly.
+- True stall (lean mass + strength flat across two DEXA scans with
+  every input delivered, recovery good) → ~+100 kcal/day for one
+  block, then re-check. Never a return to bulking.
+- Fat gauge: weekly navel waist 7-day average (NOT TRACKED YET — open
+  item) + DEXA every 3-4 months. Muscle gauge: DEXA lean mass +
+  strength/hypertrophy progression + test-week singles every 8 weeks.
 
-## Cut phase notes (until Dec 13)
+## Cut phase notes (until Dec 13 — unchanged)
 
 - Cut priorities in one line: keep the engine and the climbing
   improving, keep the barbell numbers from sliding, get lighter
@@ -57,6 +66,6 @@ the third-Sunday rule; every other signal changes training first.
 - Maintenance week + DEXA Nov 2–8 at ~157 lb — the scan decides
   whether 13% really means 154; the endpoint moves to match.
 - Last four weeks (Nov 16–Dec 13): top singles at RPE 7, not 8.
-- When the cut ends, phase flips to reverse (Dec 14), then the recomp
-  blocks run per program.yaml v8 — re-rank the table above only if the
-  program itself changes.
+- When the cut ends, phase flips to reverse (Dec 14) and the post-cut
+  recomp program runs per program.yaml v9 — re-rank the table above
+  only if the program itself changes.
