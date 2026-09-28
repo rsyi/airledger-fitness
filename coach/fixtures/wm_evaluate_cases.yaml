@@ -142,7 +142,10 @@ cases:
     reading: { weight: 205, reps: 1, rpe: 6, kind: heavy_top }
     expect: { decision: hold, new_wm: 235 }
 
-  - name: climbing_block_frozen_holds_at_rpe_8
+  # v9 (post-cut-recomp-spec): climbing_block is no longer frozen —
+  # raises need TWO consecutive RPE <= 7 readings — and an RPE-8 top
+  # set sits squarely in the hold band.
+  - name: climbing_block_holds_at_rpe_8
     policy: climbing_block
     lift: squat
     wm: 320
@@ -284,11 +287,21 @@ cases:
       new_wm: 240
       flags: [TWO_SIGNALS]
 
-  # ── lifting_block: single-session raise ──────────────────────────────
-  - name: lifting_block_single_rpe_8_raises
+  # ── lifting_block: single-session raise (v9: post-cut heavy lives at
+  # RPE 7.5-8, so the raise trigger is a top set at RPE <= 7; RPE 8 is
+  # now a hold) ─────────────────────────────────────────────────────────
+  - name: lifting_block_single_rpe_7_raises
     policy: lifting_block
     lift: squat
     wm: 320
     date: "2027-03-08"
-    reading: { weight: 300, reps: 1, rpe: 8, kind: heavy_top }
+    reading: { weight: 300, reps: 1, rpe: 7, kind: heavy_top }
     expect: { decision: raise, new_wm: 325 }
+
+  - name: lifting_block_rpe_8_holds
+    policy: lifting_block
+    lift: squat
+    wm: 320
+    date: "2027-03-08"
+    reading: { weight: 305, reps: 1, rpe: 8, kind: heavy_top }
+    expect: { decision: hold, new_wm: 320 }
