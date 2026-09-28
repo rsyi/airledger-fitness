@@ -11,6 +11,14 @@ FIRST-CLASS objective alongside strength, climbing, calisthenics and
 VO2. Not a bulk. The scale barely moving while strength and lean mass
 rise is SUCCESS.
 
+**Tracking layer**: `coach/recomp-tracking-spec.md` (user-authored,
+2026-09-27) — daily inputs (set_type-tagged strength, calisthenics
+view, macros, waist, recovery subjectives in daily notes) vs the
+GENERATED Sunday weekly review (`weekly_review` tab; MCP
+`get_weekly_review`; injected into Sunday briefings) and the home
+dashboard's recomp one-screen rows. RIR convention everywhere:
+RIR = 10 - RPE (no separate field).
+
 ## The year in one paragraph
 
 Finish the cut to ~154 lb (~13% by DEXA) by mid-December. Then ~3
