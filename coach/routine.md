@@ -1,5 +1,12 @@
 > **DEPRECATED (2026-09-20): superseded by coach/program.yaml
 > weekly_template. Kept readable for one release; do not edit.**
+>
+> **2026-09-28: the cut structure below (squat/deadlift heavy-light
+> alternation, hard singles, Monday press anchor, carryover rule) is
+> RETIRED by the approved cut-training revision — program.yaml v11
+> `weekly_template_block_0` + `strength_wave_cut` are canonical
+> (weekly wave tops on all four lifts, %TM volume, Tue AM-4x4 +
+> PM-hard-climb, Fri light climb). See goals.md for the summary.**
 
 # Weekly routine — cut phase
 

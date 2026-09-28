@@ -4,10 +4,12 @@
 # Both suites load THIS file against coach/program.yaml + coach/phase.yaml
 # and must produce identical outputs. Drift = a failing test on either side.
 #
-# Conventions under test (program.yaml v10, post-cut-final-spec.md —
-# v10 keeps every v9 resolver-visible target; the template strings are
-# the FINAL-SPEC schedule and Tue/Fri climbing is SWAPPED vs v9:
-# Tue = technique/volume, Fri = limit):
+# Conventions under test (program.yaml v11, approved cut-training
+# revision 2026-09-28 on top of v10/post-cut-final-spec.md — the
+# BLOCK-0 template/targets are rewritten (cut wave, %TM volume slots,
+# hypertrophy band active for the cut); the post-cut tail keeps the
+# v10 FINAL-SPEC schedule with Tue = technique/volume, Fri = limit.
+# Block-0 climbing is the OPPOSITE: Tue = HARD, Fri = LIGHT):
 # - week_in_block: 1-based count of Mondays; the week containing the
 #   block's start date is week 1 (all seed blocks start on Mondays).
 # - week_type: blocks 2-7 (week_types.applies_to_blocks) run weeks 1-3
@@ -29,13 +31,15 @@
 #   fat_g_day_min [55, 65], carbs_g_day [225, 300]; protein_g_per_lb is
 #   explicitly null post-cut. Block 0 keeps protein_g_per_lb [0.8, 1.0]
 #   and nulls for the absolute keys.
-# - hypertrophy_sets_per_muscle: v9 first-class dose band [8, 12] for
-#   blocks >= 1; explicitly null for block 0 (the cut is outside it).
+# - hypertrophy_sets_per_muscle: [8, 12] for blocks >= 1 AND (since
+#   v11) for block 0 — the cut runs the same dose band.
 # - structural targets (v9 template): near_max_sets 4 (one heavy top
 #   set per lift @ RPE 7-8), working_sets 18, press/squat 1 day,
 #   bench 2. Block-0 targets come from `targets_block_0` (key present
 #   -> overrides base; explicit null -> no target in force; absent ->
-#   base value) and are IDENTICAL to the v7/v8 cut slice.
+#   base value) — v11 REVISED them for the cut schedule: bench 3 days,
+#   squat 2, press 2 (scalars, no longer ranges), hypertrophy band
+#   [8, 12] ACTIVE for the cut; protein stays relative 0.8-1.0 g/lb.
 # - variant: 'recomposition' rides along in targets_in_force.
 # - Blocks 0-7 are contiguous (each starts the day after the previous
 #   ends), so NO between-blocks gap date exists to test.
@@ -50,15 +54,15 @@ cases:
       week_type: normal
       weekday: mon
       today_template:
-        morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
+        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
         afternoon: null
       targets:
-        near_max_sets: 4          # targets_block_0: one top single per lift
+        near_max_sets: 4          # one wave top per lift per week (v11)
         working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
-        bench_days: 2
-        press_days: [1, 2]
-        squat_days: [1, 2]
+        bench_days: 3             # v11 schedule: Mon vol / Wed heavy / Fri vol
+        press_days: 2             # Wed vol / Sat heavy
+        squat_days: 2             # Mon heavy / Wed vol
         deadlift_days: 1
         climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
@@ -67,11 +71,11 @@ cases:
         bodyweight_band_lb: [154, 172] # cut keeps the v7 band (targets_block_0)
         bodyweight_band_advisory: null # the cut band is NOT advisory
         hard_cap_lb: 172             # cut keeps the v7 cap (targets_block_0)
-        protein_g_per_lb: [0.8, 1.0] # cut keeps the v7 floor (targets_block_0)
+        protein_g_per_lb: [0.8, 1.0] # cut keeps the v7 floor (UNCHANGED in v11)
         protein_g_day: null          # absolute targets are post-cut only
         fat_g_day_min: null
         carbs_g_day: null
-        hypertrophy_sets_per_muscle: null # hypertrophy band is post-cut only
+        hypertrophy_sets_per_muscle: [8, 12] # v11: the band is ACTIVE for the cut
         variant: recomposition
 
   - name: block0_week3_midweek_wednesday
@@ -83,15 +87,15 @@ cases:
       week_type: normal
       weekday: wed
       today_template:
-        morning: "Calisthenics."
-        afternoon: "Flex slot for Climb 2 (default is Friday)."
+        morning: "Bench heavy: wave top per strength_wave_cut, then bench back-offs 3x6-8 @ 72% TM; squat volume 3x8 @ 65% TM; OHP volume 3x8-10 @ 62% TM; pull-ups 3x6-10."
+        afternoon: null
       targets:
-        near_max_sets: 4          # targets_block_0: one top single per lift
+        near_max_sets: 4          # one wave top per lift per week (v11)
         working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
-        bench_days: 2
-        press_days: [1, 2]
-        squat_days: [1, 2]
+        bench_days: 3
+        press_days: 2
+        squat_days: 2
         deadlift_days: 1
         climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
@@ -111,12 +115,12 @@ cases:
         morning: null
         afternoon: null
       targets:
-        near_max_sets: 4          # targets_block_0: one top single per lift
+        near_max_sets: 4          # one wave top per lift per week (v11)
         working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
-        bench_days: 2
-        press_days: [1, 2]
-        squat_days: [1, 2]
+        bench_days: 3
+        press_days: 2
+        squat_days: 2
         deadlift_days: 1
         climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1
@@ -330,29 +334,29 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v10 is the last non-pending entry for 2026-09-27+.
-  # v10 = v9 + the FINAL post-cut spec (strength wave, concrete accessory
-  # schedule, Tue/Fri climb swap, emphasis/ramp multipliers, expectation
-  # ranges, plateau checklist); the block-0 cut slice stays IDENTICAL.
-  - name: version_resolution_v10_wins_for_block0
+  # Version resolution: v11 is the last non-pending entry — the approved
+  # cut-training revision (2026-09-28). NOTE currentVersion is not
+  # date-gated: v11's rewritten block-0 template applies to every
+  # block-0 date, including pre-revision ones like this.
+  - name: version_resolution_v11_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 10
+      version: 11
       block: 0
       emphasis: cut
       week_in_block: 1
       week_type: normal
       weekday: mon
       today_template:
-        morning: "Squat: one hard single at RPE 8 + one back-off at RPE 7 x 3-5. Squat/deadlift alternate weekly: squat heavy + deadlift light, then swap. Face pulls + external rotations."
+        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
         afternoon: null
       targets:
-        near_max_sets: 4          # targets_block_0: one top single per lift
+        near_max_sets: 4
         working_sets: null        # no volume floor on a cut (explicit null)
         working_sets_min_normal: null
-        bench_days: 2
-        press_days: [1, 2]
-        squat_days: [1, 2]
+        bench_days: 3
+        press_days: 2
+        squat_days: 2
         deadlift_days: 1
         climbing_sessions: 2      # scalar override (cut block)
         bike_4x4: 1

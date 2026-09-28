@@ -300,27 +300,43 @@ phases:
         from: "2026-09-21" # block-0 start — sync with wilks_series above
         floor_pct: 2.5
         act_weeks_below: 3
-    # Cut drivers — verified against coach/program.yaml v7
-    # targets_block_0 (near_max 4 = one single per lift at RPE ≤ 8,
-    # bench_days 2, climbing_wk 2 scalar, bike_4x4_wk 1) and base
-    # protein_g_per_lb [0.8, 1.0].
+    # Cut drivers — REVISED 2026-09-28 for the approved cut-training
+    # revision (program.yaml v11 targets_block_0: near_max 4 = one wave
+    # top per lift, bench_days 3, squat/press 2, hypertrophy band
+    # [8, 12] ACTIVE for the cut; base protein_g_per_lb [0.8, 1.0]
+    # UNCHANGED — the absolute 160-175 floor starts Dec 14).
+    # heavy_single_max_days is RETIRED here: the wave's weekly tops are
+    # 5/4/3-rep sets, so the ≤2-rep recency line would never refresh;
+    # the alternation (H)/(L) tags disappear with planned_alternation.
     weekly_drivers:
-      # Codified 2026-09-25 (user): "the rule is I need to hit a heavy
-      # single every two weeks, but I've been fine with a lighter
-      # stimulus on alternate weeks." The weekly tick = a top-set
-      # reading, heavy OR light; the heavy-single line under the pills
-      # enforces the two-week rule for the alternating lifts.
       - id: top_single_per_lift
-        label: singles
+        label: tops
         lifts: [squat, bench, deadlift, press]
-        heavy_single_max_days: 14
         outcome: "Wilks preserved"
-        why: "One top set per lift each week keeps neural drive in the deficit — heavy or light both count (squat/deadlift alternate heavy and light weeks; (H)/(L) marks this week's side). The standing rule: a true heavy single every two weeks per lift — the line under the pills tracks it."
+        why: "Every main lift tops weekly on the cut wave (5@81% / 4@84% / 3@86% / deload 5@~70% TM at RPE 7-8) — the heavy stimulus that keeps neural drive and the working max honest through the deficit."
+      # v11: the recomp spec's dual-exposure rule runs through the cut
+      # too — hypertrophy is first-class in the deficit program.
+      - id: dual_exposure
+        label: lifts
+        lifts: [squat, bench, deadlift, press]
+        hyp_sets_min: 2
+        hyp_reps: [4, 12]
+        outcome: "muscle retained + built in the deficit"
+        why: "Each main lift gets BOTH exposures weekly — the wave top plus its %TM volume slots (bench 4x8@68 + 3x6@72 + 3x8@65; squat 3x8@65; OHP 3x8@62; deadlift 2x4-6@75 — hence the 2-set minimum). Two half-ticks per lift; a 4-5 rep wave top double-counts into the volume half by design."
+      - id: hypertrophy_volume
+        label: hyp sets
+        band: [8, 12]
+        muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
+        outcome: "muscle retained (hypertrophy-maximizing deficit)"
+        why: "8-12 productive sets per muscle group per week, overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — pulling volume stacks fast (climbing, MU, pull-ups, rows, curls)."
       - id: bench_frequency
-        label: bench 2x
-        target: 2
+        label: bench 3x
+        target: 3
         outcome: "bench / Wilks held"
-        why: "Bench detrains fastest of the four — the second (light) weekly exposure is what holds it through the cut."
+        why: "Bench detrains fastest of the four — the v11 schedule spreads three weekly exposures (Mon 68% volume, Wed heavy, Fri 65% volume)."
+      # Protein floor stays the CUT-ERA relative 0.8-1.0 g/lb until
+      # Dec 14 (the revision changed training only; the recomp phase's
+      # absolute 160-175 g floor takes over with the phase flip).
       - id: protein_floor
         label: protein
         floor_g_per_lb: 0.8

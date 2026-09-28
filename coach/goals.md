@@ -1,6 +1,24 @@
 # Goals
 
 **Active phase: CUT** (as of 2026-09-11) — ends Dec 13 2026.
+**Cut TRAINING revised 2026-09-28** (program.yaml v11, user-approved):
+the hypertrophy-maximizing deficit program — every main lift tops
+weekly on a 4-week wave (wk1 1x5@81% / wk2 1x4@84% / wk3 1x3@86% TM =
+chart[8][reps] / wk4 deload 1x5@~70% + halved volume, RPE 7-8; TM =
+the live working_max tab), %TM volume slots (bench 3x/wk: Mon 4x8@68 /
+Wed 3x6-8@72 / Fri 3x8-10@65; squat vol Wed 3x8@65; OHP vol Wed
+3x8-10@62; deadlift back-offs Fri 2x4-6@75) and concrete accessories
+on double progression (start bottom of the range @ 1-2 RIR). Back-off
+rule: hold while RPE ≤ 8, drop 2.5-5% if above (drift guard). No
+AMRAPs; main work ≤ RPE 8-9. Week: Mon squat / Tue AM-4x4 + PM HARD
+climb (no lifting) / Wed bench / Thu muscle-ups-first + arms / Fri
+deadlift + PM LIGHT climb / Sat OHP / Sun rest — NOTE Tue/Fri climb
+intensity is SWAPPED vs the old cut (and opposite the post-cut
+Tue-technique/Fri-limit). The 8-12 sets/muscle/week hypertrophy band
+now applies THROUGH the cut. **Cut NUTRITION AND WEIGHT TARGETS ARE
+UNCHANGED** (protein 0.8-1.0 g/lb, band/cap/rate as before); the old
+squat/deadlift heavy-light alternation and the every-two-weeks heavy
+single rule are retired.
 **The year after it runs the POST-CUT RECOMP program** (program.yaml
 v10, source: **`coach/post-cut-final-spec.md`** (user-authored FINAL
 specification, 2026-09-27; supersedes `coach/post-cut-recomp-spec.md`

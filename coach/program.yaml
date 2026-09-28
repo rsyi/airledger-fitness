@@ -3831,3 +3831,763 @@ versions:
         maintenance_week: "week 4 of every block at maintenance"
         carbs: "extra on the four lifting days and the limit-climbing day"
         maintenance_definition: "the intake at which the 7-day average holds for two weeks; recorded at end of block 1"
+
+  # ====================================================================
+  # v11 — approved cut-training revision (2026-09-28). Full standalone
+  # copy of v10 with: block-0 template + targets rewritten (cut wave,
+  # %TM volume slots, hypertrophy band active), strength_wave_cut +
+  # backoff_rule added, planned_alternation retired. The v10 post-cut
+  # tail (weekly_template, strength_wave, load_policies, ...) is
+  # UNCHANGED verbatim.
+  # ====================================================================
+  - version: 11
+    effective_from: "2026-09-28"
+    reason: "Approved cut-training revision — hypertrophy-maximizing deficit program; nutrition/weight targets unchanged"
+    id: bulk-2026-27
+    variant: recomposition
+
+    # Accounting-week start (amendment 2026-09-22) — unchanged.
+    week_start: saturday
+
+    block_0_loads: "Cut-training revision (2026-09-28): every lift tops weekly per strength_wave_cut — wk1 1x5@81% / wk2 1x4@84% / wk3 1x3@86% TM (= chart[8][reps]) / wk4 deload 1x5@~70% + halved volume, all RPE 7-8; volume slots at explicit %TM; accessories double progression from the bottom of the range @ 1-2 RIR; back-offs per backoff_rule; no AMRAPs, main work <= RPE 8-9. TM = the live working_max tab — never hard-coded; workout completion never moves the TM."
+
+    # 5.1 Blocks — UNCHANGED (calendar/emphasis structure kept; the
+    # per-block weight/rate values remain the superseded BULK trajectory,
+    # for structure/history only — resolvers replace them under the
+    # variant exactly as in v8/v9).
+    blocks:
+      - { n: 0, dates: ["2026-09-21", "2026-12-13"], emphasis: cut,      weight: [163, 154], notes: "DEXA Nov 2-8. Cut-training revision from Sep 28 (see strength_wave_cut + weekly_template_block_0); cut_late (Nov 16+) still governs reading evaluation and its RPE-7 cap undercuts the wave pricing." }
+      - { n: 1, dates: ["2026-12-14", "2027-01-03"], emphasis: reverse,  weight: [154, 155], notes: "Establish maintenance: expect weight to RISE from glycogen/water/food mass — do NOT treat 154 as the target. Find the intake where the 7-day avg is ~stable 2-3 weeks. New training week at RPE 7; volume_ramp applies (wk1 60-70%, wk2 80-90% of accessory volume)." }
+      - { n: 2, dates: ["2027-01-04", "2027-02-28"], emphasis: climbing, weight: [154, 157], rate: 0.4 }
+      - { n: 3, dates: ["2027-03-01", "2027-04-25"], emphasis: lifting,  weight: [157, 160], rate: 0.4 }
+      - { n: 4, dates: ["2027-04-26", "2027-06-20"], emphasis: climbing, weight: [160, 163], rate: 0.4, notes: "End with an outdoor trip or a comp." }
+      - { n: 5, dates: ["2027-06-21", "2027-08-15"], emphasis: lifting,  weight: [163, 166], rate: 0.4 }
+      - { n: 6, dates: ["2027-08-16", "2027-10-10"], emphasis: climbing, weight: [166, 168], rate: 0.2 }
+      - { n: 7, dates: ["2027-10-11", "2027-12-05"], emphasis: lifting,  weight: [168, 170], rate: 0.2, notes: "Then hold 168-170." }
+    # ADVISORY tripwire only (unchanged from v9): the response is the
+    # conditioned weight_rules review, never an automatic cut. Block 0
+    # keeps 172 via targets_block_0.
+    hard_cap_lb: 165
+
+    # Blocks 2-7 are 8 weeks: weeks 1-3 normal, week 4 light, weeks 5-7
+    # normal, week 8 test — UNCHANGED. NOTE the deliberate harmony with
+    # strength_wave below: an 8-week block is exactly TWO 4-week waves,
+    # so block weeks 4 and 8 both land on wave week 4 (deload) — the
+    # block's light week IS the wave's deload, and the test week is the
+    # second wave's deload carrying the block-result single.
+    week_types:
+      normal: {}
+      light: { week_in_block: 4 }
+      test: { week_in_block: 8 }
+      applies_to_blocks: [2, 3, 4, 5, 6, 7]
+
+    # NEW (final spec, Strength Periodization): repeating ~4-week wave
+    # per lift (S/B/D/OHP). Week 1: top ~5 @ RPE 7-8; week 2: top ~3;
+    # week 3: top ~1; week 4: deload/reduced volume. The wave sets the
+    # PRESCRIBED TOP REPS each week — the week planner and the §4
+    # prescription blocks follow it; READINGS still evaluate through the
+    # working-max controller (load_policies) unchanged, and loading
+    # still hangs off the working max via the rpe_chart. Avoid routine
+    # AMRAP/grinders (policy `never` unchanged).
+    #
+    # ANCHOR (design decision, 2026-09-27): the wave is anchored to the
+    # BLOCK START — wave_week = ((week_in_block - 1) mod 4) + 1 — for
+    # every post-cut block (applies_to_blocks below; the cut is outside
+    # it). Consequences, reconciled with the block cadence honestly:
+    #   * blocks 2-7 (8 wk): weeks 1-3 and 5-7 run tops of 5/3/1; weeks
+    #     4 and 8 are wave week 4 — week 4 IS the light week (top at the
+    #     light policy's RPE-6 cap, planner uses the wave-restart 5 reps;
+    #     reduced volume via deload_volume_multiplier) and week 8 IS the
+    #     test week (the deload carries the block-result RPE-8 single:
+    #     planner top reps = 1, same reduced volume).
+    #   * block 1 (3 wk maintenance calibration): wave weeks 1-3 only
+    #     (5/3/1); the deload never fires — block 2 restarts the wave.
+    #     The volume_ramp (below) is doing the easing that block anyway.
+    strength_wave:
+      applies_to_blocks: [1, 2, 3, 4, 5, 6, 7]
+      anchor: block_start
+      top_reps_by_week: { "1": 5, "2": 3, "3": 1 }
+      deload_week: 4
+      # Wave week 4 (== light/test weeks in blocks 2-7): non-top planned
+      # sets (back-offs + accessories) are scaled by this, min 1 set.
+      deload_volume_multiplier: 0.5
+      rpe: [7, 8]
+      note: "top reps 5/3/1 then deload; readings evaluate via load_policies; light week = wave deload at the RPE-6 cap; test week = wave deload + the RPE-8 single"
+
+    # NEW v11 (approved cut-training revision, 2026-09-28): the CUT's own
+    # 4-week wave — hypertrophy-maximizing deficit program, block 0 only.
+    # CALENDAR-anchored, not block-anchored: wave week = ((whole weeks
+    # since anchor_monday of the day's Monday) mod 4) + 1. Tops on ALL
+    # FOUR lifts every week; pct = fraction of the LIVE working max
+    # (working_max tab, resolved at plan time — never hard-coded;
+    # workout completion never moves the TM, only load_policies
+    # readings do). Weeks 1-3 pcts ARE chart[8][reps] from rpe_chart
+    # (the approved "81/84/86%"): 5 @ 0.811, 4 @ 0.837, 3 @ 0.863.
+    # Week 4 deload: top 5 @ ~70% (deliberately NOT a chart value) +
+    # non-top planned sets halved (min 1 set). An active RPE cap (pain
+    # cap, post-drop cap, cut_late's 7 from Nov 16) UNDERCUTS the wave
+    # pct via min(pct, chart[cap][reps]) — caps always win. No AMRAPs;
+    # main work stays <= RPE 8-9.
+    strength_wave_cut:
+      applies_to_blocks: [0]
+      anchor_monday: "2026-09-28"
+      weeks:
+        "1": { reps: 5, pct: 0.811 }              # = chart[8][5] — "81% TM"
+        "2": { reps: 4, pct: 0.837 }              # = chart[8][4] — "84% TM"
+        "3": { reps: 3, pct: 0.863 }              # = chart[8][3] — "86% TM"
+        "4": { reps: 5, pct: 0.70, deload: true } # light top + halved volume
+      deload_volume_multiplier: 0.5
+      rpe: [7, 8]
+      note: "cut wave 5/4/3/deload on all four lifts; readings still evaluate through load_policies (cut_early / cut_late) unchanged"
+
+    # NEW v11: structured back-off rule (approved contract, verbatim).
+    # Governs every back-off / volume slot: hold the load while RPE <= 8;
+    # if RPE drifts above, drop 2.5-5% for the next set. The weekly
+    # review's fatigue-match readout flags logged sequences where a set
+    # ran RPE > 8.5 and the next set held the load (missing RPE =
+    # unknown, never guessed). No AMRAPs anywhere.
+    backoff_rule:
+      target_rpe: 8
+      hold_if_rpe_lte: 8
+      drop_pct: [2.5, 5]
+      purpose: "prevent RPE drift, not normal fatigue"
+
+    # NEW (final spec, Volume Ramp post-cut): maintenance week 1 runs
+    # ~60-70% of planned ACCESSORY volume, week 2 ~80-90%, week 3+ full
+    # (recovery adequate). Keyed to whole weeks since the maintenance /
+    # block-1 start; the planner scales accessory (non-main-lift) planned
+    # sets by the band midpoint, min 1 set. Main-lift tops + back-offs
+    # are NOT ramped (the wave + RPE targets govern them).
+    volume_ramp:
+      anchor_monday: "2026-12-14"
+      multipliers_by_week: { "1": [0.6, 0.7], "2": [0.8, 0.9] }
+      applies_to: accessories
+
+    # NEW (final spec, Longer Periodization quantified): climbing/
+    # calisthenics-emphasis blocks reduce LIFTING volume ~30-40% —
+    # heavy exposures PRESERVED, nothing fully off. The planner scales
+    # non-top planned sets (back-offs + accessories) by the midpoint
+    # (0.65) in climbing-emphasis blocks; top sets are never scaled.
+    emphasis_volume:
+      climbing_block_lifting_multiplier: [0.6, 0.7]
+      preserve: top_sets
+      note: "never completely turn off any major adaptation during an emphasis block"
+
+    # 5.2 POST-CUT weekly template (blocks 1-7) — FINAL-SPEC schedule,
+    # verbatim-faithful including accessories. NOTE vs v9: Tue climbing
+    # is the TECHNIQUE/volume session (V3-V5, onsight + movement
+    # quality) and Fri is the LIMIT session (V5-V7+ projects) — v9 had
+    # them swapped. Separate Fri lifting and limit climbing by several
+    # hours when practical. No heavy lower on Tuesday, ever.
+    #
+    # `planned` = structured rows the app auto-plans (one row per set).
+    # NOW INCLUDES ACCESSORIES (final spec prescribes them concretely).
+    # Exercise strings must match the logged names EXACTLY (the curated
+    # strength options / exercise_muscle_map prefixes). Rep ranges
+    # resolve to the LOW end. `reps: top` = the strength_wave's top reps
+    # for that week (5/3/1; test week 1). NEVER carries rpe/notes/
+    # weight — those are logged, not planned. HSPU + front-lever
+    # progressions stay PROSE (the spec gives quality-set counts but no
+    # rep range — the planner never fabricates one).
+    weekly_template:
+      mon:
+        morning: "Squat + lower + muscle-up: MU skill 3-5x1-2 (quality); squat top work per the wave (wk1 ~5 / wk2 ~3 / wk3 ~1 @ RPE 7-8), then squat back-offs ~3x5-8 @ 1-3 RIR; Romanian deadlift 3x6-8; Bulgarian split squat 2x8-12/leg; hanging leg raise 3x8-15."
+        afternoon: null
+        planned:
+          - { exercise: "Muscle Up", sets: 3, reps: 1 }
+          - { exercise: "Barbell Squat", sets: 1, reps: top }
+          - { exercise: "Barbell Squat", sets: 3, reps: 5 }
+          - { exercise: "Romanian Deadlift", sets: 3, reps: 6 }
+          - { exercise: "Bulgarian Split Squat", sets: 2, reps: 8 }
+          - { exercise: "Hanging Leg Raise", sets: 3, reps: 8 }
+      tue:
+        morning: "Bench + upper: paused bench top work per the wave, then bench back-offs ~3x5-8; seated cable row 3x6-10; lateral raise 3x10-20; triceps extension 2x8-15; face pull 2x12-20; external rotation 2x12-20 easy. Avoid unnecessary extra pulling — climbing supplies substantial pulling/finger volume. No squat or deadlift today, ever."
+        afternoon: "Climb 1 — TECHNIQUE/volume session (~V3-V5, onsight + movement-quality focus; partner day). Track new V5+ sends/onsights."
+        planned:
+          - { exercise: "Flat Barbell Bench Press", sets: 1, reps: top }
+          - { exercise: "Flat Barbell Bench Press", sets: 3, reps: 5 }
+          - { exercise: "Seated Cable Row", sets: 3, reps: 6 }
+          - { exercise: "Lateral Dumbbell Raise", sets: 3, reps: 10 }
+          - { exercise: "Triceps Extension", sets: 2, reps: 8 }
+          - { exercise: "Cable Face Pull", sets: 2, reps: 12 }
+          - { exercise: "Cable External Rotation", sets: 2, reps: 12 }
+      wed:
+        morning: "Calisthenics skill (~30-45 min): handstand practice; HSPU progression 3-4 quality sets; front-lever progression 3-4 quality sets; pistol squat 3x3-6/leg; optional core. Skill quality over fatigue; well short of failure. Recovery/easy day."
+        afternoon: null
+        planned:
+          - { exercise: "Pistol Squat", sets: 3, reps: 3 }
+      thu:
+        morning: "Norwegian 4x4 VO2 (warmup, 4x4 min hard, ~3 min recovery, cooldown). Track workload, Z4/Z5 exposure, HR. Purpose is cardiovascular adaptation, not calories. No additional high-fatigue training today."
+        afternoon: null
+      fri:
+        morning: "Deadlift + lower volume: deadlift top work per the wave, then deadlift back-offs ~2x4-6 (supplemental deadlift volume stays lower — fatigue cost); leg press or hack squat 3x8-12; leg curl 3x8-15; calf raise 3x8-15."
+        afternoon: "Climb 2 — LIMIT session (hard V5-V7+ projects, long rests, low junk volume). Separate lifting and climbing by several hours when practical. Track limit-project progress."
+        planned:
+          - { exercise: "Barbell Deadlift", sets: 1, reps: top }
+          - { exercise: "Barbell Deadlift", sets: 2, reps: 4 }
+          - { exercise: "Leg Press", sets: 3, reps: 8 }
+          - { exercise: "Leg Curl", sets: 3, reps: 8 }
+          - { exercise: "Calf Raise", sets: 3, reps: 8 }
+      sat:
+        morning: "OHP + upper hypertrophy: OHP top work per the wave, then OHP back-offs ~3x5-8; bench 3x6-10 (second exposure); seated cable row 3x8-12; lateral raise 3x12-20; EZ-bar/preacher curl 2-3x8-15; triceps extension 2-3x8-15; face pull 2x12-20; external rotation 2x12-20 — mind total weekly pulling volume vs the 8-12 band."
+        afternoon: null
+        planned:
+          - { exercise: "Overhead Press", sets: 1, reps: top }
+          - { exercise: "Overhead Press", sets: 3, reps: 5 }
+          - { exercise: "Flat Barbell Bench Press", sets: 3, reps: 6 }
+          - { exercise: "Seated Cable Row", sets: 3, reps: 8 }
+          - { exercise: "Lateral Dumbbell Raise", sets: 3, reps: 12 }
+          - { exercise: "EZ-Bar Preacher Curl", sets: 2, reps: 8 }
+          - { exercise: "Triceps Extension", sets: 2, reps: 8 }
+          - { exercise: "Cable Face Pull", sets: 2, reps: 12 }
+          - { exercise: "Cable External Rotation", sets: 2, reps: 12 }
+      sun:
+        morning: null
+        afternoon: "Recovery: no hard training; walking/easy activity encouraged; optional easy Zone 2 if recovery is good."
+
+    # 5.2c planned_alternation RETIRED in v11: the cut wave gives every
+    # lift a top set every week — no more squat/deadlift heavy-light
+    # alternation (driver parity tags disappear with the key).
+
+    # 5.2b Block-0 weekly template (cut) — REWRITTEN v11 per the
+    # approved cut-training revision (2026-09-28), movements verbatim.
+    # Every main lift tops weekly (`reps: top` → strength_wave_cut);
+    # volume slots carry explicit `pct` (fraction of the live working
+    # max); accessories run double progression from the bottom of the
+    # range @ 1-2 RIR (planner low-end reps, never weights). NOTE the
+    # climb-day SWAP vs the old cut template: Tue is now the HARD
+    # session (was the partner/volume day) and Fri is LIGHT — also the
+    # opposite of the post-cut v10 assignment (Tue technique / Fri
+    # limit). "Optional" items (Thu row / extra triceps) stay prose —
+    # the planner never plans optionals.
+    weekly_template_block_0:
+      mon:
+        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
+        afternoon: null
+        planned:
+          - { exercise: "Barbell Squat", sets: 1, reps: top }
+          - { exercise: "Bulgarian Split Squat", sets: 3, reps: 8 }
+          - { exercise: "Flat Barbell Bench Press", sets: 4, reps: 8, pct: 0.68 }
+          - { exercise: "Lateral Dumbbell Raise", sets: 3, reps: 12 }
+          - { exercise: "Triceps Extension", sets: 2, reps: 10 }
+      tue:
+        morning: "AM: Norwegian 4x4 VO2 (warmup, 4x4 min hard, ~3 min recovery, cooldown). NO lifting today, ever."
+        afternoon: "PM: Climb — HARD session (the week's quality/limit climbing; partner day). The Tue AM-4x4 + PM-climb double session is the week's biggest recovery bite — keep both honest, no junk volume."
+      wed:
+        morning: "Bench heavy: wave top per strength_wave_cut, then bench back-offs 3x6-8 @ 72% TM; squat volume 3x8 @ 65% TM; OHP volume 3x8-10 @ 62% TM; pull-ups 3x6-10."
+        afternoon: null
+        planned:
+          - { exercise: "Flat Barbell Bench Press", sets: 1, reps: top }
+          - { exercise: "Flat Barbell Bench Press", sets: 3, reps: 6, pct: 0.72 }
+          - { exercise: "Barbell Squat", sets: 3, reps: 8, pct: 0.65 }
+          - { exercise: "Overhead Press", sets: 3, reps: 8, pct: 0.62 }
+          - { exercise: "Pull Up", sets: 3, reps: 6 }
+      thu:
+        morning: "Muscle-ups FIRST (skill — quality sets, stop on quality loss). Then dips 3x8-12; optional row; EZ curls 3x8-12; optional triceps 2x10-15."
+        afternoon: null
+        planned:
+          - { exercise: "Muscle Up", sets: 3, reps: 1 }
+          - { exercise: "Parallel Bar Triceps Dip", sets: 3, reps: 8 }
+          - { exercise: "EZ-Bar Preacher Curl", sets: 3, reps: 8 }
+      fri:
+        morning: "Deadlift heavy: wave top per strength_wave_cut, then deadlift back-offs 2x4-6 @ 75% TM; RDL or leg curl 2-3x8-12; bench volume 3x8-10 @ 65% TM."
+        afternoon: "PM: Climb — LIGHT session (technique/volume, movement quality; low fatigue)."
+        planned:
+          - { exercise: "Barbell Deadlift", sets: 1, reps: top }
+          - { exercise: "Barbell Deadlift", sets: 2, reps: 4, pct: 0.75 }
+          - { exercise: "Romanian Deadlift", sets: 2, reps: 8 }
+          - { exercise: "Flat Barbell Bench Press", sets: 3, reps: 8, pct: 0.65 }
+      sat:
+        morning: "OHP heavy: wave top per strength_wave_cut, then OHP back-offs 3x6-8 @ 72% TM; seated cable row 3x8-12; pull-ups 3x6-10; lateral raise 3x12-20; face pulls 2-3x12-20; external rotations 2-3x12-20 easy."
+        afternoon: null
+        planned:
+          - { exercise: "Overhead Press", sets: 1, reps: top }
+          - { exercise: "Overhead Press", sets: 3, reps: 6, pct: 0.72 }
+          - { exercise: "Seated Cable Row", sets: 3, reps: 8 }
+          - { exercise: "Pull Up", sets: 3, reps: 6 }
+          - { exercise: "Lateral Dumbbell Raise", sets: 3, reps: 12 }
+          - { exercise: "Cable Face Pull", sets: 2, reps: 12 }
+          - { exercise: "Cable External Rotation", sets: 2, reps: 12 }
+      sun:
+        morning: null
+        afternoon: null
+
+    # 5.2d Warm-up ramp — UNCHANGED.
+    warmup_protocol:
+      rounding_lb: 5
+      default:
+        - { weight_lb: 45, reps: 10 }   # empty bar
+        - { pct_top: 0.40, reps: 5 }
+        - { pct_top: 0.60, reps: 3 }
+        - { pct_top: 0.80, reps: 1 }
+      deadlift:                          # plates start at 135; no bar work
+        - { weight_lb: 135, reps: 5 }
+        - { pct_top: 0.60, reps: 3, min_above_lb: 135 }
+        - { pct_top: 0.80, reps: 1, min_above_lb: 135 }
+
+    # 5.2e Working-weight fill — pct_by_reps gains 4- and 6-rep entries
+    # for the final-spec back-offs (deadlift 2x4-6 low-end 4; Saturday
+    # bench 3x6-10 low-end 6). Reference-e1rm FALLBACK path only; the
+    # working-max path prices every rep count off rpe_chart. Accessories
+    # have no main-lift reference and are never weight-filled.
+    weight_fill:
+      method: reference_e1rm
+      reference_days: 42
+      pct_by_reps: { 1: 0.96, 3: 0.88, 4: 0.84, 5: 0.80, 6: 0.78 }
+      rounding_lb: 5
+      never_fill: [rpe, notes]
+
+    # ------------------------------------------------------------------
+    # Working-max controller. rpe_chart / variants / load_policies
+    # UNCHANGED from v9 — the wave changes WHICH top reps are
+    # prescribed, not how readings move the working max (spec:
+    # "Continue Ledger's working-max controller for loading").
+    # ------------------------------------------------------------------
+
+    # §1.3 RPE chart — UNCHANGED.
+    rpe_chart:
+      fallback: "inverted Epley: pct = 1 / (1 + (reps + (10 - rpe)) / 30)"
+      pct_by_rpe_reps:
+        "10":  { "1": 100,  "2": 95.5, "3": 92.2, "4": 89.2, "5": 86.3, "6": 83.7, "8": 78.6 }
+        "9.5": { "1": 97.8, "2": 93.9, "3": 90.7, "4": 87.8, "5": 85.0, "6": 82.4, "8": 77.4 }
+        "9":   { "1": 95.5, "2": 92.2, "3": 89.2, "4": 86.3, "5": 83.7, "6": 81.1, "8": 76.2 }
+        "8.5": { "1": 93.9, "2": 90.7, "3": 87.8, "4": 85.0, "5": 82.4, "6": 79.9, "8": 75.1 }
+        "8":   { "1": 92.2, "2": 89.2, "3": 86.3, "4": 83.7, "5": 81.1, "6": 78.6, "8": 73.9 }
+        "7.5": { "1": 90.7, "2": 87.8, "3": 85.0, "4": 82.4, "5": 79.9, "6": 77.4, "8": 72.3 }
+        "7":   { "1": 89.2, "2": 86.3, "3": 83.7, "4": 81.1, "5": 78.6, "6": 76.2, "8": 70.7 }
+        "6.5": { "1": 87.8, "2": 85.0, "3": 82.4, "4": 79.9, "5": 77.4, "6": 75.1, "8": 69.4 }
+        "6":   { "1": 86.3, "2": 83.7, "3": 81.1, "4": 78.6, "5": 76.2, "6": 73.9, "8": 68.0 }
+
+    # §1.4 Variants — UNCHANGED.
+    variants:
+      keywords: [paused, pins, touch and go, belted, unbelted, straps, double overhand]
+      bench:
+        default: paused
+        parse: [paused, pins, touch_and_go]
+        conversions:
+          paused: 0
+          pins: 0            # pins = paused
+          touch_and_go: 3    # +3% -> divide by 1.03
+      squat:
+        default: belted
+        parse: [paused, pins, belted, unbelted]
+        conversions:
+          belted: 0
+          unbelted: -3
+          paused: -3
+          belted_paused: -3  # "belted, paused" = -3% once, never stacked
+      deadlift:
+        default: belted
+        parse: [belted, unbelted, straps, double_overhand, paused, pins, touch_and_go]
+        conversions:
+          belted: 0
+          unbelted: -4
+          straps: 0          # straps / double-overhand: no change
+          double_overhand: 0
+      press:
+        default: standard
+        parse: []            # press is always standard; keywords = gear
+        conversions:
+          standard: 0
+
+    # §1.5/§3 load policies — UNCHANGED (cut_early stays THE cut
+    # policy per the approved revision). Both waves ride ON TOP of the
+    # policies: they pick the top set's rep count (+ pct for the cut);
+    # the policy judges the reading. Reading extraction is REP-AGNOSTIC
+    # (the day's heaviest RPE-logged set), so %TM volume-day tops (Wed
+    # squat 3x8@65, Fri bench 3x8@65) ALSO produce readings — a volume
+    # reading at RPE <= 7 counts toward cut_early's two-in-a-row raise;
+    # this is the same accepted stance as v10's Saturday second bench
+    # exposure. cut_late (Nov 16+) keeps evaluating drops at >= 8.5 and
+    # its RPE-7 cap undercuts the wave pct in prescriptions.
+    load_policies:
+      - name: cut_early
+        applies: { block: 0, dates: ["2026-09-21", "2026-11-15"] }
+        target_rpe: [7.5, 8]
+        raise_if_rpe_lte: 7
+        raise_requires_consecutive: 2
+        hold_band: [7.5, 8.5]
+        drop_if_rpe_gte: 9
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: false
+        cap_rpe: 8.5
+        cap_after_drop_rpe: 8.5
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: [heavy_top]
+        readings_that_lower: [heavy_top, saturday_single, capped]
+        reset_on: test
+        saturday_single: true
+      - name: cut_late
+        applies: { block: 0, dates: ["2026-11-16", "2026-12-13"] }
+        target_rpe: [7, 7]
+        raise_if_rpe_lte: null            # no raises
+        raise_requires_consecutive: 2
+        hold_band: [6.5, 7.5]
+        drop_if_rpe_gte: 8.5
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: true
+        cap_rpe: 7
+        cap_after_drop_rpe: 7
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: []
+        readings_that_lower: [heavy_top, saturday_single, capped]
+        reset_on: test
+        saturday_single: false
+      - name: reverse
+        applies: { block: 1 }
+        seed: "last cut_late RPE-7 single / 0.892"
+        target_rpe: [7, 7]
+        raise_if_rpe_lte: null            # no raises
+        raise_requires_consecutive: 2
+        hold_band: [6.5, 7.5]
+        drop_if_rpe_gte: 8.5
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: true
+        cap_rpe: 7
+        cap_after_drop_rpe: 7
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: []
+        readings_that_lower: [heavy_top, saturday_single, capped]
+        reset_on: test
+        saturday_single: false
+      - name: lifting_block
+        applies: { blocks: [3, 5, 7] }
+        # Post-cut heavy: top sets live at RPE 7.5-8 (spec: "top ~N @
+        # RPE 7-8"); a top set at RPE <= 7 raises the working max next
+        # session.
+        target_rpe: [7.5, 8]
+        raise_if_rpe_lte: 7
+        raise_requires_consecutive: 1
+        hold_band: [7, 8.5]
+        drop_if_rpe_gte: 9
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: false
+        cap_rpe: 8.5
+        cap_after_drop_rpe: 8
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: [heavy_top]
+        readings_that_lower: [heavy_top, capped]
+        reset_on: test
+        saturday_single: false
+      - name: climbing_block
+        applies: { blocks: [2, 4, 6] }
+        # Same RPE 7-8 heavy band, tops capped at 8; raises allowed but
+        # need TWO consecutive RPE <= 7 readings (climbing keeps
+        # priority; the bar number still creeps).
+        target_rpe: [7.5, 8]
+        raise_if_rpe_lte: 7
+        raise_requires_consecutive: 2
+        hold_band: [7, 8]
+        drop_if_rpe_gte: 9
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: false
+        cap_rpe: 8
+        cap_after_drop_rpe: 8
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: [heavy_top]
+        readings_that_lower: [heavy_top, capped]
+        reset_on: test
+        saturday_single: false
+      - name: light_week
+        applies: { week_type: light }
+        target_rpe: [6, 6]
+        raise_if_rpe_lte: null
+        raise_requires_consecutive: 2
+        hold_band: null
+        drop_if_rpe_gte: null             # readings recorded + IGNORED
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: true
+        cap_rpe: 6
+        cap_after_drop_rpe: 6
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: []
+        readings_that_lower: []
+        readings_ignored: true
+        reset_on: test
+        saturday_single: false
+        resume: "week 5 resumes at week 3's number (light-week holds never move wm)"
+      - name: test_week
+        applies: { week_type: test }
+        target_rpe: [8, 8]
+        raise_if_rpe_lte: null
+        raise_requires_consecutive: 2
+        hold_band: null
+        drop_if_rpe_gte: null
+        step_lb: { bench: 5, press: 5, squat: 5, deadlift: 5 }
+        frozen: true
+        cap_rpe: 8
+        cap_after_drop_rpe: 8
+        consecutive_drops_action: no_top_sets_next_week
+        readings_that_raise: []
+        readings_that_lower: []
+        reset_on: test
+        saturday_single: false
+        note: "the RPE-8 single resets wm: weight / 0.922, round DOWN to 5"
+
+    # 5.3 Loads — dual exposure kept; back-offs return as the final
+    # spec's hypertrophy work behind the top set.
+    loads:
+      top_set:
+        reps: [1, 5]                     # per the wave: 5 / 3 / 1
+        rpe: [7, 8]
+        rotate: "strength_wave (4-week 5/3/1/deload), not weekly rep rotation"
+      back_offs:
+        default: "3-4 x 5-8 @ 1-3 RIR (planner low-end: 3x5)"
+        deadlift: "2 x 4-6 (supplemental deadlift volume stays lower — fatigue cost)"
+      hypertrophy:
+        reps: [5, 15]
+        rpe: [7, 9]
+        rir: [1, 3]         # most hypertrophy sets ~1-3 RIR
+        compounds_stop_rir: [2, 3]
+        safe_isolations_occasional_rir: [0, 1]
+      accessories: "double progression — all sets at the top of the rep range at target RIR -> increase load"
+      progression: "working max moves on the heavy-day top set only (load_policies); back-offs/accessories progress by reps-then-weight"
+      never: "no grinders; avoid routine AMRAP"
+      light_week:
+        top_set_rpe: 6
+        volume: "wave deload — non-top sets x0.5"
+        climbing: "one fewer"
+        hangboard: "off"
+      test_week: "one single at RPE 8 on squat, bench, deadlift, press; those four numbers are the block's result (volume at the wave-deload x0.5)"
+      climbing_block:
+        top_set_rpe_cap: 8
+        lifting_volume: "x0.6-0.7 on non-top sets (emphasis_volume); heavies preserved"
+        climbing: 3
+        max_hangs: "5x7s on 20mm before the two hard sessions"
+      lifting_block:
+        climbing: 2
+        climbing_intensity: "the default week stands — Tue technique/volume + Fri limit (the final spec keeps one limit session year-round)"
+        hangboard: "once a week or off"
+
+    # Weekly hypertrophy dose per major muscle group — UNCHANGED
+    # (8-12, ~10 default), overlap-counted via exercise_muscle_map.
+    hypertrophy_targets:
+      sets_per_muscle_wk: [8, 12]
+      default_sets_per_muscle_wk: 10
+      muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
+      counting: "one logged strength row = one set x its map credits; one climbing session = the climbing_session credits; calisthenics rows count via their map entries"
+      caution: "flag BOTH obvious underdosing and excessive overlapping volume — climbing, muscle-ups, pull-ups, rows and curls overlap on back/biceps"
+
+    # Declared overlap accounting — v9 map + the final-spec accessories.
+    # v11 cut-revision check: every movement in the new block-0 template
+    # (Dips = "Parallel Bar Triceps Dip", Pull Up, EZ-Bar Preacher Curl,
+    # BSS, RDL, Triceps Extension, laterals, face pulls, ext rot, rows)
+    # already has an entry below — NO new credits were needed.
+    # (leg curl, calf raise, hack squat, triceps extension, external
+    # rotation, preacher/EZ-bar curl names from the curated options,
+    # HSPU progression name). NEW-in-v10 credits are marked; ALL
+    # CREDITS ARE EDITABLE best-judgment defaults — correct freely, the
+    # counters re-read this map on the next sync.
+    exercise_muscle_map:
+      exercises:
+        "Barbell Squat":                { quads: 1.0, hamstrings_glutes: 0.5, core: 0.25 }
+        "Pistol Squat":                 { quads: 1.0, hamstrings_glutes: 0.25 }
+        "Leg Press":                    { quads: 1.0, hamstrings_glutes: 0.25 }
+        "Hack Squat":                   { quads: 1.0, hamstrings_glutes: 0.25 }   # NEW v10
+        "Bulgarian Split Squat":        { quads: 1.0, hamstrings_glutes: 0.5 }
+        "Barbell Deadlift":             { hamstrings_glutes: 1.0, back: 0.5, forearms: 0.25 }
+        "Romanian Deadlift":            { hamstrings_glutes: 1.0, back: 0.25 }
+        "Leg Curl":                     { hamstrings_glutes: 1.0 }                # NEW v10
+        "Calf Raise":                   { calves: 1.0 }                           # NEW v10 (no band group)
+        "Flat Barbell Bench Press":     { chest: 1.0, triceps: 0.5, shoulders: 0.25 }
+        "Bench Press":                  { chest: 1.0, triceps: 0.5, shoulders: 0.25 }
+        "Overhead Press":               { shoulders: 1.0, triceps: 0.5 }
+        "Barbell Standing Military Press": { shoulders: 1.0, triceps: 0.5 }
+        "Weighted Pull Up":             { back: 1.0, biceps: 0.5, forearms: 0.25 }
+        "Pull Up":                      { back: 1.0, biceps: 0.5, forearms: 0.25 }
+        "Chin Up":                      { back: 1.0, biceps: 0.75 }
+        "Lat Pulldown":                 { back: 1.0, biceps: 0.5 }
+        "Barbell Row":                  { back: 1.0, biceps: 0.5 }
+        "Seated Cable Row":             { back: 1.0, biceps: 0.5 }
+        "Inverted Row":                 { back: 1.0, biceps: 0.5 }
+        "Inverted Rows Rings":          { back: 1.0, biceps: 0.5 }                # NEW v10 (curated name)
+        "Dumbbell Row":                 { back: 1.0, biceps: 0.5 }                # NEW v10 (curated name)
+        "Cable Face Pull":              { shoulders: 0.5, back: 0.25 }
+        "Cable External Rotation":      { shoulders: 0.25 }                       # NEW v10 (easy prehab — partial credit)
+        "Lateral Dumbbell Raise":       { shoulders: 1.0 }
+        "Lateral Cable Raise":          { shoulders: 1.0 }                        # NEW v10 (prefix covers '(Partials)')
+        "EZ Bar Curl":                  { biceps: 1.0 }
+        "EZ-Bar Preacher Curl":         { biceps: 1.0 }                           # NEW v10 (curated name)
+        "Strict Wall EZ-Bar Curl":      { biceps: 1.0 }                           # NEW v10 (curated name)
+        "Dumbbell Curl":                { biceps: 1.0 }                           # NEW v10 (curated name)
+        "Dumbbell Bicep Curl":          { biceps: 1.0 }                           # NEW v10 (curated name)
+        "Dumbbell Hammer Curl":         { biceps: 1.0, forearms: 0.5 }            # NEW v10 (curated name)
+        "Triceps Extension":            { triceps: 1.0 }                          # NEW v10
+        "Parallel Bar Triceps Dip":     { triceps: 1.0, chest: 0.5 }
+        "Muscle Up":                    { back: 0.75, biceps: 0.5, triceps: 0.5, chest: 0.25 }
+        "Transition Negatives":         { back: 0.5, triceps: 0.5 }
+        "Handstand Push Up":            { shoulders: 1.0, triceps: 0.5 }
+        "Back to Wall Handstand Pushup": { shoulders: 1.0, triceps: 0.5 }         # NEW v10 (curated name)
+        "Handstand Hold":               { shoulders: 0.25 }
+        "Front Lever":                  { back: 0.75, core: 0.75 }
+        "Hanging Leg Raise":            { core: 1.0, forearms: 0.25 }
+        "Farmer Carry":                 { forearms: 0.5, core: 0.25 }
+      # One climbing session's hypertrophy-equivalent pulling stimulus —
+      # UNCHANGED (deliberately generous on back/forearms).
+      climbing_session: { back: 3.0, forearms: 3.0, biceps: 1.5, core: 1.0 }
+
+    # 5.4 Targets — UNCHANGED from v9 (the final spec's concrete
+    # schedule keeps 18 planned MAIN-LIFT working sets: 4 tops +
+    # 3/3/2/3 back-offs + Sat bench 3; accessory volume rides outside
+    # this floor and is governed by the hypertrophy band + multipliers).
+    targets:
+      gain_rate_lb_wk: { blocks_2_7: [-0.1, 0.25], alarm: 0.5, alarm_weeks: 2 }
+      bodyweight_lb: { soft_band: [154, 165], advisory: true }
+      near_max_sets_wk: 4        # one heavy top set (wave 5/3/1 @ RPE 7-8) per lift
+      working_sets_wk: 18        # planned main-lift working sets in the template
+      working_sets_wk_min_normal: 14
+      bench_days_wk: 2           # Tue heavy + Sat hypertrophy exposure
+      press_days_wk: 1           # Sat (heavy + hypertrophy same day)
+      squat_days_wk: 1           # Mon (heavy + hypertrophy same day)
+      deadlift_days_wk: 1        # Fri
+      climbing_wk: { lifting_block: 2, climbing_block: 3 }
+      bike_4x4_wk: 1
+      muscle_up_sessions_wk: 1
+      block_length_wk: 8
+      hypertrophy_sets_per_muscle_wk: [8, 12]
+      protein_g_day: [160, 175]
+      fat_g_day_min: [55, 65]
+      carbs_g_day: [225, 300]
+      protein_g_per_lb: null
+
+    # 5.4b Block-0 (cut) target overrides — REVISED v11 for the
+    # cut-training revision: frequency targets follow the new schedule
+    # (bench 3 days: Mon 68% vol / Wed heavy / Fri 65% vol; squat 2:
+    # Mon heavy / Wed vol; press 2: Wed vol / Sat heavy; deadlift 1)
+    # and the hypertrophy band goes ACTIVE for the cut ([8, 12] —
+    # dual_exposure + hypertrophy_volume drivers run through Dec 13).
+    # NUTRITION / WEIGHT UNCHANGED: protein stays the cut-era RELATIVE
+    # 0.8-1.0 g/lb (absolute keys null until Dec 14); band/cap/alarm
+    # untouched.
+    targets_block_0:
+      near_max_sets_wk: 4          # one wave top per lift per week
+      working_sets_wk: null
+      working_sets_wk_min_normal: null
+      bench_days_wk: 3
+      press_days_wk: 2
+      squat_days_wk: 2
+      deadlift_days_wk: 1
+      climbing_wk: 2
+      bike_4x4_wk: 1
+      bodyweight_lb: { band: [154, 172] }
+      hard_cap_lb: 172
+      gain_rate_alarm_lb_wk: 0.6
+      protein_g_per_lb: [0.8, 1.0]
+      protein_g_day: null
+      fat_g_day_min: null
+      carbs_g_day: null
+      hypertrophy_sets_per_muscle_wk: [8, 12]
+
+    # NEW (final spec, EXPECTATION RANGES — NOT controller targets):
+    # the successful-one-year envelope. Surfaced on the Program screen
+    # forecast as a faint band labeled "expectation range, not target";
+    # NEVER a flag threshold, never fed to the controller.
+    expectations_1yr:
+      note: "expectation ranges, not targets (final spec) — the envelope of a successful year, for orientation only"
+      bodyweight_lb: [158, 163]
+      bf_pct: [12, 14]
+      lean_gain_lb: [3, 6]
+      bench_lb: [260, 280]
+      squat_lb: [345, 375]
+      deadlift_lb: [370, 405]
+      ohp_lb: [150, 165]
+      climbing: "V6-V7 increasingly consistent; V8 legitimate project territory"
+      vo2: "~5-10% greater sustainable 4x4 workload at comparable effort"
+
+    # Conditioned weight rules — v9 semantics + the final spec's
+    # PLATEAU CHECKLIST: before any +100 kcal, rule out the seven
+    # training/recovery causes. Flag evaluators / the coach read these
+    # as JUDGMENT rules, not thresholds.
+    weight_rules:
+      flat_scale: "SUCCESS when strength/lean mass are rising — a flat scale NEVER triggers +100 kcal"
+      allow_rise: "let body weight increase when waist/BF are stable and performance/lean mass are improving"
+      cut_trigger: "weight AND waist consistently rising WITHOUT performance/lean-mass improvement -> reduce calories modestly"
+      stall_trigger: "lean mass and strength stall despite high adherence, recovery and appropriate volume -> run the plateau_checklist FIRST; only if every item is consistently adequate: ~+100 kcal/day for one block, reassess; NOT a return to bulking"
+    plateau_checklist:
+      before_adding_calories:
+        - inadequate volume
+        - inadequate proximity to failure
+        - poor progressive overload
+        - insufficient carbs
+        - poor sleep/recovery
+        - excessive climbing/calisthenics overlap
+        - inconsistent adherence
+      then: "if ALL inputs are consistently adequate and progress remains stalled: ~+100 kcal/day for one block, reassess; maintain ~13% BF throughout — no traditional bulk/cut cycle"
+
+    # 2.6 flag rule ids — UNCHANGED from v9.
+    rules:
+      - WEIGHT_FAST
+      - WEIGHT_CAP
+      - WEIGHT_DRIFT
+      - PHASE_MISMATCH
+      - NEAR_MAX_LOW
+      - WORKING_LOW
+      - LONG_SETS
+      - BENCH_ONCE
+      - TUESDAY_LOWER
+      - CLIMB_OVER
+      - BIKE_DROP
+      - TOP_SET_HEAVY
+      - PAIN_NOTE
+      - TWO_SIGNALS
+      - BLOCK_END
+
+    # 5.5 Nutrition — UNCHANGED from v9 (the final spec restates it).
+    nutrition:
+      intake: "~maintenance (spec: 'calories ~maintenance, not deliberate surplus')"
+      protein: "160-175 g/day, every day"
+      fat: "minimum ~55-65 g/day"
+      carbs: "~225-300 g/day = remaining calories; bias toward lifting/climbing/VO2 days; ~50-75 g in the 1-3 h before demanding training as a default"
+      adjust: "conditioned, not scale-automatic — see weight_rules + plateau_checklist"
+      maintenance_week: "week 4 of every block at maintenance (identical to the rest of the week under recomp)"
+
+    # Maintenance semantics — UNCHANGED from v9; the volume_ramp above
+    # covers the training side of the same ~3 calibration weeks.
+    maintenance:
+      established: "the calorie level where the 7-day average is ~stable for 2-3 weeks (~3 weeks after the BF target); record the maintenance calorie estimate AND the glycogen-replete weight baseline"
+      note: "expect weight to RISE off the cut from glycogen/water/food mass — 154 is NOT the long-term weight target"
+      refind: "re-establish whenever the 7-day average trends steadily for 3+ weeks"
+
+    # Gauges — UNCHANGED from v9.
+    gauges:
+      fat: "waist at the navel, weekly 7-day average; DEXA every 3-4 months"
+      muscle: "DEXA lean mass every 3-4 months; strength progression; hypertrophy performance; test-week singles every 8 weeks"
+      climbing: "new V5+ sends/onsights (technique/volume days, Tue) + limit-project progress (limit days, Fri)"
+      waist_status: "not tracked yet"
+    stall_rule: "lean mass + strength stalled across two DEXA scans with every plateau_checklist input delivered -> +100 kcal/day for one block, then re-check; NOT a return to bulking"
+
+    # Climbing differentiation — final spec: Tue = TECHNIQUE (V3-V5),
+    # Fri = LIMIT (v9 had them swapped).
+    climbing:
+      sessions_per_wk: 2
+      types:
+        technique_volume: "~V3-V5, onsight + movement-quality focus (default Tue, partner day)"
+        limit: "hard V5-V7+ projects, long rests, low junk volume (default Fri; separate from the deadlift session by several hours when practical)"
+      tracking: "new V5+ sends/onsights + limit-project progress"
+      future: "climbing-emphasis blocks may run 3x/week with lifting volume reduced 30-40% (emphasis_volume); heavies preserved"
+    calisthenics:
+      mode: "skill training, not high-fatigue hypertrophy — low-fatigue high-quality practice, long rests, stop when quality deteriorates"
+      skills: [muscle-up, handstand/HSPU, front lever, pistol squat, hanging leg raise/core]
+
+    # The superseded bulk numbers, kept for reference (the simulator's
+    # 'Bulk plan (inactive)' preset). NOT read by the resolvers.
+    inactive_bulk_variant:
+      hard_cap_lb: 172
+      band_lb: [154, 172]
+      hold_lb: [168, 170]
+      targets:
+        gain_rate_lb_wk: { blocks_2_5: [0.2, 0.5], blocks_6_7: [0.1, 0.3], alarm: 0.6 }
+        bodyweight_lb: { band: [154, 172], hold: [168, 170] }
+        protein_g_per_lb: [0.8, 1.0]
+        near_max_sets_wk: 6
+        working_sets_wk: 28
+      rules_retired_or_changed:
+        WEIGHT_FLAT: "add 100 kcal after 3 flat weeks — retired under recomp (flat is an explicit SUCCESS state)"
+        WEIGHT_FAST: "alarm was 0.6 lb/wk two weeks — advisory alarm is 0.5"
+        WEIGHT_CAP: "cap was 172 — advisory tripwire is 165"
+      nutrition:
+        surplus_kcal: { rate_0_4: 200, rate_0_2: 100 }
+        adjust: "every third Sunday, 7-day average vs block target line: >1 lb over -> -100; >1 lb under -> +100; never a bigger step"
+        maintenance_week: "week 4 of every block at maintenance"
+        carbs: "extra on the four lifting days and the limit-climbing day"
+        maintenance_definition: "the intake at which the 7-day average holds for two weeks; recorded at end of block 1"
