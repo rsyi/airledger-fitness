@@ -366,27 +366,32 @@ phases:
         floor_g_per_lb: 0.8
         outcome: "lean gain"
         why: "The surplus builds muscle only when the protein floor is met."
-  # Recomposition year (program.yaml v8, active from Dec 14 2026):
-  # maintenance food, muscle out of the fat store. Selected via the
-  # program `variant` (see the section comment above); the bulk set
-  # stays defined-but-unselected. The scale HOLDING FLAT is the good
-  # state here — the retired WEIGHT_FLAT bulk rule does not apply.
-  # Fat gauge note: the doc's primary fat gauge is the weekly navel
-  # waist 7-day average + DEXA every 16 weeks — waist is NOT TRACKED
-  # YET (no view/data source; open item), so until a source lands the
-  # hero runs on weight-hold + strength + inputs and the waist gauge is
-  # a placeholder only.
+  # Recomposition year (program.yaml v9 / coach/post-cut-recomp-spec.md,
+  # active from Dec 14 2026): maintenance food, muscle out of the fat
+  # store, hypertrophy FIRST-CLASS. Selected via the program `variant`
+  # (see the section comment above); the bulk set stays
+  # defined-but-unselected. The scale HOLDING FLAT is a SUCCESS state
+  # (spec: flat scale + strength/lean mass rising = the plan working;
+  # the v8 down-0.5-adds-100 step is reversed).
+  # Weight-rule JUDGMENT (spec, encoded 2026-09-27): the true rules are
+  # conditioned on waist + performance — allow weight to RISE when
+  # waist/BF are stable and performance improves; cut modestly only
+  # when weight AND waist rise without performance. Waist is NOT
+  # TRACKED YET (no view/data source; open item), so the weight-only
+  # verdict below is deliberately SOFT: a generous rate band with far
+  # red edges — amber is "look at waist/DEXA/performance", never an
+  # automatic kcal change.
   recomp:
     eigenvectors:
-      # Hold the scale: 0 to +0.15 lb/wk; 0.3 sustained is the recomp
-      # alarm (WEIGHT_FAST's v8 threshold); losing faster than the
-      # third-Sunday -0.5 adjustment step is the red edge below (a
-      # deficit slows the building).
+      # Hold-to-modest-rise: flat is success; drift up is allowed while
+      # performance improves (soft band, spec §Body-Fat/Calorie
+      # Control). act_above 0.5 = sustained clearly-not-maintenance
+      # intake; act_below -0.5 = a real deficit (slows the building).
       - id: weight_hold
         label: weight
-        rate_band: [0.0, 0.15]
-        act_above: 0.3
-        act_below: -0.25
+        rate_band: [-0.1, 0.25]
+        act_above: 0.5
+        act_below: -0.5
       # Gain strength at maintenance: Wilks trending up over the block.
       # The block's RESULT is still the test-week singles (every 8
       # weeks); the weekly Wilks series is the between-tests proxy.
@@ -394,30 +399,35 @@ phases:
         label: strength
         floor_pct: 1.5
         act_weeks_below: 3
-      # Deliver the inputs — unchanged from the bulk set (the variant
-      # keeps the whole training week: 28 working / 6 near-max).
+      # Deliver the inputs — v9 template targets (18 working / 4 heavy
+      # exposures) come through the program slice's targets-in-force.
       - id: inputs_delivered
         label: inputs
-    # Recomp drivers — same causal inputs as the bulk (the training
-    # week is unchanged) with the protein floor raised to the recomp
-    # 1.0 g/lb (targets 1.0-1.1, four feedings) and the weekly 4x4 kept
-    # explicit (never dropped).
+    # Recomp drivers (v9): DUAL EXPOSURE per lift (heavy top set AND
+    # hypertrophy sets — the spec's both-every-week rule), the 8-12
+    # per-muscle hypertrophy band (overlap-counted via the program's
+    # exercise_muscle_map), the ABSOLUTE protein floor, and the weekly
+    # 4x4 (never dropped).
     weekly_drivers:
-      - id: lift_frequency
+      - id: dual_exposure
         label: lifts
-        per_lift_targets: { squat: 2, bench: 2, press: 2, deadlift: 1 }
-        outcome: "steady e1RM growth"
-        why: "Each lift ~2x/week (deadlift 1x) is the muscle-group frequency eigenvector specialized to the program — coverage, not volume, drives steady progress."
-      - id: near_max_exposure
-        label: near-max
-        target: 6
-        outcome: "e1RM growth"
-        why: "Backtest-validated: ~6 near-max sets a week is the productive stretch that actually moves e1RM."
+        lifts: [squat, bench, deadlift, press]
+        hyp_sets_min: 3
+        hyp_reps: [3, 8]
+        outcome: "strength + muscle gain"
+        why: "Every main lift gets BOTH exposures each week — a heavy top set (1-3 @ RPE 7-8) keeps the working max moving, and 3+ sets of 3-8 @ RPE 7-9 supply the hypertrophy dose behind it. Two half-ticks per lift."
+      - id: hypertrophy_volume
+        label: hyp sets
+        band: [8, 12]
+        muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
+        outcome: "muscle gain"
+        why: "8-12 productive sets per muscle group per week (~10 default), overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — the excess-pulling caution (climbing, MU, pull-ups, rows, curls all land on back/biceps)."
       - id: protein_floor
         label: protein
-        floor_g_per_lb: 1.0
+        floor_g: 160
+        band_g: [160, 175]
         outcome: "recomp lean gain"
-        why: "At maintenance the muscle signal is protein + heavy sets — 1.0-1.1 g/lb over four feedings, every day; under the floor the recomp stalls."
+        why: "Absolute 160-175 g/day, every day (spec) — at maintenance the muscle signal is protein + hard sets; under the floor the recomp stalls."
       - id: bike_4x4
         label: 4x4
         target: 1
