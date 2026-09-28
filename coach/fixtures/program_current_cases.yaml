@@ -4,7 +4,10 @@
 # Both suites load THIS file against coach/program.yaml + coach/phase.yaml
 # and must produce identical outputs. Drift = a failing test on either side.
 #
-# Conventions under test (program.yaml v9, post-cut-recomp-spec.md):
+# Conventions under test (program.yaml v10, post-cut-final-spec.md —
+# v10 keeps every v9 resolver-visible target; the template strings are
+# the FINAL-SPEC schedule and Tue/Fri climbing is SWAPPED vs v9:
+# Tue = technique/volume, Fri = limit):
 # - week_in_block: 1-based count of Mondays; the week containing the
 #   block's start date is week 1 (all seed blocks start on Mondays).
 # - week_type: blocks 2-7 (week_types.applies_to_blocks) run weeks 1-3
@@ -128,7 +131,7 @@ cases:
       week_type: normal
       weekday: mon
       today_template:
-        morning: "Squat heavy: top set of 1-3 at RPE 7-8, then squat hypertrophy 3x5 at RPE 7-9; lower-body hypertrophy accessories (RDL or leg press, 2-3 sets); hanging leg raise; muscle-up skill (~10 min, low fatigue, long rests)."
+        morning: "Squat + lower + muscle-up: MU skill 3-5x1-2 (quality); squat top work per the wave (wk1 ~5 / wk2 ~3 / wk3 ~1 @ RPE 7-8), then squat back-offs ~3x5-8 @ 1-3 RIR; Romanian deadlift 3x6-8; Bulgarian split squat 2x8-12/leg; hanging leg raise 3x8-15."
         afternoon: null
       targets:
         near_max_sets: 4          # one heavy top set (1-3 @ RPE 7-8) per lift
@@ -243,7 +246,7 @@ cases:
       week_type: normal
       weekday: wed
       today_template:
-        morning: "Calisthenics skill: handstand/HSPU, front lever, pistol squat, hanging leg raise/core — low-fatigue high-quality practice, long rests, stop when quality deteriorates. Recovery/easy day."
+        morning: "Calisthenics skill (~30-45 min): handstand practice; HSPU progression 3-4 quality sets; front-lever progression 3-4 quality sets; pistol squat 3x3-6/leg; optional core. Skill quality over fatigue; well short of failure. Recovery/easy day."
         afternoon: null
       targets:
         near_max_sets: 4
@@ -251,6 +254,36 @@ cases:
         bench_days: 2
         climbing_sessions: 2
         gain_rate_lb_wk: [-0.1, 0.25]
+
+  # v10 climb-day swap: Tue = TECHNIQUE/volume, Fri = LIMIT (the final
+  # spec; v9 had them the other way around).
+  - name: block3_week2_tuesday_technique_climb
+    date: "2027-03-09"
+    expect:
+      block: 3
+      emphasis: lifting
+      week_in_block: 2
+      week_type: normal
+      weekday: tue
+      today_template:
+        afternoon: "Climb 1 — TECHNIQUE/volume session (~V3-V5, onsight + movement-quality focus; partner day). Track new V5+ sends/onsights."
+      targets:
+        near_max_sets: 4
+        working_sets: 18
+
+  - name: block3_week2_friday_limit_climb
+    date: "2027-03-12"
+    expect:
+      block: 3
+      emphasis: lifting
+      week_in_block: 2
+      week_type: normal
+      weekday: fri
+      today_template:
+        afternoon: "Climb 2 — LIMIT session (hard V5-V7+ projects, long rests, low junk volume). Separate lifting and climbing by several hours when practical. Track limit-project progress."
+      targets:
+        near_max_sets: 4
+        working_sets: 18
 
   - name: block6_week1_slower_rate
     date: "2027-08-16"
@@ -297,14 +330,14 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v9 is the last non-pending entry for 2026-09-27+.
-  # v9 = v8 + the post-cut recomp spec (new post-cut week, absolute
-  # nutrition, hypertrophy band, soft weight band; block-0 slice
-  # IDENTICAL to v8's apart from the explicit nulls for the new keys).
-  - name: version_resolution_v9_wins_for_block0
+  # Version resolution: v10 is the last non-pending entry for 2026-09-27+.
+  # v10 = v9 + the FINAL post-cut spec (strength wave, concrete accessory
+  # schedule, Tue/Fri climb swap, emphasis/ramp multipliers, expectation
+  # ranges, plateau checklist); the block-0 cut slice stays IDENTICAL.
+  - name: version_resolution_v10_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 9
+      version: 10
       block: 0
       emphasis: cut
       week_in_block: 1
