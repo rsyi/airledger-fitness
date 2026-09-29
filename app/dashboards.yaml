@@ -353,6 +353,43 @@ phases:
         target: 1
         outcome: "VO2 maintained"
         why: "One weekly 4x4 keeps the aerobic top end without eating recovery."
+    # GOALS tab (bottom-nav split 2026-09-29): the input eigenvectors the
+    # user controls day to day, as plain-language rows with a met /
+    # partial / unmet state. Parsed by services/goals_service.dart; a
+    # phase WITHOUT `goals:` (or an older app) shows the screen's "no
+    # goals declared" placeholder. Goal ids: macros / calorie_band /
+    # hard_sets / climbing / cardio_4x4. Cut set:
+    goals:
+      - id: macros
+        label: Macros
+        description: "Protein high enough to hold muscle in the deficit; carbs to fuel the hard sessions."
+        protein_g_per_lb: [0.8, 1.0]   # cut-era relative floor (targets_block_0)
+        carbs_floor_g_day: 150         # soft "enough" — cut has no hard carb target
+      - id: calorie_band
+        label: Calories
+        description: "Stay in a modest deficit — intake below your estimated maintenance."
+        calorie_mode: deficit
+      - id: hard_sets
+        label: Hard sets per lift
+        description: "~10 hard sets (RPE 8-9) per main lift each week — the hypertrophy landmark that retains muscle through the cut."
+        lifts: [squat, bench, deadlift, press]
+        hard_set_target: 10
+        hard_rpe: [8, 9]
+        # Associated accessories per lift, from the routine (editable):
+        # a per-lift check that the supporting work got hit this week.
+        accessories:
+          squat: [Bulgarian Split Squat]
+          bench: [Triceps Extension]
+          deadlift: [Romanian Deadlift]
+          press: [Seated Cable Row]
+      - id: climbing
+        label: Climbing
+        description: "Two climbing sessions a week."
+        target: 2
+      - id: cardio_4x4
+        label: Cardio
+        description: "One 4x4 interval session a week."
+        target: 1
   bulk:
     eigenvectors:
       # Not gaining too fast: §5.4 gain_rate_lb_wk blocks_2_5 band;
@@ -458,6 +495,41 @@ phases:
         target: 1
         outcome: "VO2 maintained"
         why: "One weekly 4x4, every block, never dropped — the longevity lever."
+    # GOALS tab — recomp set (post-cut, from Dec 14). Protein goes
+    # ABSOLUTE (160-175 g/day, spec); calories sit at maintenance-to-
+    # slightly-over (recomp is muscle at maintenance, not a deficit);
+    # hard sets + climbing + cardio unchanged. Accessories from the
+    # postcut routine week (editable).
+    goals:
+      - id: macros
+        label: Macros
+        description: "Protein 160-175 g every day; carbs biased to training days."
+        protein_g_day: [160, 175]      # absolute floor (spec)
+        carbs_floor_g_day: 225
+      - id: calorie_band
+        label: Calories
+        description: "Eat at maintenance to a slight surplus — build at the fat store's edge, not a bulk."
+        calorie_mode: surplus
+        band_kcal: 200
+      - id: hard_sets
+        label: Hard sets per lift
+        description: "~10 hard sets (RPE 8-9) per main lift each week — the hypertrophy dose behind the recomp."
+        lifts: [squat, bench, deadlift, press]
+        hard_set_target: 10
+        hard_rpe: [8, 9]
+        accessories:
+          squat: [Romanian Deadlift]
+          bench: [Seated Cable Row]
+          deadlift: [Leg Curl]
+          press: [Lateral Dumbbell Raise]
+      - id: climbing
+        label: Climbing
+        description: "Two climbing sessions a week (three in climbing-emphasis blocks)."
+        target: 2
+      - id: cardio_4x4
+        label: Cardio
+        description: "One 4x4 interval session a week."
+        target: 1
   maintain:
     eigenvectors:
       - id: weight_hold
