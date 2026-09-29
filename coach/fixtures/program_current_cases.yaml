@@ -334,14 +334,15 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v13 is the last non-pending entry — the
-  # two-loop TM (slow-loop median estimator, 2026-09-28) on top of the
-  # v12 routine unification; day content is verbatim v11 throughout.
-  # NOTE currentVersion is not date-gated.
-  - name: version_resolution_v13_wins_for_block0
+  # Version resolution: v14 is the last non-pending entry — Thursday
+  # calisthenics additions (handstand/front-lever/HLR, 2026-09-29) on
+  # top of the v13 two-loop TM; the resolver slice shape is unchanged
+  # (day content only added skill rows). NOTE currentVersion is not
+  # date-gated.
+  - name: version_resolution_v14_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 13
+      version: 14
       block: 0
       emphasis: cut
       week_in_block: 1
