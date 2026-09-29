@@ -27,6 +27,11 @@ dimensions:
   - { name: belted, type: boolean, expr: Belted, description: "Lifting belt worn. Squat/deadlift default variant is belted; FALSE = beltless (~3-4% weaker)." }
   - { name: wrist_wraps, type: boolean, expr: Wrist Wraps, description: "Wrist wraps worn (pressing movements)." }
   - { name: knee_sleeves, type: boolean, expr: Knee Sleeves, description: "Knee sleeves worn (squat/deadlift)." }
+  # Form video (2026-09-28): a Google Photos deep link to set footage,
+  # attached via the in-app Photos Picker. video_media_id is the picker's
+  # persistent media-item id (re-fetch key); both app-written, never typed.
+  - { name: video_url, type: string, expr: Video URL, description: "Google Photos link to a video of this set (attached via the in-app picker)." }
+  - { name: video_media_id, type: string, expr: Video Media Id, description: "Google Photos Picker persistent media-item id for video_url (app-managed)." }
   - { name: notes, type: string, expr: Notes }
 measures:
   - { name: set_count, type: count }

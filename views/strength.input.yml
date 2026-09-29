@@ -188,6 +188,16 @@ fields:
     show_when:
       exercise:
         in: [Barbell Squat, Barbell Deadlift]
+  # Video attach (2026-09-28): Photos Picker flow writes a Google Photos
+  # deep link here + the picker media id into video_media_id. autofill:
+  # false — carrying a past set's video forward would attach the wrong
+  # footage (fabricated data). The AI RPE estimate the app derives from
+  # the video is PROPOSE-ONLY: it never writes rpe; only a user tap does.
+  video_url:
+    widget: video
+    autofill: false
+  video_media_id:
+    editable: false
   notes:
     widget: longtext
     autofill: false
