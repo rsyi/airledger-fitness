@@ -371,10 +371,10 @@ phases:
         calorie_mode: deficit
       - id: hard_sets
         label: Hard sets per lift
-        description: "~10 hard sets (RPE 8-9) per main lift each week — the hypertrophy landmark that retains muscle through the cut."
+        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy landmark that retains muscle through the cut."
         lifts: [squat, bench, deadlift, press]
         hard_set_target: 10
-        hard_rpe: [8, 9]
+        hard_rpe_min: 7
         # Associated accessories per lift, from the routine (editable):
         # a per-lift check that the supporting work got hit this week.
         accessories:
@@ -513,10 +513,10 @@ phases:
         band_kcal: 200
       - id: hard_sets
         label: Hard sets per lift
-        description: "~10 hard sets (RPE 8-9) per main lift each week — the hypertrophy dose behind the recomp."
+        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy dose behind the recomp."
         lifts: [squat, bench, deadlift, press]
         hard_set_target: 10
-        hard_rpe: [8, 9]
+        hard_rpe_min: 7
         accessories:
           squat: [Romanian Deadlift]
           bench: [Seated Cable Row]
