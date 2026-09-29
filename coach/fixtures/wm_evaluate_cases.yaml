@@ -1,18 +1,26 @@
 # Shared fixtures for the working-max controller evaluate() twins:
 #   Dart: ledger/lib/services/working_max.dart  (test/wm_fixture_test.dart)
 #   TS:   ledger-mcp/src/working_max.ts         (test/working_max.test.ts)
-# Both suites load THIS file against coach/program.yaml v12
+# Both suites load THIS file against coach/program.yaml v13
 # (load_policies + tm_rule) and must produce identical outputs. Drift =
 # a failing test on either side. Expectations were generated FROM the
 # Dart controller (the reference implementation).
 #
-# v12 (2026-09-28): TM movement is the GUARDED IMPLIED-MAX rule
-# (`tm_rule`), replacing the per-policy raise/hold/drop bands:
-#   TM_next = round5(weight / chart[rpe][reps]) — raises capped at
-#   +5/session, drops in full; sub-top readings (< 0.78×TM) hold;
-#   grinders/misses always drop at least −5; light/deload readings are
-#   ignored; the test single is just a reading (implied /0.922, raise
-#   cap applies); pain caps freeze (clean = rpe < 9, no grind/miss).
+# v13 (2026-09-28): TWO-LOOP TM — the SLOW LOOP is a deterministic
+# median estimator (`tm_rule: median_implied_max`):
+#   TM = round5(median(implied maxes of the qualifying top sets over
+#   the last 21 days anchored at the newest set, or the last 5 sets —
+#   whichever holds more data)), applied IN FULL (the v12 ±5/session
+#   raise cap is superseded BY DESIGN of the median). With no history
+#   the window is the single reading — its implied max applies in
+#   full. The FAST LOOP keeps every v12 safety: sub-top readings
+#   (< 0.78×TM) hold; grinders/misses always drop at least −5 (in full
+#   to the implied max when lower — even through a manual pin);
+#   light/deload readings are ignored; pain caps freeze (clean =
+#   rpe < 9, no grind/miss); drops cap the next top set; two drops in
+#   a row = no top sets next week. A manual value PINS the TM until
+#   manual_outvote_sets (3) qualifying sets land after it; then the
+#   estimator runs on post-manual sets only.
 #
 # Case shape:
 #   policy   load_policy name from program.yaml v12 (cut_early,
@@ -26,6 +34,14 @@
 #            on `notes` (converted weight = weight / factor) and the
 #            §1.2 grinder rule (rpe >= 9.5 or notes ~ /grind|slow|stall|
 #            miss/); `missed` is passed through as given (default false).
+#   history  optional list of PRIOR day-top sets (same shape + a
+#            `date`), the slow loop's sample history: the harness
+#            builds readings from them exactly like `reading`, appends
+#            the reading itself, and computes slowTmEstimate(currentTm
+#            = wm, notBefore = manual_pin.since). Omitted = no history
+#            (the window is the reading alone).
+#   manual_pin  { since, new_sets, needed } — manual-pin state passed
+#            straight to evaluate (median mode only).
 #   weeks_without_reading   for no-reading cases (NO_READING at >= 2)
 #   prior    { action, pain_cap_clean } — the previous decision's state
 #            (consecutive-drop rule, pain-cap clean-session counting).
@@ -41,7 +57,7 @@
 #     implied_max             converted weight / chart[rpe][reps] (±0.05)
 cases:
   # ── the one rule: implied max, guarded ───────────────────────────────
-  - name: guarded_hold_at_prescription_rpe
+  - name: hold_at_prescription_rpe
     # Wave top exactly as prescribed: 81%×5@8 implies the TM itself.
     policy: cut_early
     lift: bench
@@ -50,17 +66,19 @@ cases:
     reading: { weight: 195, reps: 5, rpe: 8, kind: heavy_top }
     expect: { decision: hold, new_wm: 240, implied_max: 240.4 }
 
-  - name: guarded_easy_top_raises_capped_plus_5
-    # 195×5@7 → implied 248.1 → 250, but raises cap at +5/session.
+  - name: easy_top_raises_in_full_no_session_cap
+    # 195×5@7 → implied 248.1 → 250. v12 capped this at +5 (245); the
+    # median mode applies its estimate in full — with no other history
+    # the window is this one set.
     policy: cut_early
     lift: bench
     wm: 240
     date: "2026-10-05"
     reading: { weight: 195, reps: 5, rpe: 7, kind: heavy_top }
-    expect: { decision: raise, new_wm: 245, implied_max: 248.1 }
+    expect: { decision: raise, new_wm: 250, implied_max: 248.1 }
 
-  - name: guarded_exact_plus_5_raise_uncapped
-    # 230×1@8 → implied 249.5 → 250 = wm+5: lands uncapped.
+  - name: single_raise_to_rounded_implied
+    # 230×1@8 → implied 249.5 → 250.
     policy: cut_early
     lift: bench
     wm: 245
@@ -68,8 +86,10 @@ cases:
     reading: { weight: 230, reps: 1, rpe: 8, kind: heavy_top }
     expect: { decision: raise, new_wm: 250 }
 
-  - name: guarded_hard_top_drops_in_full
-    # 195×5@9 → implied 233.0 → 235: the drop is not capped.
+  - name: lone_hard_top_drops_in_full
+    # 195×5@9 → implied 233.0 → 235: with NO history the window is the
+    # single set — the drop applies (see median_outvotes_* below for
+    # the damped case).
     policy: cut_early
     lift: bench
     wm: 240
@@ -77,7 +97,7 @@ cases:
     reading: { weight: 195, reps: 5, rpe: 9, kind: heavy_top }
     expect: { decision: drop, new_wm: 235, cap: 8.5 }
 
-  - name: guarded_big_drop_applies_in_full
+  - name: big_drop_applies_in_full
     # Squat 260×5@9 → implied 310.6 → 310: a 10 lb drop in one session.
     policy: cut_early
     lift: squat
@@ -143,8 +163,9 @@ cases:
     expect: { decision: hold, new_wm: 240 }
 
   # ── cut_late / reverse are UNFROZEN under tm_rule (caps stay) ────────
-  - name: cut_late_tracks_implied_max_guarded
-    # v11 froze cut_late; v12: 220×1@7 → implied 246.6 → 245 → raise +5.
+  - name: cut_late_tracks_implied_max
+    # v11 froze cut_late; since v12 it is unfrozen: 220×1@7 → implied
+    # 246.6 → median (n=1) → 245.
     policy: cut_late
     lift: bench
     wm: 240
@@ -171,15 +192,15 @@ cases:
     expect: { decision: hold, new_wm: 240 }
 
   # ── test single is just a reading (one rule + caps) ──────────────────
-  - name: test_single_raise_capped
-    # Old rule: reset to 240/0.922 → 260. v12: implied 260.3 → 260,
-    # raise capped at +5 → 255 (the TM converges over later sessions).
+  - name: test_single_raises_in_full
+    # The old /0.922 reset falls out of the one rule: implied 260.3 →
+    # 260, applied in full (v12 capped it to 255).
     policy: test_week
     lift: bench
     wm: 250
     date: "2027-04-20"
     reading: { weight: 240, reps: 1, rpe: 8, kind: test }
-    expect: { decision: raise, new_wm: 255, implied_max: 260.3 }
+    expect: { decision: raise, new_wm: 260, implied_max: 260.3 }
 
   - name: test_single_below_tm_drops_in_full
     # 220×1@8 → implied 238.6 → 240 < 250: the block result cuts the TM.
@@ -199,7 +220,7 @@ cases:
     reading: { weight: 247.2, reps: 1, rpe: 8, kind: heavy_top, notes: "touch and go" }
     expect:
       decision: raise
-      new_wm: 245
+      new_wm: 260   # rounded implied, in full (no session cap)
       converted_weight: 240.0
       implied_max: 260.3
 
@@ -304,16 +325,16 @@ cases:
       flags: [TWO_SIGNALS]
 
   # ── post-cut blocks run the same one rule ────────────────────────────
-  - name: lifting_block_guarded_raise
-    # 300×1@7 → implied 336.3 → 335, capped → 325.
+  - name: lifting_block_raise_in_full
+    # 300×1@7 → implied 336.3 → 335, applied in full.
     policy: lifting_block
     lift: squat
     wm: 320
     date: "2027-03-08"
     reading: { weight: 300, reps: 1, rpe: 7, kind: heavy_top }
-    expect: { decision: raise, new_wm: 325, implied_max: 336.3 }
+    expect: { decision: raise, new_wm: 335, implied_max: 336.3 }
 
-  - name: climbing_block_guarded_hold
+  - name: climbing_block_hold_at_implied
     # 295×1@8 → implied 320.0 → 320 == TM → hold.
     policy: climbing_block
     lift: squat
@@ -321,3 +342,107 @@ cases:
     date: "2027-01-12"
     reading: { weight: 295, reps: 1, rpe: 8, kind: heavy_top }
     expect: { decision: hold, new_wm: 320, implied_max: 320.0 }
+
+  # ── slow-loop median: the window outvotes single days ────────────────
+  - name: median_outvotes_single_strong_day
+    # Four sets implying 240.4 + one implying 255.9 (+15.4): the median
+    # stays 240.4 → TM unchanged. THE outlier-damping pin: one +15 lb
+    # day moves the TM 0 ≤ 5 lb (v12 would have raised +5).
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-10-15"
+    history:
+      - { date: "2026-10-01", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-04", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-08", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-11", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+    reading: { weight: 207.5, reps: 5, rpe: 8, kind: heavy_top }
+    expect: { decision: hold, new_wm: 240, implied_max: 255.9 }
+
+  - name: median_outvotes_single_hard_day
+    # The mirror image: one hard (non-grinder) day implying 230.6 among
+    # four 240.4s — the median holds; only a grinder or a sustained
+    # decline drops.
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-10-15"
+    history:
+      - { date: "2026-10-01", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-04", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-08", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-11", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+    reading: { weight: 190, reps: 5, rpe: 8.5, kind: heavy_top }
+    expect: { decision: hold, new_wm: 240 }
+
+  - name: median_sustained_trend_raises_in_full
+    # The whole window says 255.9 → 255: a real trend moves the TM in
+    # one step (no ±5/session crawl).
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-10-15"
+    history:
+      - { date: "2026-10-01", weight: 207.5, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-04", weight: 207.5, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-08", weight: 207.5, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-11", weight: 207.5, reps: 5, rpe: 8, kind: heavy_top }
+    reading: { weight: 207.5, reps: 5, rpe: 8, kind: heavy_top }
+    expect: { decision: raise, new_wm: 255 }
+
+  - name: median_window_ignores_light_and_subtop_history
+    # Light-week and sub-top history rows never enter the sample; the
+    # window is the two qualifying sets (240.4, 249.5) → median 245.0
+    # → 245.
+    policy: cut_early
+    lift: bench
+    wm: 240
+    date: "2026-10-15"
+    history:
+      - { date: "2026-10-04", weight: 195, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-06", weight: 160, reps: 8, rpe: 7, kind: heavy_top }
+      - { date: "2026-10-08", weight: 170, reps: 5, rpe: 6, kind: light_week }
+    reading: { weight: 230, reps: 1, rpe: 8, kind: heavy_top }
+    expect: { decision: raise, new_wm: 245 }
+
+  # ── manual pin: holds until outvoted; grinders drop through ──────────
+  - name: manual_pin_holds_before_quorum
+    policy: cut_early
+    lift: bench
+    wm: 260
+    date: "2026-10-15"
+    manual_pin: { since: "2026-10-03", new_sets: 2, needed: 3 }
+    history:
+      - { date: "2026-10-10", weight: 210, reps: 5, rpe: 8, kind: heavy_top }
+    reading: { weight: 210, reps: 5, rpe: 8, kind: heavy_top }
+    expect: { decision: hold, new_wm: 260 }
+
+  - name: manual_pin_outvoted_runs_on_post_manual_sets_only
+    # Pre-manual sets implied 271.3 (220×5@8); post-manual three sets
+    # implied 252.8 (205×5@8) → median 252.8 → 255. With the full
+    # 6-set history the median would be 262.0 → hold at 260 — the drop
+    # to 255 proves overridden history never resurrects.
+    policy: cut_early
+    lift: bench
+    wm: 260
+    date: "2026-10-15"
+    manual_pin: { since: "2026-10-03", new_sets: 3, needed: 3 }
+    history:
+      - { date: "2026-10-01", weight: 220, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-02", weight: 220, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-03", weight: 220, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-10", weight: 205, reps: 5, rpe: 8, kind: heavy_top }
+      - { date: "2026-10-12", weight: 205, reps: 5, rpe: 8, kind: heavy_top }
+    reading: { weight: 205, reps: 5, rpe: 8, kind: heavy_top }
+    expect: { decision: drop, new_wm: 255, cap: 8.5 }
+
+  - name: grinder_drops_through_manual_pin
+    # Safety beats the pin: 225×1@9.5 → implied 230.1 → 230 < 260−5.
+    policy: cut_early
+    lift: bench
+    wm: 260
+    date: "2026-10-15"
+    manual_pin: { since: "2026-10-03", new_sets: 0, needed: 3 }
+    reading: { weight: 225, reps: 1, rpe: 9.5, kind: heavy_top }
+    expect: { decision: drop, new_wm: 230, cap: 8.5 }

@@ -334,14 +334,14 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v12 is the last non-pending entry — the TM
-  # mechanism + routine unification (2026-09-28), which preserves the
-  # v11 day content verbatim through routine.week/phase_overrides.
+  # Version resolution: v13 is the last non-pending entry — the
+  # two-loop TM (slow-loop median estimator, 2026-09-28) on top of the
+  # v12 routine unification; day content is verbatim v11 throughout.
   # NOTE currentVersion is not date-gated.
-  - name: version_resolution_v12_wins_for_block0
+  - name: version_resolution_v13_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 12
+      version: 13
       block: 0
       emphasis: cut
       week_in_block: 1
