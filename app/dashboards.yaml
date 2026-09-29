@@ -249,7 +249,8 @@ last_bulk:
 #                        extraction — heavy_top / saturday_single /
 #                        capped / test tick; light_week doesn't; ANY
 #                        reps) — per-lift ticks. Squat/deadlift ticks
-#                        wear this week's alternation side ((H)/(L),
+#                        wear this week's alternation side (heavy/light
+#                        week tags,
 #                        from program.yaml planned_alternation), and
 #                        heavy_single_max_days adds the every-two-weeks
 #                        heavy-single recency line (≤2 reps at RPE ≥
@@ -324,13 +325,13 @@ phases:
         outcome: "muscle retained + built in the deficit"
         why: "Each main lift gets BOTH exposures weekly — the wave top plus its %TM volume slots (bench 4x8@68 + 3x6@72 + 3x8@65; squat 3x8@65; OHP 3x8@62; deadlift 2x4-6@75 — hence the 2-set minimum). Two half-ticks per lift; a 4-5 rep wave top double-counts into the volume half by design."
       - id: hypertrophy_volume
-        label: hyp sets
+        label: muscle sets
         band: [8, 12]
         muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
         outcome: "muscle retained (hypertrophy-maximizing deficit)"
         why: "8-12 productive sets per muscle group per week, overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — pulling volume stacks fast (climbing, MU, pull-ups, rows, curls)."
       - id: bench_frequency
-        label: bench 3x
+        label: bench days
         target: 3
         outcome: "bench / Wilks held"
         why: "Bench detrains fastest of the four — the v11 schedule spreads three weekly exposures (Mon 68% volume, Wed heavy, Fri 65% volume)."
@@ -441,7 +442,7 @@ phases:
         outcome: "strength + muscle gain"
         why: "Every main lift gets BOTH exposures each week — a heavy top set (1-3 @ RPE 7-8) keeps the working max moving, and 3+ sets of 3-8 @ RPE 7-9 supply the hypertrophy dose behind it. Two half-ticks per lift."
       - id: hypertrophy_volume
-        label: hyp sets
+        label: muscle sets
         band: [8, 12]
         muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
         outcome: "muscle gain"
