@@ -12,11 +12,14 @@ answer to "what should I be doing?" changes.
   conversation ("switch me to a bulk", "drop climbing to 1x/week") —
   Claude edits the file, commits, and pushes. Date-stamp material
   changes in the file header.
-- **Template links are load-bearing.** Routine rules reference template
-  names from `../views/*.template.yml` (e.g. `strength.cut_squat_heavy`).
-  Those templates ARE the structured plans in Air Ledger — when the
-  coach schedules "heavy squat day", it means "apply that template".
-  If a template is renamed or added, update `routine.md` to match.
+- **The program is the source of the week (templates retired
+  2026-09-30).** `program.yaml`'s `routine:` (base week +
+  `phase_overrides`) holds the authoritative day-by-day prescription;
+  the app resolves it into a "program slice" (concrete exercises,
+  sets/reps, loads) that the nightly coach and the in-app coach read.
+  The old `views/*.template.yml` files are deleted — when the coach
+  schedules "heavy squat day" it reads that day from the program, not a
+  template file. `routine.md` is a deprecated readable fallback only.
 - **Read as prompt context.** The nightly coach (and any ad-hoc "what
   should I do today?" session) reads these files verbatim alongside
   recent ledger data (workouts, weight, daily_notes). Write for that

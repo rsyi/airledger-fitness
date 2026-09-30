@@ -1,16 +1,22 @@
 > **DEPRECATED (2026-09-20): superseded by coach/program.yaml
-> weekly_template. Kept readable for one release; do not edit.**
+> `routine:`. Kept readable as a fallback; do not edit.**
 >
 > **2026-09-28: the cut structure below (squat/deadlift heavy-light
 > alternation, hard singles, Monday press anchor, carryover rule) is
-> RETIRED by the approved cut-training revision — program.yaml v11
-> `weekly_template_block_0` + `strength_wave_cut` are canonical
-> (weekly wave tops on all four lifts, %TM volume, Tue AM-4x4 +
+> RETIRED by the approved cut-training revision — program.yaml v11+
+> `routine:` (base week + `phase_overrides`) + `strength_wave_cut` are
+> canonical (weekly wave tops on all four lifts, %TM volume, Tue AM-4x4 +
 > PM-hard-climb, Fri light climb). See goals.md for the summary.**
+>
+> **2026-09-30: the workout TEMPLATES (`views/*.template.yml`) this doc
+> named are RETIRED and deleted — the program's `routine:` is the
+> authoritative day-by-day prescription (surfaced as the program slice).
+> The template names below (`strength.cut_squat_heavy` etc.) are kept
+> only as historical prose; no such files exist anymore.**
 
 # Weekly routine — cut phase
 
-(as of 2026-09-13 · templates live in `../views/`)
+(as of 2026-09-13 · templates retired 2026-09-30 — see program.yaml `routine:`)
 
 ## The week, by rule
 
