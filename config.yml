@@ -43,3 +43,10 @@ integrations:
   # client in the same GCP project is matched by package + SHA-1.
   kaya_gmail:
     server_client_id: 262393512085-7sqb33066e7f8fo3s8pb4bvpu8ncfmsq.apps.googleusercontent.com
+  # Whoop developer app (developer.whoop.com) → daily_notes sleep +
+  # recovery. Redirect URL registered on the Whoop app:
+  # ledger://oauth/whoop. Secret lives in .env (gitignored) and is
+  # resolved into assets/config.yaml at build time.
+  whoop_api:
+    client_id_var: WHOOP_CLIENT_ID
+    client_secret_var: WHOOP_CLIENT_SECRET
