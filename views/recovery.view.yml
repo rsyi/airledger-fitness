@@ -1,0 +1,24 @@
+name: recovery
+description: "Objective sleep + recovery log, one row per day — fed by the Whoop developer API (sleep + recovery + cycle). Distinct from daily_notes' MANUAL recovery subjectives; this tab carries the raw device %/scores."
+datasource: gsheets
+table: recovery
+entities:
+  - { name: recovery_entry, type: primary, key: id }
+dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
+  - { name: date, type: date, expr: date, description: "Day (wake date for sleep; recovery is keyed on the same day)" }
+  - { name: day_of_week, type: string, expr: day_of_week }
+  - { name: sleep_hours, type: number, expr: sleep_hours, description: "Time asleep last night (hours) = total in bed − total awake, from the Whoop sleep stage summary" }
+  - { name: sleep_performance_pct, type: number, expr: sleep_performance_pct, description: "Whoop sleep performance % (asleep vs sleep need, 0-100)" }
+  - { name: sleep_efficiency_pct, type: number, expr: sleep_efficiency_pct, description: "Whoop sleep efficiency % (asleep vs in bed, 0-100)" }
+  - { name: sleep_consistency_pct, type: number, expr: sleep_consistency_pct, description: "Whoop sleep consistency % (bed/wake timing regularity, 0-100)" }
+  - { name: recovery_score, type: number, expr: recovery_score, description: "Whoop recovery score (0-100; green >=67 / yellow 34-66 / red <34)" }
+  - { name: hrv_ms, type: number, expr: hrv_ms, description: "Heart-rate variability (RMSSD, milliseconds)" }
+  - { name: resting_hr, type: number, expr: resting_hr, description: "Resting heart rate (bpm)" }
+  - { name: respiratory_rate, type: number, expr: respiratory_rate, description: "Respiratory rate (breaths per minute), from the sleep score" }
+  - { name: notes, type: string, expr: notes, description: "Free-form note (user-owned; Whoop leaves it blank)" }
+measures:
+  - { name: recovery_count, type: count }
+  - { name: avg_recovery_score, type: average, expr: recovery_score }
+  - { name: avg_hrv_ms, type: average, expr: hrv_ms }
+  - { name: avg_sleep_hours, type: average, expr: sleep_hours }

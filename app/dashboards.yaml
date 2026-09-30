@@ -204,6 +204,35 @@ domains:
         goal_band_per_lb: [0.8, 1.0] # shaded band, scaled by current 7d-avg bw
         goal_note: "0.8–1.0 g/lb of bodyweight"
 
+  # Recovery is INTEGRATION paradigm (Whoop API → recovery tab,
+  # 2026-09-30): the Whoop developer-API background pull OWNS the
+  # objective sleep/recovery fields, so the screen is a read surface
+  # (record list + Trends). Manual corrections stay possible via ⋮ →
+  # "Add entry manually" (the view keeps its input overlay). This is the
+  # OBJECTIVE recovery data — daily_notes still carries the hand-logged
+  # subjectives (sleep_quality/fatigue/soreness/pain/readiness).
+  - name: recovery
+    paradigm: integration
+    views: [recovery]
+    icon: moon
+    headline: [recovery_score, hrv_ms] # latest recovery score + HRV
+    list_fields:
+      - recovery_score
+      - { field: hrv_ms, unit: ms }
+      - { field: sleep_hours, unit: h }
+    metrics:
+      - id: recovery_score
+        kind: series
+        label: "recovery score"
+      - id: hrv_ms
+        kind: series
+        label: "HRV"
+        unit: ms
+      - id: sleep_hours
+        kind: series
+        label: "sleep"
+        unit: h
+
 # last_bulk: — the home STRENGTH card's second column (2026-09-22,
 # user: "show my numbers from my last bulk"): per lift the heaviest
 # weight ACTUALLY lifted inside [start, end], Wilks-priced at the

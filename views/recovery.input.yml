@@ -1,0 +1,64 @@
+target: recovery.view.yml
+icon: moon
+date_field: date
+list_display:
+  title: recovery_score
+  subtitle: ${sleep_hours}h sleep • HRV ${hrv_ms}ms
+fields:
+  id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  day_of_week:
+    derive:
+      from: date
+      format: weekday_long
+  # All objective device fields are OWNED by the Whoop API integration
+  # (whoop_api.dart). They stay editable so a manual correction is
+  # possible, but never autofilled from history — carrying a prior
+  # night's recovery forward would fabricate data.
+  sleep_hours:
+    widget: number
+    min: 0
+    max: 14
+    autofill: false
+  sleep_performance_pct:
+    widget: number
+    min: 0
+    max: 100
+    autofill: false
+  sleep_efficiency_pct:
+    widget: number
+    min: 0
+    max: 100
+    autofill: false
+  sleep_consistency_pct:
+    widget: number
+    min: 0
+    max: 100
+    autofill: false
+  recovery_score:
+    widget: number
+    min: 0
+    max: 100
+    autofill: false
+  hrv_ms:
+    widget: number
+    min: 0
+    max: 500
+    autofill: false
+  resting_hr:
+    widget: number
+    min: 0
+    max: 200
+    autofill: false
+  respiratory_rate:
+    widget: number
+    min: 0
+    max: 40
+    autofill: false
+  notes:
+    widget: longtext
+    autofill: false
