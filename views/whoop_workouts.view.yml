@@ -1,0 +1,24 @@
+name: whoop_workouts
+description: "Whoop workouts (strain) log — one row per Whoop-detected workout, fed by the Whoop developer API (v2 /activity/workout). SESSION-level: each row is a single strain score for one workout; it is NOT joined to per-set strength rows. The coach/LLM associates a workout to a logged session by date/time overlap (a Monday lifting session's strength rows ↔ Monday's Whoop workout strain). Distinct from the `recovery` view (daily sleep/HRV) and the BLE live-HR zone stamps."
+datasource: gsheets
+table: whoop_workouts
+entities:
+  - { name: workout, type: primary, key: workout_id }
+dimensions:
+  - { name: workout_id, type: string, expr: workout_id, description: "Whoop workout id (uuid; the row-grained ingest match key)" }
+  - { name: date, type: date, expr: date, description: "Workout day (start time's date; see start_time for the instant)" }
+  - { name: start_time, type: datetime, expr: start_time, description: "Workout start (for the date/time overlap join to logged sessions)" }
+  - { name: end_time, type: datetime, expr: end_time, description: "Workout end" }
+  - { name: sport, type: string, expr: sport, description: "Whoop sport name (mapped from sport_id; unknown ids fall back to the raw id)" }
+  - { name: strain, type: number, expr: strain, description: "Whoop strain score (0-21, logarithmic cardiovascular load)" }
+  - { name: avg_hr, type: number, expr: avg_hr, description: "Average heart rate over the workout (bpm)" }
+  - { name: max_hr, type: number, expr: max_hr, description: "Max heart rate over the workout (bpm)" }
+  - { name: kcal, type: number, expr: kcal, description: "Energy expended (kcal; converted from Whoop's kilojoule, kcal = kj / 4.184, 1dp)" }
+  - { name: duration_min, type: number, expr: duration_min, description: "Workout duration (minutes, end − start, 1dp)" }
+  - { name: notes, type: string, expr: notes, description: "Free-form note (user-owned; Whoop leaves it blank)" }
+measures:
+  - { name: workout_count, type: count }
+  - { name: avg_strain, type: average, expr: strain }
+  - { name: total_strain, type: sum, expr: strain }
+  - { name: avg_max_hr, type: average, expr: max_hr }
+  - { name: total_kcal, type: sum, expr: kcal }

@@ -1,0 +1,51 @@
+target: whoop_workouts.view.yml
+icon: activity
+date_field: date
+list_display:
+  title: sport
+  subtitle: strain ${strain} • ${duration_min}min • max ${max_hr}bpm
+fields:
+  # workout_id is the Whoop workout uuid — the row-grained ingest match
+  # key. Not editable (hand-editing it would orphan the ingest match).
+  workout_id:
+    editable: false
+  date:
+    widget: date
+    default: today
+    required: true
+  start_time:
+    widget: datetime
+  end_time:
+    widget: datetime
+  sport:
+    widget: text
+  # All objective device fields are OWNED by the Whoop API integration
+  # (whoop_api.dart). They stay editable so a manual correction is
+  # possible, but never autofilled from history — carrying a prior
+  # workout's strain forward would fabricate data.
+  strain:
+    widget: number
+    min: 0
+    max: 21
+    autofill: false
+  avg_hr:
+    widget: number
+    min: 0
+    max: 250
+    autofill: false
+  max_hr:
+    widget: number
+    min: 0
+    max: 250
+    autofill: false
+  kcal:
+    widget: number
+    min: 0
+    autofill: false
+  duration_min:
+    widget: number
+    min: 0
+    autofill: false
+  notes:
+    widget: longtext
+    autofill: false

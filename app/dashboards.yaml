@@ -233,6 +233,29 @@ domains:
         label: "sleep"
         unit: h
 
+  # Whoop workouts (strain) is INTEGRATION paradigm (Whoop API →
+  # whoop_workouts tab, 2026-09-30): SESSION-level strain scores, one
+  # row per Whoop-detected workout, pulled over the same window as
+  # sleep/recovery. Read surface (record list + Trends). Kept DISTINCT
+  # from `recovery` (that is daily sleep/HRV; this is per-workout
+  # cardiovascular load) so the coach can line a workout's strain up
+  # against the day's logged training session by date/time overlap. The
+  # strain series plots the day's HARDEST workout (max strain).
+  - name: whoop_workouts
+    paradigm: integration
+    views: [whoop_workouts]
+    icon: activity
+    headline: [strain_series] # latest workout's strain above the records
+    list_fields:
+      - sport
+      - strain
+      - { field: max_hr, unit: bpm }
+      - { field: duration_min, unit: min }
+    metrics:
+      - id: strain_series
+        kind: series
+        label: "workout strain"
+
 # last_bulk: — the home STRENGTH card's second column (2026-09-22,
 # user: "show my numbers from my last bulk"): per lift the heaviest
 # weight ACTUALLY lifted inside [start, end], Wilks-priced at the
