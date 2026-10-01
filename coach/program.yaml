@@ -6263,10 +6263,11 @@ versions:
           # Skill/core work — stop on quality loss, well short of
           # failure. Hangboard is deliberately NOT added here; it is
           # deferred to block 2 (Jan 2027) per the user.
-          morning: "Muscle-ups FIRST (skill — quality sets, stop on quality loss). Then handstand practice ~10 min (wall or free, quality holds); front-lever up-downs 2x5 (straight-arm, short of failure); hanging leg raise 3x8-15. Then dips 3x8-12; optional row; EZ curls 3x8-12; optional triceps 2x10-15."
+          morning: "Muscle-ups 6 sets of 1-2 unassisted (quality — stop on form loss), then banded muscle-ups 2x3-5 to build volume. Then handstand practice ~10 min (wall or free, quality holds); front-lever up-downs 2x5 (straight-arm, short of failure); hanging leg raise 3x8-15. Then dips 3x8-12; optional row; EZ curls 3x8-12; optional triceps 2x10-15."
           afternoon: null
           planned:
-            - { exercise: "Muscle Up", sets: 3, reps: 1 }
+            - { exercise: "Muscle Up", sets: 6, reps: 1, reps_hi: 2 }
+            - { exercise: "Muscle Up Green Band", sets: 2, reps: 3, reps_hi: 5 }
             - { exercise: "Handstand Hold", sets: 3, reps: 1 }
             - { exercise: "Front Lever", sets: 2, reps: 5 }
             - { exercise: "Hanging Leg Raise", sets: 3, reps: 8, reps_hi: 15 }
