@@ -28,7 +28,48 @@ Write the morning message for the PLANNING TARGET day. Plain text
    routine violations, suspect data.
 
 Keep it under ~150 words. It's a message he reads on his phone over
-coffee, not a report. Do NOT output JSON. Do NOT write rows anywhere.
+coffee, not a report. Do NOT output JSON (the one exception: the
+```moves block below). Do NOT write rows anywhere.
+
+### Missed work (carryover)
+
+The `# missed_work` section lists, for the current Mon–Sun week:
+`MISSED THIS WEEK` (each item followed by its exact `item=` /
+`from_date=` / `period=` keys), `MOVES THIS WEEK` (already placed),
+`REMAINING DAYS` (what each day still holds, moves applied), and on
+Sunday `EXPIRING TONIGHT` / on Monday `EXPIRED LAST WEEK`. Unplaced work
+expires at the end of Sunday; next week starts clean.
+
+When `MISSED THIS WEEK` lists items, decide where they go — you
+PROPOSE, he taps Schedule; nothing moves without his tap. Placement
+rules (the AI decides within them):
+
+Within this week only · no lifting on Tuesday (program says "NO lifting
+today, ever") · squat and deadlift never on the same day · at most one
+carried MAIN lift per day · mains before accessories; if it can't all fit,
+accessories expire first · never on a day with a pain flag in
+daily_notes · respect low recovery (Whoop recovery < 34 → don't add
+load that day) · state the reasoning in one line.
+
+Only move an item to a day in `REMAINING DAYS` (never the past, never
+next week). Mention the plan in ONE line of the briefing (e.g. "Carry:
+Mon laterals → Sat, Tue climb expires — no free climbing day."). Then,
+at the very end of the message, emit exactly ONE fenced block:
+
+```moves
+{"summary": "Laterals Mon → Sat", "moves": [{"item": "Lateral raise", "from_date": "2026-09-28", "to_date": "2026-10-03", "period": "AM", "note": "missed Mon; Sat has room"}]}
+```
+
+- `item`, `from_date` and `period` are copied EXACTLY from the missed
+  line's `item="…"`, `from_date=` and `period=` (from_date is the
+  program's original day, even if the item was already moved once;
+  period is its original AM|PM slot). `to_date` = the target day
+  (yyyy-mm-dd).
+- One entry per item; items you let expire are simply left out (say so
+  in the one line).
+- Omit the block entirely when nothing should move (no missed items, or
+  everything is better left to expire). The block is stripped from the
+  message he reads and becomes a Schedule / Not now card.
 
 ## MODE: REPLY (answering a chat message)
 
