@@ -1,0 +1,38 @@
+target: program_moves.view.yml
+icon: calendar
+date_field: date
+list_display:
+  title: item
+  subtitle: from ${from_date} • ${source}
+# Rows are written by the app (program day card "Move to…", accepted
+# coach move proposals). Every field is per-move: never autofilled from
+# history — carrying a prior move forward would fabricate a relocation.
+fields:
+  id:
+    editable: false
+  date:
+    widget: date
+    required: true
+    autofill: false
+  from_date:
+    widget: date
+    required: true
+    autofill: false
+  item:
+    widget: text
+    required: true
+    autofill: false
+  period:
+    widget: text
+    autofill: false
+  source:
+    widget: text
+    editable: false
+    autofill: false
+  created_at:
+    widget: datetime
+    editable: false
+    autofill: false
+  note:
+    widget: text
+    autofill: false

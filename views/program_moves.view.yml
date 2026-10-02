@@ -1,0 +1,17 @@
+name: program_moves
+description: "Program item relocations within a Mon-Sun week — one row per move (manual from the program day card, or an accepted coach proposal). Latest row per (from_date, item) wins; deleting the row undoes the move. Read by the app, the nightly coach, and MCP."
+datasource: gsheets
+table: program_moves
+entities:
+  - { name: move, type: primary, key: id }
+dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
+  - { name: date, type: date, expr: date, description: "Target day the item now lives on" }
+  - { name: from_date, type: date, expr: from_date, description: "Day the program prescribed the item" }
+  - { name: item, type: string, expr: item, description: "Prescribed item display name (case-insensitive key with from_date)" }
+  - { name: period, type: string, expr: period, description: "AM / PM slot of the original item" }
+  - { name: source, type: string, expr: source, description: "manual | coach" }
+  - { name: created_at, type: datetime, expr: created_at, description: "When the move was made (latest wins)" }
+  - { name: note, type: string, expr: note, description: "Optional reason" }
+measures:
+  - { name: move_count, type: count }
