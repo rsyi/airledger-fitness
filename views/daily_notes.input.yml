@@ -18,9 +18,9 @@ fields:
   note:
     widget: longtext
     required: true
-    placeholder: How training felt, sleep, soreness, life context…
-  # --- Daily recovery subjectives (recomp tracking spec, 2026-09-27;
-  # amends intent-layers spec §2.4) --------------------------------------
+    placeholder: How training felt, soreness, life context…
+  # --- Daily recovery subjectives. sleep_hours / sleep_quality / readiness are HIDDEN from the form since 2026-10-01 — Whoop (recovery view) owns sleep + readiness; the dims stay so history is intact.
+  # (recomp tracking spec, 2026-09-27; amends intent-layers spec §2.4) --------------------------------------
   # ALL OPTIONAL — the free-text note stays primary. Numbers feed the
   # weekly review's recovery aggregates; the pain field OUTRANKS every
   # numeric target as a coaching signal. Subjective per-day: never
@@ -31,12 +31,14 @@ fields:
     max: 14
     placeholder: '7.5'
     autofill: false
+    editable: false
   sleep_quality:
     widget: number
     min: 1
     max: 5
     placeholder: 1-5
     autofill: false
+    editable: false
   fatigue:
     widget: number
     min: 1
@@ -59,3 +61,4 @@ fields:
     max: 5
     placeholder: 1-5
     autofill: false
+    editable: false

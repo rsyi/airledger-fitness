@@ -112,7 +112,10 @@ cases:
       week_type: normal
       weekday: sun
       today_template:
-        morning: null
+        # v15 (2026-10-01): cut Sunday gained the optional zone-2 run
+        # prose — never planned (no `planned` rows), never a missed
+        # session.
+        morning: "Optional: easy zone-2 run, 30-45 min (nice to have; Whoop detects it — no logging needed)."
         afternoon: null
       targets:
         near_max_sets: 4          # one wave top per lift per week (v11)
@@ -334,15 +337,16 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v14 is the last non-pending entry — Thursday
-  # calisthenics additions (handstand/front-lever/HLR, 2026-09-29) on
-  # top of the v13 two-loop TM; the resolver slice shape is unchanged
-  # (day content only added skill rows). NOTE currentVersion is not
-  # date-gated.
-  - name: version_resolution_v14_wins_for_block0
+  # Version resolution: v15 is the last non-pending entry — cut Sunday
+  # gains the optional zone-2 run prose (2026-10-01) on top of v14's
+  # Thursday calisthenics additions; the resolver slice shape is
+  # unchanged (day content only added/changed prose). NOTE
+  # currentVersion is not date-gated — v15 applies even to a date
+  # before its effective_from.
+  - name: version_resolution_v15_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 14
+      version: 15
       block: 0
       emphasis: cut
       week_in_block: 1

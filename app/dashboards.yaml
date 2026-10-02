@@ -410,7 +410,7 @@ phases:
     # partial / unmet state. Parsed by services/goals_service.dart; a
     # phase WITHOUT `goals:` (or an older app) shows the screen's "no
     # goals declared" placeholder. Goal ids: macros / calorie_band /
-    # hard_sets / climbing / cardio_4x4. Cut set:
+    # hard_sets / climbing / cardio_4x4 / zone2_run. Cut set:
     goals:
       - id: macros
         label: Macros
@@ -442,6 +442,13 @@ phases:
         label: Cardio
         description: "One 4x4 interval session a week."
         target: 1
+      - id: zone2_run
+        label: Zone-2 run
+        description: "Nice to have: one easy run a week (the Sunday run) — detected from Whoop, no logging needed."
+        optional: true
+        target: 1
+        min_minutes: 20
+        max_avg_hr_pct: 0.75
   bulk:
     eigenvectors:
       # Not gaining too fast: §5.4 gain_rate_lb_wk blocks_2_5 band;
@@ -550,8 +557,8 @@ phases:
     # GOALS tab — recomp set (post-cut, from Dec 14). Protein goes
     # ABSOLUTE (160-175 g/day, spec); calories sit at maintenance-to-
     # slightly-over (recomp is muscle at maintenance, not a deficit);
-    # hard sets + climbing + cardio unchanged. Accessories from the
-    # postcut routine week (editable).
+    # hard sets + climbing + cardio + zone2_run unchanged. Accessories
+    # from the postcut routine week (editable).
     goals:
       - id: macros
         label: Macros
@@ -582,6 +589,13 @@ phases:
         label: Cardio
         description: "One 4x4 interval session a week."
         target: 1
+      - id: zone2_run
+        label: Zone-2 run
+        description: "Nice to have: one easy run a week (the Sunday run) — detected from Whoop, no logging needed."
+        optional: true
+        target: 1
+        min_minutes: 20
+        max_avg_hr_pct: 0.75
   maintain:
     eigenvectors:
       - id: weight_hold
