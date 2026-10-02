@@ -337,16 +337,18 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v15 is the last non-pending entry — cut Sunday
-  # gains the optional zone-2 run prose (2026-10-01) on top of v14's
-  # Thursday calisthenics additions; the resolver slice shape is
-  # unchanged (day content only added/changed prose). NOTE
-  # currentVersion is not date-gated — v15 applies even to a date
+  # Version resolution: v16 is the last non-pending entry — the
+  # corrected exercise_muscle_map (back → lats/upper_back/lower_back,
+  # shoulders → side/rear/front delts, stimulus-tier credits,
+  # hypertrophy_targets.tracked_groups; 2026-10-02) on top of v15's
+  # optional zone-2 Sunday prose; the resolver slice shape is
+  # unchanged (hypertrophy_sets_per_muscle stays [8, 12] post-cut).
+  # NOTE currentVersion is not date-gated — v16 applies even to a date
   # before its effective_from.
-  - name: version_resolution_v15_wins_for_block0
+  - name: version_resolution_v16_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 15
+      version: 16
       block: 0
       emphasis: cut
       week_in_block: 1

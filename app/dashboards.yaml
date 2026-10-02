@@ -402,9 +402,9 @@ phases:
       - id: hypertrophy_volume
         label: muscle sets
         band: [8, 12]
-        muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
+        muscle_groups: [quads, hamstrings_glutes, chest, lats, upper_back, side_delts, rear_delts, biceps, triceps]
         outcome: "muscle retained (hypertrophy-maximizing deficit)"
-        why: "8-12 productive sets per muscle group per week, overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — pulling volume stacks fast (climbing, MU, pull-ups, rows, curls)."
+        why: "8-12 productive sets per muscle group per week, overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — pulling volume stacks fast (climbing, MU, pull-ups on lats; rows, face pulls on upper back). Tracked-only groups (lower back, front delts, forearms, core) are not banded."
       - id: bench_frequency
         label: bench days
         target: 3
@@ -468,7 +468,9 @@ phases:
         label: Sets per muscle group
         description: "Working sets per muscle group this week (Monday to Sunday) from the program's exercise-to-muscle credits, climbing sessions included. Aim for 8-12 per group. Over 12 is excess overlapping volume (flagged per group); under mid-week just means not done yet — the detail shows who trails an even pace."
         band: [8, 12]
-        # muscle_groups: omitted → the program's hypertrophy_targets groups.
+        # muscle_groups / tracked_groups: omitted → the program's
+        # hypertrophy_targets groups (v16: 9 banded + tracked-only
+        # lower_back/front_delts/forearms/core, shown without a band).
       - id: climbing
         label: Climbing
         description: "Two climbing sessions a week."
@@ -575,9 +577,9 @@ phases:
       - id: hypertrophy_volume
         label: muscle sets
         band: [8, 12]
-        muscle_groups: [quads, hamstrings_glutes, chest, back, shoulders, biceps, triceps]
+        muscle_groups: [quads, hamstrings_glutes, chest, lats, upper_back, side_delts, rear_delts, biceps, triceps]
         outcome: "muscle gain"
-        why: "8-12 productive sets per muscle group per week (~10 default), overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — the excess-pulling caution (climbing, MU, pull-ups, rows, curls all land on back/biceps)."
+        why: "8-12 productive sets per muscle group per week (~10 default), overlap-counted from compounds + climbing + calisthenics via the program's exercise_muscle_map. OVER the band goes red — the excess-pulling caution (climbing, MU, pull-ups stack on lats; rows, face pulls on upper back). Tracked-only groups (lower back, front delts, forearms, core) are not banded."
       - id: protein_floor
         label: protein
         floor_g: 160
@@ -620,7 +622,9 @@ phases:
         label: Sets per muscle group
         description: "Working sets per muscle group this week (Monday to Sunday) from the program's exercise-to-muscle credits, climbing sessions included. Aim for 8-12 per group. Over 12 is excess overlapping volume (flagged per group); under mid-week just means not done yet — the detail shows who trails an even pace."
         band: [8, 12]
-        # muscle_groups: omitted → the program's hypertrophy_targets groups.
+        # muscle_groups / tracked_groups: omitted → the program's
+        # hypertrophy_targets groups (v16: 9 banded + tracked-only
+        # lower_back/front_delts/forearms/core, shown without a band).
       - id: climbing
         label: Climbing
         description: "Two climbing sessions a week (three in climbing-emphasis blocks)."
