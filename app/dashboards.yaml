@@ -24,6 +24,11 @@
 #                            scale battery).
 #   views:    view names — the FIRST backs the domain screen's timeline.
 #   icon:     lucide icon name (same vocabulary as the input.yml icons).
+#   label:    human display name (Log list + domain screen title);
+#             absent → the humanized name (daily_notes → "Daily notes").
+#   description: one-line Log-list subtitle shown when today's program
+#             has no call for the domain; absent → the view description's
+#             first clause. Older apps ignore both keys safely.
 #   headline: metric ids for the compact strip above the records — the
 #     2-3 numbers worth seeing every open (e.g. strength: wilks +
 #     pl_total → "Wilks 306.1 · PL 1222 lb"). Stats show their first
@@ -54,6 +59,8 @@
 
 domains:
   - name: strength
+    label: Strength
+    description: "Sets, weight × reps, RPE"
     paradigm: entry
     views: [strength]
     icon: dumbbell
@@ -122,6 +129,8 @@ domains:
   # weigh-ins stay possible via ⋮ → "Add entry manually" (the view keeps
   # its input overlay; rows write to the ledger + sync like any entry).
   - name: weight
+    label: Weight
+    description: "Withings weigh-ins and body fat"
     paradigm: integration
     views: [weight]
     icon: scale
@@ -143,6 +152,8 @@ domains:
         unit: "%"
 
   - name: cardio
+    label: Cardio
+    description: "4x4 intervals"
     paradigm: entry
     views: [cardio]
     icon: heart-pulse
@@ -154,12 +165,16 @@ domains:
         unit: bpm
 
   - name: daily_notes
+    label: Daily notes
+    description: "Journal · sleep, fatigue, pain"
     paradigm: entry
     views: [daily_notes]
     icon: notebook-pen
     metrics: [] # journal — no numeric dashboard
 
   - name: climbing
+    label: Climbing
+    description: "Kaya ascents"
     paradigm: integration
     views: [climbing]
     icon: mountain
@@ -178,12 +193,16 @@ domains:
   # Calisthenics skill log (recomp tracking spec 2026-09-27): entry
   # paradigm — skill quality/progression, not hypertrophy volume.
   - name: calisthenics
+    label: Calisthenics
+    description: "Skill sets and holds"
     paradigm: entry
     views: [calisthenics]
     icon: person-standing
     metrics: [] # bests are per-skill/variation — surfaced by the weekly review + recomp dashboard rows
 
   - name: meals
+    label: Meals
+    description: "Macrofactor via Health Connect"
     paradigm: integration
     views: [meals]
     icon: utensils
@@ -212,6 +231,8 @@ domains:
   # OBJECTIVE recovery data — daily_notes still carries the hand-logged
   # subjectives (sleep_quality/fatigue/soreness/pain/readiness).
   - name: recovery
+    label: Recovery
+    description: "Whoop sleep and recovery"
     paradigm: integration
     views: [recovery]
     icon: moon
@@ -242,6 +263,8 @@ domains:
   # against the day's logged training session by date/time overlap. The
   # strain series plots the day's HARDEST workout (max strain).
   - name: whoop_workouts
+    label: Whoop workouts
+    description: "Whoop strain per workout"
     paradigm: integration
     views: [whoop_workouts]
     icon: activity
