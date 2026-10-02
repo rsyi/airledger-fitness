@@ -1,5 +1,5 @@
 name: program_moves
-description: "Program item relocations within a Mon-Sun week — one row per move (manual from the program day card, or an accepted coach proposal). Latest row per (from_date, item) wins; deleting the row undoes the move. Read by the app, the nightly coach, and MCP."
+description: "Program item relocations within a Mon-Sun week — one row per move (manual from the program day card, or an accepted coach proposal). Latest row per (from_date, item) wins; deleting the row undoes the move. Also holds SKIP rows (source=skip): a prescribed item the user intentionally skipped that day (date == from_date, note = the required reason); deleting the row undoes the skip; skips are never moves and never supersede one. Read by the app, the nightly coach, and MCP."
 datasource: gsheets
 table: program_moves
 entities:
@@ -10,8 +10,8 @@ dimensions:
   - { name: from_date, type: date, expr: from_date, description: "Day the program prescribed the item" }
   - { name: item, type: string, expr: item, description: "Prescribed item display name (case-insensitive key with from_date)" }
   - { name: period, type: string, expr: period, description: "AM / PM slot of the original item" }
-  - { name: source, type: string, expr: source, description: "manual | coach" }
+  - { name: source, type: string, expr: source, description: "manual | coach | skip (skip = item intentionally skipped that day; date == from_date; note = the reason; deleting the row undoes the skip; never a move)" }
   - { name: created_at, type: datetime, expr: created_at, description: "When the move was made (latest wins)" }
-  - { name: note, type: string, expr: note, description: "Optional reason" }
+  - { name: note, type: string, expr: note, description: "Reason (required for skip rows)" }
 measures:
   - { name: move_count, type: count }
