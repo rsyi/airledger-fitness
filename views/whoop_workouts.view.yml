@@ -3,8 +3,9 @@ description: "Whoop workouts (strain) log — one row per Whoop-detected workout
 datasource: gsheets
 table: whoop_workouts
 entities:
-  - { name: workout, type: primary, key: workout_id }
+  - { name: workout, type: primary, key: id }
 dimensions:
+  - { name: id, type: string, expr: id, description: Unique row identifier (UUID) }
   - { name: workout_id, type: string, expr: workout_id, description: "Whoop workout id (uuid; the row-grained ingest match key)" }
   - { name: date, type: date, expr: date, description: "Workout day (start time's date; see start_time for the instant)" }
   - { name: start_time, type: datetime, expr: start_time, description: "Workout start (for the date/time overlap join to logged sessions)" }

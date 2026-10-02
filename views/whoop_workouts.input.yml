@@ -5,6 +5,8 @@ list_display:
   title: sport
   subtitle: strain ${strain} • ${duration_min}min • max ${max_hr}bpm
 fields:
+  id:
+    editable: false
   # workout_id is the Whoop workout uuid — the row-grained ingest match
   # key. Not editable (hand-editing it would orphan the ingest match).
   workout_id:
