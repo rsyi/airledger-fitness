@@ -423,9 +423,14 @@ phases:
         calorie_mode: deficit
       - id: hard_sets
         label: Hard sets per lift
-        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy landmark that retains muscle through the cut."
+        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy landmark that retains muscle through the cut. Deadlift is 3 (Friday only: top set + 2 back-offs — hinge volume comes from RDLs)."
         lifts: [squat, bench, deadlift, press]
         hard_set_target: 10
+        # Per-lift overrides (app 2026-10-02+; older apps ignore the key
+        # and keep 10). Deadlift trains once a week with deliberately low
+        # supplemental volume (fatigue cost) — the routine prescribes
+        # exactly top + 2 back-offs, so 10 is unreachable by design.
+        hard_set_targets: {deadlift: 3}
         hard_rpe_min: 7
         # Associated accessories per lift, from the routine (editable):
         # a per-lift check that the supporting work got hit this week.
@@ -572,9 +577,10 @@ phases:
         band_kcal: 200
       - id: hard_sets
         label: Hard sets per lift
-        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy dose behind the recomp."
+        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy dose behind the recomp. Deadlift is 3 (once a week: top set + 2 back-offs)."
         lifts: [squat, bench, deadlift, press]
         hard_set_target: 10
+        hard_set_targets: {deadlift: 3}   # routine: top + ~2x4-6, lower by design
         hard_rpe_min: 7
         accessories:
           squat: [Romanian Deadlift]
