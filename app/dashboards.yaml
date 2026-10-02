@@ -410,7 +410,8 @@ phases:
     # partial / unmet state. Parsed by services/goals_service.dart; a
     # phase WITHOUT `goals:` (or an older app) shows the screen's "no
     # goals declared" placeholder. Goal ids: macros / calorie_band /
-    # hard_sets / climbing / cardio_4x4 / zone2_run. Cut set:
+    # hard_sets / muscle_stimulus / climbing / cardio_4x4 / zone2_run.
+    # Cut set:
     goals:
       - id: macros
         label: Macros
@@ -422,16 +423,17 @@ phases:
         description: "Stay in a modest deficit — intake below your estimated maintenance."
         calorie_mode: deficit
       - id: hard_sets
-        label: Hard sets per lift
-        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy landmark that retains muscle through the cut. Deadlift is 3 (Friday only: top set + 2 back-offs — hinge volume comes from RDLs)."
+        label: Program sets per lift
+        description: "Working sets logged per main lift vs what this week's program prescribes (top sets, back-offs and volume slots; moves and skips applied) — Monday to Sunday, the same count as the Today card."
         lifts: [squat, bench, deadlift, press]
+        # Targets are DERIVED from the effective program week (app
+        # 2026-10-02+). hard_set_target is only the legacy fallback when
+        # no program week is available (and what older apps show);
+        # `hard_set_targets: {lift: n}` would OVERRIDE the derived target
+        # for a lift — none needed now (deadlift's 3 is what the program
+        # prescribes).
         hard_set_target: 10
-        # Per-lift overrides (app 2026-10-02+; older apps ignore the key
-        # and keep 10). Deadlift trains once a week with deliberately low
-        # supplemental volume (fatigue cost) — the routine prescribes
-        # exactly top + 2 back-offs, so 10 is unreachable by design.
-        hard_set_targets: {deadlift: 3}
-        hard_rpe_min: 7
+        hard_rpe_min: 7   # the secondary "RPE 7 or higher" count
         # Associated accessories per lift, from the routine (editable):
         # a per-lift check that the supporting work got hit this week.
         accessories:
@@ -439,6 +441,11 @@ phases:
           bench: [Triceps Extension]
           deadlift: [Romanian Deadlift]
           press: [Seated Cable Row]
+      - id: muscle_stimulus
+        label: Sets per muscle group
+        description: "Working sets per muscle group this week (Monday to Sunday) from the program's exercise-to-muscle credits, climbing sessions included. Aim for 8-12 per group. Over 12 is excess overlapping volume (flagged per group); under mid-week just means not done yet — the detail shows who trails an even pace."
+        band: [8, 12]
+        # muscle_groups: omitted → the program's hypertrophy_targets groups.
       - id: climbing
         label: Climbing
         description: "Two climbing sessions a week."
@@ -576,17 +583,21 @@ phases:
         calorie_mode: surplus
         band_kcal: 200
       - id: hard_sets
-        label: Hard sets per lift
-        description: "10 sets at RPE 7 or higher per main lift each week — the hypertrophy dose behind the recomp. Deadlift is 3 (once a week: top set + 2 back-offs)."
+        label: Program sets per lift
+        description: "Working sets logged per main lift vs what this week's program prescribes (top sets, back-offs and volume slots; moves and skips applied) — Monday to Sunday, the same count as the Today card."
         lifts: [squat, bench, deadlift, press]
-        hard_set_target: 10
-        hard_set_targets: {deadlift: 3}   # routine: top + ~2x4-6, lower by design
+        hard_set_target: 10   # legacy fallback only — targets derive from the program
         hard_rpe_min: 7
         accessories:
           squat: [Romanian Deadlift]
           bench: [Seated Cable Row]
           deadlift: [Leg Curl]
           press: [Lateral Dumbbell Raise]
+      - id: muscle_stimulus
+        label: Sets per muscle group
+        description: "Working sets per muscle group this week (Monday to Sunday) from the program's exercise-to-muscle credits, climbing sessions included. Aim for 8-12 per group. Over 12 is excess overlapping volume (flagged per group); under mid-week just means not done yet — the detail shows who trails an even pace."
+        band: [8, 12]
+        # muscle_groups: omitted → the program's hypertrophy_targets groups.
       - id: climbing
         label: Climbing
         description: "Two climbing sessions a week (three in climbing-emphasis blocks)."
