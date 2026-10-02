@@ -37,7 +37,7 @@ The `# missed_work` section lists, for the current Mon–Sun week:
 `MISSED THIS WEEK` (each item followed by its exact `item=` /
 `from_date=` / `period=` keys), `MOVES THIS WEEK` (already placed),
 `REMAINING DAYS` (what each day still holds, moves applied), and on
-Sunday `EXPIRING TONIGHT` / on Monday `EXPIRED LAST WEEK`. Unplaced work
+`EXPIRING END OF WEEK` (Sat/Sun runs) / on Monday `EXPIRED LAST WEEK`. Unplaced work
 expires at the end of Sunday; next week starts clean.
 
 When `MISSED THIS WEEK` lists items, decide where they go — you
