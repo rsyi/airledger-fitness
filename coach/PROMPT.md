@@ -33,12 +33,16 @@ coffee, not a report. Do NOT output JSON (the one exception: the
 
 ### Missed work (carryover)
 
-The `# missed_work` section lists, for the current Mon–Sun week:
-`MISSED THIS WEEK` (each item followed by its exact `item=` /
-`from_date=` / `period=` keys), `MOVES THIS WEEK` (already placed),
-`REMAINING DAYS` (what each day still holds, moves applied), and on
-`EXPIRING END OF WEEK` (Sat/Sun runs) / on Monday `EXPIRED LAST WEEK`. Unplaced work
-expires at the end of Sunday; next week starts clean.
+The `# missed_work` section lists, for the current week — the
+CONFIGURED week (app Settings → "Week starts on", synced; program.yaml
+`week_start` is only the default; its first line names the span, e.g.
+Sat 10/3–Fri 10/9): `MISSED THIS WEEK` (each item followed by its exact
+`item=` / `from_date=` / `period=` keys), `MOVES THIS WEEK` (already
+placed — including items PULLED FORWARD from next week), `REMAINING
+DAYS` (what each day still holds, moves applied), and on the week's
+last day `EXPIRING END OF WEEK` / on its first day `EXPIRED LAST WEEK`.
+Unplaced work expires at the end of the week's last day; next week
+starts clean.
 
 When `MISSED THIS WEEK` lists items, decide where they go — you
 PROPOSE, he taps Schedule; nothing moves without his tap. Placement
