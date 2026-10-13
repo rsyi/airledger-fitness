@@ -64,11 +64,11 @@ domains:
     paradigm: entry
     views: [strength]
     icon: dumbbell
-    headline: [wilks, pl_total] # "Wilks 306.1 · PL 1222 lb" above the log
+    headline: [wilks, pl_total] # "Wilks 365.9 · est. total 1064 lb" above the log
     metrics:
       - id: pl_total
         kind: stat
-        label: "PL total — sum of best capped e1RMs (S+B+D+P)"
+        label: "est. total — current RPE-adjusted e1RM per lift (S+B+D+P)"
         unit: lb
         goal: null # no declared total goal yet
       # Current-1RM ESTIMATE for progress tracking (2026-09-25): recent
@@ -109,14 +109,16 @@ domains:
       # score is tracked against.
       - id: wilks
         kind: stat
-        label: "Wilks (SBD, actual lifts) — weekly"
+        label: "Wilks (SBD, est. max) — weekly"
       - id: wilks_series
         kind: series
-        label: "Wilks (SBD, actual lifts) — monthly"
+        label: "Wilks (SBD, est. max) — monthly"
         from: "2026-09-21" # block-0 (cut) start — keep in sync with program.yaml
         # Acceptable drop below the cut-start reference, on the
-        # actual-max basis: reference 306.1 → floor 298.5 (2026-09-22;
-        # was 327.3 → 319.1 on the retired e1RM basis).
+        # RPE-adjusted e1RM basis since 2026-10-12 (the app's Wilks
+        # basis — the Lifts rows' estimate): reference 358.3 → floor
+        # 349.3 (Sat weeks). Was 320.5 → 312.5 on the retired
+        # actual-max basis.
         floor_pct: 2.5
         # Trailing plot window in years (48 monthly points). User-tunable;
         # delete the key (or set null) for the full history. Tooltips
