@@ -41,6 +41,10 @@ dimensions:
   - { name: video_taken_at, type: datetime, expr: Video Taken At, description: "When the clip was recorded (local time, from the phone's media metadata)." }
   - { name: video_duration_ms, type: number, expr: Video Duration Ms, description: "Clip length in milliseconds." }
   - { name: video_photos_url, type: string, expr: Video Photos URL, description: "Durable Google Photos link to the clip's backup (photos.google.com/lr/photo/<id>)." }
+  # How the Photos link was verified (2026-10-14): the item's thumbnail vs
+  # frames of the local clip, perceptual hash. verified:<bits> |
+  # unverified | manual[:<bits>] | mismatch:<bits>:<item id> (not linked).
+  - { name: video_photos_check, type: string, expr: Video Photos Check, description: "How the Google Photos link was checked (app-managed): verified:<bits>, unverified, manual, or mismatch:<bits>:<item id>." }
   - { name: notes, type: string, expr: Notes }
 measures:
   - { name: set_count, type: count }

@@ -212,6 +212,9 @@ fields:
   video_photos_url:
     editable: false
     autofill: false
+  video_photos_check:
+    editable: false
+    autofill: false
   notes:
     widget: longtext
     autofill: false
