@@ -27,11 +27,20 @@ dimensions:
   - { name: belted, type: boolean, expr: Belted, description: "Lifting belt worn. Squat/deadlift default variant is belted; FALSE = beltless (~3-4% weaker)." }
   - { name: wrist_wraps, type: boolean, expr: Wrist Wraps, description: "Wrist wraps worn (pressing movements)." }
   - { name: knee_sleeves, type: boolean, expr: Knee Sleeves, description: "Knee sleeves worn (squat/deadlift)." }
-  # Form video (2026-09-28): a Google Photos deep link to set footage,
-  # attached via the in-app Photos Picker. video_media_id is the picker's
-  # persistent media-item id (re-fetch key); both app-written, never typed.
-  - { name: video_url, type: string, expr: Video URL, description: "Google Photos link to a video of this set (attached via the in-app picker)." }
-  - { name: video_media_id, type: string, expr: Video Media Id, description: "Google Photos Picker persistent media-item id for video_url (app-managed)." }
+  # Form video. Attach (2026-10-02+) is LOCAL + offline: video_url = the
+  # on-device content:// clip (legacy 2026-09-28..10-01 rows: a Google
+  # Photos deep link). video_media_id = the app's device cache key
+  # (legacy rows: the Photos item id). All app-written, never typed.
+  - { name: video_url, type: string, expr: Video URL, description: "Video of this set: on-device clip reference (content://), or a legacy Google Photos link." }
+  - { name: video_media_id, type: string, expr: Video Media Id, description: "App-managed clip key for video_url (device thumbnail/clip cache + AI-RPE estimate)." }
+  # Durable clip siblings (2026-10-14): survive reinstall / a new phone /
+  # deleting the clip. Thumb + recording time + duration are captured
+  # offline at attach; video_photos_url is added later by the in-app
+  # "Link clips to Google Photos" flow (matched on recording time).
+  - { name: video_thumb, type: string, expr: Video Thumb, description: "Small JPEG thumbnail of the clip as a data: URI (app-managed, ~10 KB)." }
+  - { name: video_taken_at, type: datetime, expr: Video Taken At, description: "When the clip was recorded (local time, from the phone's media metadata)." }
+  - { name: video_duration_ms, type: number, expr: Video Duration Ms, description: "Clip length in milliseconds." }
+  - { name: video_photos_url, type: string, expr: Video Photos URL, description: "Durable Google Photos link to the clip's backup (photos.google.com/lr/photo/<id>)." }
   - { name: notes, type: string, expr: Notes }
 measures:
   - { name: set_count, type: count }
