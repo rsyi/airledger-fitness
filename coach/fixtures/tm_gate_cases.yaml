@@ -1,0 +1,113 @@
+# Shared fixtures for the HUMAN-IN-THE-LOOP training-max gate
+# (2026-10-16 — user: "I'd like to know that training maxes have been
+# updated, rather than it happening automatically"). Twins:
+#   Dart: ledger/lib/services/wm_tabs.dart     (test/tm_gate_fixture_test.dart)
+#   TS:   ledger-mcp/src/working_max.ts        (test/tm_gate.test.ts)
+# Both suites load THIS file and must agree. The Dart side is the
+# reference implementation.
+#
+# Row model (working_max tab, append-only):
+#   proposal  source=auto, confirmed=false        (pending; never prices)
+#   accept    source=auto_accepted, confirmed=true, reading_id=tm:<lift>:<date>:<value>
+#   decline   source=declined, confirmed=true, value=kept TM, reading_id=tm:...
+#   withdrawn source=withdrawn (estimate back at the accepted TM)
+#   revert    source=revert_to_pending, confirmed=true
+#
+# gate cases: gateTmCandidate(accepted, candidate, pending?, declined?)
+#   → none | propose | withdraw   (re-propose distance 5 lb)
+# state cases: rows (one lift) → accepted value (pending proposals
+#   skipped), pending proposal value, declined value in force.
+# evidence cases: tmEvidence(...) → the proposal's reason string.
+
+gate:
+  - { name: no candidate, accepted: 340, candidate: null, expect: none }
+  - { name: candidate equals accepted, accepted: 340, candidate: 340, expect: none }
+  - { name: back at accepted withdraws pending, accepted: 340, candidate: 340, pending: 360, expect: withdraw }
+  - { name: new raise proposes, accepted: 340, candidate: 360, expect: propose }
+  - { name: same as pending is idempotent, accepted: 340, candidate: 360, pending: 360, expect: none }
+  - { name: newer value supersedes pending, accepted: 340, candidate: 365, pending: 360, expect: propose }
+  - { name: drop proposes, accepted: 145, candidate: 135, expect: propose }
+  - { name: declined same value suppressed, accepted: 340, candidate: 360, declined: 360, expect: none }
+  - { name: declined within 5 suppressed, accepted: 340, candidate: 362.5, declined: 360, expect: none }
+  - { name: declined exactly 5 away re-proposes, accepted: 340, candidate: 355, declined: 360, expect: propose }
+  - { name: declined 5 above re-proposes, accepted: 340, candidate: 365, declined: 360, expect: propose }
+  - { name: declined direction flip re-proposes, accepted: 340, candidate: 335, declined: 345, expect: propose }
+  - { name: declined drop suppressed, accepted: 145, candidate: 140, declined: 140, expect: none }
+
+state:
+  - name: pending proposal never prices
+    lift: bench
+    rows:
+      - { value: 245, date: '2026-09-21', source: manual, confirmed: true }
+      - { value: 255, date: '2026-10-16', source: auto, confirmed: false }
+    expect: { accepted: 245, pending: 255, declined: null, needs_confirmation: false }
+  - name: accepted proposal is in force
+    lift: bench
+    rows:
+      - { value: 245, date: '2026-09-21', source: manual, confirmed: true }
+      - { value: 255, date: '2026-10-16', source: auto, confirmed: false }
+      - { value: 255, date: '2026-10-17', source: auto_accepted, confirmed: true, reading_id: 'tm:bench:2026-10-16:255' }
+    expect: { accepted: 255, pending: null, declined: null, needs_confirmation: false }
+  - name: declined keeps the value and records the declined number
+    lift: deadlift
+    rows:
+      - { value: 340, date: '2026-09-25', source: manual, confirmed: true }
+      - { value: 360, date: '2026-10-15', source: auto, confirmed: false }
+      - { value: 340, date: '2026-10-16', source: declined, confirmed: true, reading_id: 'tm:deadlift:2026-10-15:360' }
+    expect: { accepted: 340, pending: null, declined: 360, needs_confirmation: false }
+  - name: newer proposal supersedes; pain-cap marker does not resolve
+    lift: squat
+    rows:
+      - { value: 320, date: '2026-09-21', source: seed, confirmed: true }
+      - { value: 330, date: '2026-10-10', source: auto, confirmed: false }
+      - { value: 335, date: '2026-10-12', source: auto, confirmed: false }
+      - { value: 320, date: '2026-10-13', source: pain_cap, reason: 'back' }
+    expect: { accepted: 320, pending: 335, declined: null, needs_confirmation: false }
+  - name: manual set resolves pending and resets a decline
+    lift: deadlift
+    rows:
+      - { value: 340, date: '2026-09-25', source: manual, confirmed: true }
+      - { value: 360, date: '2026-10-15', source: auto, confirmed: false }
+      - { value: 340, date: '2026-10-16', source: declined, confirmed: true, reading_id: 'tm:deadlift:2026-10-15:360' }
+      - { value: 365, date: '2026-10-20', source: auto, confirmed: false }
+      - { value: 350, date: '2026-10-21', source: manual, confirmed: true }
+    expect: { accepted: 350, pending: null, declined: null, needs_confirmation: false }
+  - name: decline survives a later proposal
+    lift: deadlift
+    rows:
+      - { value: 340, date: '2026-09-25', source: manual, confirmed: true }
+      - { value: 360, date: '2026-10-15', source: auto, confirmed: false }
+      - { value: 340, date: '2026-10-16', source: declined, confirmed: true, reading_id: 'tm:deadlift:2026-10-15:360' }
+      - { value: 370, date: '2026-10-22', source: auto, confirmed: false }
+    expect: { accepted: 340, pending: 370, declined: 360, needs_confirmation: false }
+  - name: withdrawn resolves pending
+    lift: press
+    rows:
+      - { value: 145, date: '2026-09-28', source: rule }
+      - { value: 150, date: '2026-10-10', source: auto, confirmed: false }
+      - { value: 145, date: '2026-10-12', source: withdrawn, reading_id: 'tm:press:2026-10-10:150' }
+    expect: { accepted: 145, pending: null, declined: null, needs_confirmation: false }
+  - name: live conversion (deadlift 340 → 360 converted to a proposal)
+    lift: deadlift
+    rows:
+      - { value: 330, date: '2026-09-21', source: seed, confirmed: false }
+      - { value: 330, date: '2026-09-21', source: pain_cap, reason: 'back twinge Sep 17' }
+      - { value: 340, date: '2026-09-21', source: manual, confirmed: true }
+      - { value: 340, date: '2026-09-25', source: manual, reason: 'pain cap lifted — user-directed removal 2026-09-25' }
+      - { value: 360, date: '2026-10-15', source: rule, reading_id: '2026-10-15|deadlift' }
+      - { value: 340, date: '2026-10-15', source: revert_to_pending, confirmed: true, reading_id: '2026-10-15|deadlift' }
+      - { value: 360, date: '2026-10-15', source: auto, confirmed: false, reading_id: '2026-10-15|deadlift' }
+    expect: { accepted: 340, pending: 360, declined: null, needs_confirmation: false }
+  - name: unconfirmed seed still needs confirmation
+    lift: squat
+    rows:
+      - { value: 320, date: '2026-09-21', source: seed, confirmed: false }
+      - { value: 330, date: '2026-10-10', source: auto, confirmed: false }
+    expect: { accepted: 320, pending: 330, declined: null, needs_confirmation: true }
+
+evidence:
+  - { name: slow loop, weight: 295, reps: 5, rpe: 8.5, implied: 358, est_median: 358.0, est_sets: 3, expect: 'from 295×5 @ RPE 8.5 (est 358, median of 3 sets)' }
+  - { name: slow loop one set, weight: 275, reps: 2, rpe: 8, implied: 308.3, est_median: 308.3, est_sets: 1, expect: 'from 275×2 @ RPE 8 (est 308, median of 1 set)' }
+  - { name: guarded mode, weight: 200, reps: 3, rpe: 8, implied: 231.2, expect: 'from 200×3 @ RPE 8 (implied 231)' }
+  - { name: grinder drop is recommended, weight: 120, reps: 4, rpe: 9.5, implied: 137.4, est_median: 143.4, est_sets: 5, grinder: true, expect: 'recommended: grinder on 120×4 @ RPE 9.5 (implied 137)' }
+  - { name: missed reps drop is recommended, weight: 222.5, reps: 3, rpe: 9, implied: 258.4, missed: true, expect: 'recommended: missed reps on 222.5×3 @ RPE 9 (implied 258)' }
