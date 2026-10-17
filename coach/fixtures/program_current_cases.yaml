@@ -337,16 +337,16 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v17 is the last non-pending entry — the cut
-  # Monday gains squat back-offs 2x5 @ 75% TM after the wave top
-  # (2026-10-12) on top of v16's corrected exercise_muscle_map; the
-  # resolver slice shape is unchanged (day content only).
-  # NOTE currentVersion is not date-gated — v17 applies even to a date
+  # Version resolution: v18 is the last non-pending entry — v17 (cut
+  # Monday squat back-offs 2x5 @ 75% TM, 2026-10-12) + the v18 cut-wave
+  # restart (strength_wave_cut.restarts ["2026-10-19"]); the resolver
+  # slice shape is unchanged (day content only).
+  # NOTE currentVersion is not date-gated — v18 applies even to a date
   # before its effective_from.
-  - name: version_resolution_v17_wins_for_block0
+  - name: version_resolution_v18_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 17
+      version: 18
       block: 0
       emphasis: cut
       week_in_block: 1
@@ -370,3 +370,97 @@ cases:
         bodyweight_band_lb: [154, 172]
         hard_cap_lb: 172
         protein_g_per_lb: [0.8, 1.0]
+
+  # v18 cut-wave RESTART (strength_wave_cut.restarts ["2026-10-19"]):
+  # `cut_wave` = strengthWaveCutFor(currentVersion, block, date) — both
+  # runners compare it when present (null = no cut wave). The cycle
+  # counts from the latest restart <= the date's Monday, else
+  # anchor_monday 2026-09-28; weeks before the restart never move.
+  - name: cut_wave_wk3_before_restart_unchanged   # past week keeps its pre-restart interpretation (anchor 9/28: wk3)
+    date: "2026-10-12"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 4
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 3, reps: 3, pct: 0.863, deload: false }
+      targets:
+        bench_days: 3
+  - name: cut_wave_restart_monday_is_wk1   # restart Monday: wk1 5s (was the calendar wk4 deload)
+    date: "2026-10-19"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 5
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 1, reps: 5, pct: 0.811, deload: false }
+      targets:
+        bench_days: 3
+  - name: cut_wave_restart_wk2   # counted from the restart
+    date: "2026-10-26"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 6
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 2, reps: 4, pct: 0.837, deload: false }
+      targets:
+        bench_days: 3
+  - name: cut_wave_restart_wk3   # counted from the restart
+    date: "2026-11-02"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 7
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 3, reps: 3, pct: 0.863, deload: false }
+      targets:
+        bench_days: 3
+  - name: cut_wave_restart_travel_deload   # user travel week = the deload
+    date: "2026-11-09"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 8
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 4, reps: 5, pct: 0.70, deload: true }
+      targets:
+        bench_days: 3
+  - name: cut_wave_restart_cycle_repeats   # normal 4-week cycles resume
+    date: "2026-11-16"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 9
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 1, reps: 5, pct: 0.811, deload: false }
+      targets:
+        bench_days: 3
+  - name: cut_wave_restart_second_deload   # last cut week before the Dec 13 block end
+    date: "2026-12-07"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 12
+      week_type: normal
+      weekday: mon
+      cut_wave: { week: 4, reps: 5, pct: 0.70, deload: true }
+      targets:
+        bench_days: 3
+  - name: cut_wave_pre_anchor_null   # pre-revision cut week: no wave
+    date: "2026-09-21"
+    expect:
+      block: 0
+      emphasis: cut
+      week_in_block: 1
+      week_type: normal
+      weekday: mon
+      cut_wave: null
+      targets:
+        bench_days: 3
