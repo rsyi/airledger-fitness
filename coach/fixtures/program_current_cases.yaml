@@ -337,16 +337,17 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v18 is the last non-pending entry — v17 (cut
+  # Version resolution: v19 is the last non-pending entry — v17 (cut
   # Monday squat back-offs 2x5 @ 75% TM, 2026-10-12) + the v18 cut-wave
-  # restart (strength_wave_cut.restarts ["2026-10-19"]); the resolver
-  # slice shape is unchanged (day content only).
-  # NOTE currentVersion is not date-gated — v18 applies even to a date
+  # restart (strength_wave_cut.restarts ["2026-10-19"]) + the v19 cut
+  # Thursday seated cable row 3x8-12 (2026-10-19); the resolver slice
+  # shape is unchanged (day content only).
+  # NOTE currentVersion is not date-gated — v19 applies even to a date
   # before its effective_from.
-  - name: version_resolution_v18_wins_for_block0
+  - name: version_resolution_v19_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 18
+      version: 19
       block: 0
       emphasis: cut
       week_in_block: 1
