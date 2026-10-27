@@ -54,7 +54,7 @@ cases:
       week_type: normal
       weekday: mon
       today_template:
-        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then squat back-offs 2x5 @ 75% TM; Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
+        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then squat back-offs 3x5 @ 75% TM; Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
         afternoon: null
       targets:
         near_max_sets: 4          # one wave top per lift per week (v11)
@@ -337,24 +337,25 @@ cases:
     date: "2026-09-20"
     expect: null
 
-  # Version resolution: v19 is the last non-pending entry — v17 (cut
-  # Monday squat back-offs 2x5 @ 75% TM, 2026-10-12) + the v18 cut-wave
-  # restart (strength_wave_cut.restarts ["2026-10-19"]) + the v19 cut
-  # Thursday seated cable row 3x8-12 (2026-10-19); the resolver slice
-  # shape is unchanged (day content only).
-  # NOTE currentVersion is not date-gated — v19 applies even to a date
+  # Version resolution: v20 is the last non-pending entry — v17 (cut
+  # Monday squat back-offs, 2026-10-12) + the v18 cut-wave restart
+  # (strength_wave_cut.restarts ["2026-10-19"]) + the v19 cut Thursday
+  # seated cable row 3x8-12 (2026-10-19) + the v20 Monday squat
+  # back-offs restored from 2x5 to 3x5 @ 75% TM (2026-10-26, user); the
+  # resolver slice shape is unchanged (day content only).
+  # NOTE currentVersion is not date-gated — v20 applies even to a date
   # before its effective_from.
-  - name: version_resolution_v19_wins_for_block0
+  - name: version_resolution_v20_wins_for_block0
     date: "2026-09-21"
     expect:
-      version: 19
+      version: 20
       block: 0
       emphasis: cut
       week_in_block: 1
       week_type: normal
       weekday: mon
       today_template:
-        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then squat back-offs 2x5 @ 75% TM; Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
+        morning: "Squat heavy: wave top per strength_wave_cut (wk1 5@81% / wk2 4@84% / wk3 3@86% / wk4 deload 5@~70% TM, RPE 7-8). Then squat back-offs 3x5 @ 75% TM; Bulgarian split squat 3x8-12/leg; bench volume 4x8 @ 68% TM; lateral raise 3x12-20; triceps extension 2-3x10-15. Accessories: double progression, start bottom of range @ 1-2 RIR."
         afternoon: null
       targets:
         near_max_sets: 4
