@@ -443,6 +443,7 @@ phases:
         description: "Protein high enough to hold muscle in the deficit; carbs to fuel the hard sessions."
         protein_g_per_lb: [0.8, 1.0]   # cut-era relative floor (targets_block_0)
         carbs_floor_g_day: 150         # soft "enough" — cut has no hard carb target
+        fat_max_g_day: 80              # user goal 2026-11-06
       - id: calorie_band
         label: Calories
         description: "Stay in a modest deficit — intake below your estimated maintenance."
@@ -463,7 +464,7 @@ phases:
         # a per-lift check that the supporting work got hit this week.
         accessories:
           squat: [Bulgarian Split Squat]
-          bench: [Triceps Extension]
+          bench: [Parallel Bar Triceps Dip]
           deadlift: [Romanian Deadlift]
           press: [Seated Cable Row]
       - id: muscle_stimulus
@@ -549,9 +550,9 @@ phases:
       # intake; act_below -0.5 = a real deficit (slows the building).
       - id: weight_hold
         label: weight
-        rate_band: [-0.1, 0.25]
+        rate_band: [0.0, 0.35]   # v21: slow lean gain ~0.25 lb/wk
         act_above: 0.5
-        act_below: -0.5
+        act_below: -0.25
       # Gain strength at maintenance: Wilks trending up over the block.
       # The block's RESULT is still the test-week singles (every 8
       # weeks); the weekly Wilks series is the between-tests proxy.
@@ -601,25 +602,28 @@ phases:
     goals:
       - id: macros
         label: Macros
-        description: "Protein 160-175 g every day; carbs biased to training days."
+        description: "Protein 160-175 g every day; fat under 80 g; carbs fill the rest, biased to training days."
         protein_g_day: [160, 175]      # absolute floor (spec)
-        carbs_floor_g_day: 225
+        carbs_floor_g_day: 200
+        fat_max_g_day: 80              # user goal 2026-11-06
       - id: calorie_band
         label: Calories
-        description: "Eat at maintenance to a slight surplus — build at the fat store's edge, not a bulk."
+        description: "Eat at maintenance to a slight surplus (~+125 kcal, ~0.25 lb/wk) — slow lean gain, not a bulk."
         calorie_mode: surplus
-        band_kcal: 200
+        band_kcal: 250
       - id: hard_sets
         label: Program sets per lift
         description: "Working sets logged per main lift vs what this week's program prescribes (top sets, back-offs and volume slots; moves and skips applied) — Monday to Sunday, the same count as the Today card."
         lifts: [squat, bench, deadlift, press]
         hard_set_target: 10   # legacy fallback only — targets derive from the program
         hard_rpe_min: 7
+        # v21: the recomp runs the CURRENT week forever (Monday triceps
+        # extension dropped — dips carry the bench accessory).
         accessories:
-          squat: [Romanian Deadlift]
-          bench: [Seated Cable Row]
-          deadlift: [Leg Curl]
-          press: [Lateral Dumbbell Raise]
+          squat: [Bulgarian Split Squat]
+          bench: [Parallel Bar Triceps Dip]
+          deadlift: [Romanian Deadlift]
+          press: [Seated Cable Row]
       - id: muscle_stimulus
         label: Sets per muscle group
         description: "Working sets per muscle group this week (Monday to Sunday) from the program's exercise-to-muscle credits, climbing sessions included. Aim for 8-12 per group. Over 12 is excess overlapping volume (flagged per group); under mid-week just means not done yet — the detail shows who trails an even pace."
@@ -629,7 +633,7 @@ phases:
         # lower_back/front_delts/forearms/core, shown without a band).
       - id: climbing
         label: Climbing
-        description: "Two climbing sessions a week (three in climbing-emphasis blocks)."
+        description: "Two climbing sessions a week."
         target: 2
       - id: cardio_4x4
         label: Cardio

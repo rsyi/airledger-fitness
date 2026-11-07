@@ -1,33 +1,29 @@
 # Goals
 
-**Active phase: CUT** (as of 2026-09-11) — ends Dec 13 2026.
-**Cut TRAINING revised 2026-09-28** (program.yaml v11, user-approved):
-the hypertrophy-maximizing deficit program — every main lift tops
-weekly on a 4-week wave (wk1 1x5@81% / wk2 1x4@84% / wk3 1x3@86% TM =
-chart[8][reps] / wk4 deload 1x5@~70% + halved volume, RPE 7-8; TM =
-the live working_max tab), %TM volume slots (bench 3x/wk: Mon 4x8@68 /
-Wed 3x6-8@72 / Fri 3x8-10@65; squat vol Wed 3x8@65; OHP vol Wed
-3x8-10@62; deadlift back-offs Fri 2x4-6@75) and concrete accessories
-on double progression (start bottom of the range @ 1-2 RIR). Back-off
-rule: hold while RPE ≤ 8, drop 2.5-5% if above (drift guard). No
-AMRAPs; main work ≤ RPE 8-9. Week: Mon squat / Tue AM-4x4 + PM HARD
-climb (no lifting) / Wed bench / Thu muscle-ups-first + arms / Fri
-deadlift + PM LIGHT climb / Sat OHP / Sun rest — NOTE Tue/Fri climb
-intensity is SWAPPED vs the old cut (and opposite the post-cut
-Tue-technique/Fri-limit). The 8-12 sets/muscle/week hypertrophy band
-now applies THROUGH the cut. **Cut NUTRITION AND WEIGHT TARGETS ARE
-UNCHANGED** (protein 0.8-1.0 g/lb, band/cap/rate as before); the old
-squat/deadlift heavy-light alternation and the every-two-weeks heavy
-single rule are retired.
-**The year after it runs the POST-CUT RECOMP program** (program.yaml
-v10, source: **`coach/post-cut-final-spec.md`** (user-authored FINAL
-specification, 2026-09-27; supersedes `coach/post-cut-recomp-spec.md`
-where they differ, which in turn superseded the recomp section of
-`coach/program-2026-27-source.md`), active from Dec 14 2026): eat at
-maintenance, gain muscle out of the fat store, hypertrophy as a
-FIRST-CLASS objective alongside strength, climbing, calisthenics and
-VO2. Not a bulk. The scale barely moving while strength and lean mass
-rise is SUCCESS.
+**Active phase: STEADY-STATE RECOMP — forever, no phases** (from
+2026-11-06; program.yaml v21, phase.yaml v2; user: "no longer in a cut
+phase … recomp phase forever. Weight gain should be minimal, strength
+should increase, no phases — just want to stay in steady state"). The
+cut ENDED early on 2026-11-05 at ~160.75 lb 7-day avg / ~10.7% scale BF.
+- TRAINING: the CURRENT week runs forever (Mon squat / Tue AM-4x4 + PM
+  HARD climb, no lifting / Wed bench / Thu muscle-ups + skills + arms /
+  Fri deadlift + PM LIGHT climb / Sat OHP / Sun rest or easy zone-2) with
+  the calendar-anchored 4-week wave (5 @ 81% / 4 @ 84% / 3 @ 86% TM /
+  deload). Monday triceps extension DROPPED (v21). No reverse diet, no
+  post-cut week, no light/test weeks, no climbing-emphasis blocks.
+- DELOAD (wave wk4): top 1x5 @ 70% TM at ~RPE 5-6; every other %TM slot
+  x0.85 and never above the top; non-top sets halved; accessories hold
+  their load (3-4 RIR). Deload readings never move the TM.
+- NUTRITION: maintenance + ~125 kcal (slow lean gain ~+0.25 lb/wk);
+  protein 160-175 g/day; FAT UNDER 80 g/day (user goal 2026-11-06);
+  carbs = the rest, biased to training days. Adjust only on 3+ weeks of
+  trend: > +0.5 lb/wk -> -100 kcal; flat/falling with strength stalled
+  -> plateau checklist, then +100 kcal.
+- Success = strength UP (est. totals, TM moves), bodyweight drifting up
+  slowly, waist/BF stable.
+
+The post-cut / reverse-diet material below is HISTORICAL (superseded by
+v21) — kept for context only.
 
 **Tracking layer**: `coach/recomp-tracking-spec.md` (user-authored,
 2026-09-27) — daily inputs (set_type-tagged strength, calisthenics

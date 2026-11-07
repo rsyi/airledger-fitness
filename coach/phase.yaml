@@ -1,4 +1,6 @@
-# coach/phase.yaml — Intent layer: declared phase (cut|reverse|bulk|maintain).
+# coach/phase.yaml — Intent layer: declared phase (cut|reverse|bulk|maintain|recomp).
+# recomp (v2+): steady-state slow lean gain — judged like a bulk at its
+# declared rate; the dashboards' `recomp` goal set applies.
 # Append-only versions; current = LAST entry without `pending: true`.
 # The app NEVER changes value; it only computes whether the scale agrees
 # (PHASE_MISMATCH).
@@ -10,3 +12,10 @@ versions:
     target_weight_lb: 154
     target_rate_lb_per_week: -0.75
     exit_criteria: "DEXA week of Nov 2 at ~157 lb sets the real endpoint (13%); maintenance week Nov 2-8; cut ends Dec 13 2026; reverse diet starts Dec 14"
+  - version: 2
+    value: recomp
+    effective_from: "2026-11-06"
+    reason: "User, 2026-11-06: no longer cutting — steady-state recomp forever (no phases). Weight gain minimal (~+0.25 lb/wk slow lean gain), strength up, fat under 80 g/day. Cut ended at ~160.75 lb 7d avg / ~10.7% scale BF."
+    target_weight_lb: null
+    target_rate_lb_per_week: 0.25
+    exit_criteria: "none — steady state. Revisit only if the 7-day avg rises > 0.5 lb/wk for 3+ weeks without strength gains (trim ~100 kcal), or stalls with strength stalled (plateau_checklist, then +100 kcal)."
