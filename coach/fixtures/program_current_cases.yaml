@@ -5,7 +5,7 @@
 # and must produce identical outputs. Drift = a failing test on either side.
 #
 # GENERATED from the Dart resolver by ledger/tool/gen_program_current_fixture.dart
-# against program.yaml v21 — regenerate after a program change,
+# against program.yaml v22 — regenerate after a program change,
 # eyeball the diff, then run BOTH twins.
 #
 # v21 (2026-11-06): block 0 = the cut (ends 2026-11-05); block 1 = the
@@ -19,7 +19,7 @@ cases:
   - name: block0_week1_monday_program_start   # cut start (pre-wave week)
     date: "2026-09-21"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 1
@@ -55,7 +55,7 @@ cases:
   - name: block0_week3_midweek_wednesday   # cut, wave wk2
     date: "2026-10-07"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 3
@@ -91,7 +91,7 @@ cases:
   - name: cut_wave_wk3_before_restart_unchanged   # past week keeps its pre-restart interpretation (anchor 9/28: wk3)
     date: "2026-10-12"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 4
@@ -127,7 +127,7 @@ cases:
   - name: cut_wave_restart_monday_is_wk1   # v18 restart Monday: wk1 5s
     date: "2026-10-19"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 5
@@ -163,7 +163,7 @@ cases:
   - name: cut_wave_restart_wk2   # counted from the restart
     date: "2026-10-26"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 6
@@ -199,7 +199,7 @@ cases:
   - name: cut_wave_restart_wk3   # counted from the restart
     date: "2026-11-02"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 7
@@ -235,7 +235,7 @@ cases:
   - name: block0_last_day_cut_ends   # v21: the cut ends Thu Nov 5
     date: "2026-11-05"
     expect:
-      version: 21
+      version: 22
       block: 0
       emphasis: cut
       week_in_block: 7
@@ -271,7 +271,7 @@ cases:
   - name: block1_recomp_starts   # v21: steady-state recomp from Fri Nov 6
     date: "2026-11-06"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 1
@@ -304,10 +304,46 @@ cases:
         carbs_g_day: null
         hypertrophy_sets_per_muscle: [8,12]
         variant: "recomposition"
+  - name: deload_starts_saturday   # v22 exact-day restart {2026-11-07, week 4}: Sat OHP deload
+    date: "2026-11-07"
+    expect:
+      version: 22
+      block: 1
+      emphasis: recomp
+      week_in_block: 1
+      week_type: normal
+      weekday: sat
+      today_template:
+        morning: "OHP heavy: wave top per strength_wave_cut, then OHP back-offs 3x6-8 @ 72% TM; seated cable row 3x8-12; pull-ups 3x6-10; lateral raise 3x12-20; face pulls 2-3x12-20; external rotations 2-3x12-20 easy."
+        afternoon: null
+      cut_wave: {"week":4,"reps":5,"pct":0.7,"deload":true}
+      targets:
+        near_max_sets: 4
+        working_sets: null
+        working_sets_min_normal: null
+        bench_days: 3
+        press_days: 2
+        squat_days: 2
+        deadlift_days: 1
+        climbing_sessions: 2
+        bike_4x4: 1
+        muscle_up_sessions: 1
+        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_alarm_lb_wk: 0.5
+        bodyweight_band_lb: [158,176]
+        bodyweight_band_advisory: true
+        hard_cap_lb: 172
+        protein_g_per_lb: null
+        protein_g_day: [160,175]
+        fat_g_day_min: null
+        fat_g_day_max: 80
+        carbs_g_day: null
+        hypertrophy_sets_per_muscle: [8,12]
+        variant: "recomposition"
   - name: block1_travel_deload   # the wave continues across the block boundary: wk4 deload
     date: "2026-11-09"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 2
@@ -340,10 +376,82 @@ cases:
         carbs_g_day: null
         hypertrophy_sets_per_muscle: [8,12]
         variant: "recomposition"
+  - name: deload_last_day_friday   # deadlift deload, Fri
+    date: "2026-11-13"
+    expect:
+      version: 22
+      block: 1
+      emphasis: recomp
+      week_in_block: 2
+      week_type: normal
+      weekday: fri
+      today_template:
+        morning: "Deadlift heavy: wave top per strength_wave_cut, then deadlift back-offs 2x4-6 @ 75% TM; RDL or leg curl 2-3x8-12; bench volume 3x8-10 @ 65% TM."
+        afternoon: "PM: Climb — LIGHT session (technique/volume, movement quality; low fatigue)."
+      cut_wave: {"week":4,"reps":5,"pct":0.7,"deload":true}
+      targets:
+        near_max_sets: 4
+        working_sets: null
+        working_sets_min_normal: null
+        bench_days: 3
+        press_days: 2
+        squat_days: 2
+        deadlift_days: 1
+        climbing_sessions: 2
+        bike_4x4: 1
+        muscle_up_sessions: 1
+        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_alarm_lb_wk: 0.5
+        bodyweight_band_lb: [158,176]
+        bodyweight_band_advisory: true
+        hard_cap_lb: 172
+        protein_g_per_lb: null
+        protein_g_day: [160,175]
+        fat_g_day_min: null
+        fat_g_day_max: 80
+        carbs_g_day: null
+        hypertrophy_sets_per_muscle: [8,12]
+        variant: "recomposition"
+  - name: wave_wk1_resumes_saturday   # wk1 from Sat Nov 14 — Sat–Fri wave weeks
+    date: "2026-11-14"
+    expect:
+      version: 22
+      block: 1
+      emphasis: recomp
+      week_in_block: 2
+      week_type: normal
+      weekday: sat
+      today_template:
+        morning: "OHP heavy: wave top per strength_wave_cut, then OHP back-offs 3x6-8 @ 72% TM; seated cable row 3x8-12; pull-ups 3x6-10; lateral raise 3x12-20; face pulls 2-3x12-20; external rotations 2-3x12-20 easy."
+        afternoon: null
+      cut_wave: {"week":1,"reps":5,"pct":0.811,"deload":false}
+      targets:
+        near_max_sets: 4
+        working_sets: null
+        working_sets_min_normal: null
+        bench_days: 3
+        press_days: 2
+        squat_days: 2
+        deadlift_days: 1
+        climbing_sessions: 2
+        bike_4x4: 1
+        muscle_up_sessions: 1
+        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_alarm_lb_wk: 0.5
+        bodyweight_band_lb: [158,176]
+        bodyweight_band_advisory: true
+        hard_cap_lb: 172
+        protein_g_per_lb: null
+        protein_g_day: [160,175]
+        fat_g_day_min: null
+        fat_g_day_max: 80
+        carbs_g_day: null
+        hypertrophy_sets_per_muscle: [8,12]
+        variant: "recomposition"
   - name: block1_wave_cycle_repeats   # wk1 again
     date: "2026-11-16"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 3
@@ -379,7 +487,7 @@ cases:
   - name: block1_tuesday_no_lifting   # same week forever
     date: "2027-03-09"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 19
@@ -415,7 +523,7 @@ cases:
   - name: block1_midweek_wednesday   # same week forever
     date: "2027-03-10"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 19
@@ -451,7 +559,7 @@ cases:
   - name: block1_friday   # same week forever
     date: "2027-03-12"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 19
@@ -487,7 +595,7 @@ cases:
   - name: block1_last_day   # declared end (extend by version)
     date: "2027-12-31"
     expect:
-      version: 21
+      version: 22
       block: 1
       emphasis: recomp
       week_in_block: 61
