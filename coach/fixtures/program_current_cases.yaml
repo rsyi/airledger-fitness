@@ -5,7 +5,7 @@
 # and must produce identical outputs. Drift = a failing test on either side.
 #
 # GENERATED from the Dart resolver by ledger/tool/gen_program_current_fixture.dart
-# against program.yaml v22 — regenerate after a program change,
+# against program.yaml v23 — regenerate after a program change,
 # eyeball the diff, then run BOTH twins.
 #
 # v21 (2026-11-06): block 0 = the cut (ends 2026-11-05); block 1 = the
@@ -19,7 +19,7 @@ cases:
   - name: block0_week1_monday_program_start   # cut start (pre-wave week)
     date: "2026-09-21"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 1
@@ -55,7 +55,7 @@ cases:
   - name: block0_week3_midweek_wednesday   # cut, wave wk2
     date: "2026-10-07"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 3
@@ -91,7 +91,7 @@ cases:
   - name: cut_wave_wk3_before_restart_unchanged   # past week keeps its pre-restart interpretation (anchor 9/28: wk3)
     date: "2026-10-12"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 4
@@ -127,7 +127,7 @@ cases:
   - name: cut_wave_restart_monday_is_wk1   # v18 restart Monday: wk1 5s
     date: "2026-10-19"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 5
@@ -163,7 +163,7 @@ cases:
   - name: cut_wave_restart_wk2   # counted from the restart
     date: "2026-10-26"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 6
@@ -199,7 +199,7 @@ cases:
   - name: cut_wave_restart_wk3   # counted from the restart
     date: "2026-11-02"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 7
@@ -235,7 +235,7 @@ cases:
   - name: block0_last_day_cut_ends   # v21: the cut ends Thu Nov 5
     date: "2026-11-05"
     expect:
-      version: 22
+      version: 23
       block: 0
       emphasis: cut
       week_in_block: 7
@@ -271,7 +271,7 @@ cases:
   - name: block1_recomp_starts   # v21: steady-state recomp from Fri Nov 6
     date: "2026-11-06"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 1
@@ -292,11 +292,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -307,7 +307,7 @@ cases:
   - name: deload_starts_saturday   # v22 exact-day restart {2026-11-07, week 4}: Sat OHP deload
     date: "2026-11-07"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 1
@@ -328,11 +328,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -343,7 +343,7 @@ cases:
   - name: block1_travel_deload   # the wave continues across the block boundary: wk4 deload
     date: "2026-11-09"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 2
@@ -364,11 +364,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -379,7 +379,7 @@ cases:
   - name: deload_last_day_friday   # deadlift deload, Fri
     date: "2026-11-13"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 2
@@ -400,11 +400,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -415,7 +415,7 @@ cases:
   - name: wave_wk1_resumes_saturday   # wk1 from Sat Nov 14 — Sat–Fri wave weeks
     date: "2026-11-14"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 2
@@ -436,11 +436,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -451,7 +451,7 @@ cases:
   - name: block1_wave_cycle_repeats   # wk1 again
     date: "2026-11-16"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 3
@@ -472,11 +472,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -487,7 +487,7 @@ cases:
   - name: block1_tuesday_no_lifting   # same week forever
     date: "2027-03-09"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 19
@@ -508,11 +508,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -523,7 +523,7 @@ cases:
   - name: block1_midweek_wednesday   # same week forever
     date: "2027-03-10"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 19
@@ -544,11 +544,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -559,7 +559,7 @@ cases:
   - name: block1_friday   # same week forever
     date: "2027-03-12"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 19
@@ -580,11 +580,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null
@@ -595,7 +595,7 @@ cases:
   - name: block1_last_day   # declared end (extend by version)
     date: "2027-12-31"
     expect:
-      version: 22
+      version: 23
       block: 1
       emphasis: recomp
       week_in_block: 61
@@ -616,11 +616,11 @@ cases:
         climbing_sessions: 2
         bike_4x4: 1
         muscle_up_sessions: 1
-        gain_rate_lb_wk: [0.1,0.35]
+        gain_rate_lb_wk: [-0.15,0.15]
         gain_rate_alarm_lb_wk: 0.5
-        bodyweight_band_lb: [158,176]
+        bodyweight_band_lb: [157,165]
         bodyweight_band_advisory: true
-        hard_cap_lb: 172
+        hard_cap_lb: 165
         protein_g_per_lb: null
         protein_g_day: [160,175]
         fat_g_day_min: null

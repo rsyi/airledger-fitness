@@ -550,9 +550,9 @@ phases:
       # intake; act_below -0.5 = a real deficit (slows the building).
       - id: weight_hold
         label: weight
-        rate_band: [0.0, 0.35]   # v21: slow lean gain ~0.25 lb/wk
-        act_above: 0.5
-        act_below: -0.25
+        rate_band: [-0.15, 0.15]   # v23: maintenance (user 2026-11-07)
+        act_above: 0.4
+        act_below: -0.4
       # Gain strength at maintenance: Wilks trending up over the block.
       # The block's RESULT is still the test-week singles (every 8
       # weeks); the weekly Wilks series is the between-tests proxy.
@@ -608,9 +608,9 @@ phases:
         fat_max_g_day: 80              # user goal 2026-11-06
       - id: calorie_band
         label: Calories
-        description: "Eat at maintenance to a slight surplus (~+125 kcal, ~0.25 lb/wk) — slow lean gain, not a bulk."
-        calorie_mode: surplus
-        band_kcal: 250
+        description: "Eat at maintenance — within ~150 kcal of your estimated maintenance, weight held steady."
+        calorie_mode: maintenance
+        band_kcal: 150
       - id: hard_sets
         label: Program sets per lift
         description: "Working sets logged per main lift vs what this week's program prescribes (top sets, back-offs and volume slots; moves and skips applied) — Monday to Sunday, the same count as the Today card."

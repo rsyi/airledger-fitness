@@ -14,13 +14,15 @@ cut ENDED early on 2026-11-05 at ~160.75 lb 7-day avg / ~10.7% scale BF.
 - DELOAD (wave wk4): top 1x5 @ 70% TM at ~RPE 5-6; every other %TM slot
   x0.85 and never above the top; non-top sets halved; accessories hold
   their load (3-4 RIR). Deload readings never move the TM.
-- NUTRITION: maintenance + ~125 kcal (slow lean gain ~+0.25 lb/wk);
-  protein 160-175 g/day; FAT UNDER 80 g/day (user goal 2026-11-06);
-  carbs = the rest, biased to training days. Adjust only on 3+ weeks of
-  trend: > +0.5 lb/wk -> -100 kcal; flat/falling with strength stalled
-  -> plateau checklist, then +100 kcal.
-- Success = strength UP (est. totals, TM moves), bodyweight drifting up
-  slowly, waist/BF stable.
+- NUTRITION: MAINTENANCE (v23, user 2026-11-07: "I should be on
+  maintenance") — weight held ~160-162; protein 160-175 g/day; FAT UNDER
+  80 g/day (user goal 2026-11-06); carbs = the rest, biased to training
+  days. Adjust ~100 kcal only when the 7-day avg drifts > ~1.5 lb over
+  3+ weeks; a flat scale with strength stalled -> plateau checklist.
+- DELOAD timing (v22): the wave runs Sat-Fri from Sat Nov 7 (deload
+  Nov 7-13, wk1 Nov 14, next deload Dec 5).
+- Success = strength UP (est. totals, TM moves), bodyweight steady,
+  waist/BF stable.
 
 The post-cut / reverse-diet material below is HISTORICAL (superseded by
 v21) — kept for context only.

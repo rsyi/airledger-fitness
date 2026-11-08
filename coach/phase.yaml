@@ -19,3 +19,10 @@ versions:
     target_weight_lb: null
     target_rate_lb_per_week: 0.25
     exit_criteria: "none — steady state. Revisit only if the 7-day avg rises > 0.5 lb/wk for 3+ weeks without strength gains (trim ~100 kcal), or stalls with strength stalled (plateau_checklist, then +100 kcal)."
+  - version: 3
+    value: recomp
+    effective_from: "2026-11-07"
+    reason: "User, 2026-11-07: \"I should be on maintenance\" — steady-state recomp AT MAINTENANCE (no lean-gain surplus). Weight held ~160-162, strength up, fat under 80 g/day."
+    target_weight_lb: null
+    target_rate_lb_per_week: 0.0
+    exit_criteria: "none — steady state. 7-day avg drifting > ~1.5 lb over 3+ weeks -> adjust ~100 kcal toward maintenance."
